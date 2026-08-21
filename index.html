@@ -1347,6 +1347,7 @@ svg.gchart{touch-action:none}
   padding:14px 15px;position:relative;overflow:hidden;
   box-shadow:0 2px 4px -1px rgba(180,30,25,.28),0 12px 24px -12px rgba(180,30,25,.62);
   transition:transform .38s var(--ease);
+  margin-top:18px;
 }
 .panic:active{transform:scale(.982);transition-duration:.08s}
 .panic .pdot{
@@ -1556,6 +1557,81 @@ td.miss{color:var(--muted);font-style:italic}
 .ch b{display:block;font-size:15.5px;font-weight:600;letter-spacing:-.02em;line-height:1.25}
 .ch span{display:block;font-size:13px;color:var(--ink-2);margin-top:2px}
 
+/* ── the landing position ───────────────────────────────────────────────
+   A brokerage screen for the second-largest thing most households own. The
+   figure is the hero, the chart is the evidence, and the band between the two
+   lines is the only thing on the page anybody has to understand. */
+.pos{
+  background:var(--surface-1);border-radius:18px;padding:18px 16px 14px;
+  margin:6px 0 12px;overflow:hidden;
+  text-align:left;      /* a position statement is read left to right, not centred */
+}
+.pos-lab{
+  font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ink-2);
+}
+.pos-amt{
+  font-size:42px;font-weight:700;letter-spacing:-.038em;line-height:1.04;
+  margin-top:5px;font-variant-numeric:tabular-nums;
+}
+.pos-sub{font-size:14px;color:var(--ink-2);margin-top:6px;line-height:1.4}
+.pos-pill{
+  display:inline-block;font-size:13px;font-weight:640;letter-spacing:-.01em;
+  font-variant-numeric:tabular-nums;
+}
+.pos-pill.up{color:var(--good-ink)}
+.pos-pill.down{color:var(--critical)}
+.pos-chart{
+  display:block;width:100%;height:128px;margin:14px 0 0;
+  touch-action:none;                 /* the drag scrubs, it does not scroll */
+  cursor:crosshair;
+}
+.pos-key{
+  display:flex;gap:18px;margin-top:10px;font-size:12.5px;color:var(--ink-2);
+  border-top:1px solid var(--hair);padding-top:10px;
+}
+.pos-key b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.pos-key i{
+  display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;
+  vertical-align:0;
+}
+.pos-key i.k-val{background:var(--brand)}
+.pos-key i.k-owe{background:none;border-top:2px dashed var(--axis);height:0;border-radius:0;
+  vertical-align:3px}
+.pos-foot{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.35}
+.pos .btn{margin-top:10px}
+
+/* three tiles, and the drawer holds everything else */
+.htile{
+  display:flex;flex-direction:column;align-items:flex-start;gap:0;
+  background:var(--surface-1);border:none;border-radius:16px;
+  padding:14px 13px 13px;text-align:left;min-height:104px;
+}
+#home-tiles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:14px}
+.htile .hti{
+  width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+  margin-bottom:9px;
+}
+.htile .hti svg{width:18px;height:18px}
+.htile .htt{font-size:14px;font-weight:600;letter-spacing:-.02em;line-height:1.2}
+.htile .hts{font-size:11.5px;color:var(--ink-2);margin-top:2px;line-height:1.25}
+.htile.t-indigo .hti{background:var(--t-indigo-bg);color:var(--t-indigo)}
+.htile.t-cyan .hti{background:var(--t-cyan-bg);color:var(--t-cyan)}
+.htile.t-blue .hti{background:var(--t-blue-bg);color:var(--t-blue)}
+.htile:active{opacity:.7}
+
+/* the forwarding address, built to be read aloud across a desk */
+.inbox{
+  display:flex;align-items:center;gap:10px;width:100%;margin-top:12px;
+  background:var(--sunk);border:none;border-radius:12px;padding:13px 14px;text-align:left;
+}
+.ib-addr{
+  flex:1;min-width:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:14.5px;letter-spacing:-.01em;color:var(--ink);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.ib-copy{flex:none;font-size:14px;font-weight:600;color:var(--brand)}
+
 </style>
 </head>
 <body>
@@ -1663,245 +1739,255 @@ td.miss{color:var(--muted);font-style:italic}
 
 <!-- ══════════ HOME ══════════ -->
 <section class="screen" id="s-home">
-  <!-- The first sixty seconds. Nothing below needs a tap, an account or a
-       number typed in — somebody standing at a desk being rushed gets something
-       usable before they have entered anything at all. -->
-  <div class="rightnow">
-    <button class="panic" data-go="s-now">
-      <span class="pdot"></span>
-      <span class="pt"><b>I&rsquo;m at the desk right now</b>
-        <span>What to say, and what they cannot make you buy</span></span>
-      <span class="chev"></span>
-    </button>
-    <p class="pline">You can leave. Nothing has to be decided today, no matter what is
-      said about the price ending tonight.</p>
-  </div>
+  <!-- THE HOME SCREEN SHOWS WHAT IS TRUE, NOT WHAT IS POSSIBLE.
+       ────────────────────────────────────────────────────────
+       The previous version was a menu of every capability: four big actions,
+       three prompts, twelve tiles, two demo buttons and a manifesto. Every one
+       of them was defensible on its own and together they asked a person who
+       had just opened the app to choose from twenty things before knowing what
+       any of them were.
 
-  <!-- The Deal Record, when one is open. Not a menu item — the state of the
-       transaction, which is the thing this product actually holds. -->
-  <button class="dealstrip" id="deal-strip" data-go="s-deal" hidden>
-    <span class="ds-l">
-      <span class="ds-lab" id="dl-lab">Your deal</span>
-      <span class="ds-veh" id="dl-veh"></span>
-      <span class="ds-sub" id="dl-sub"></span>
-    </span>
-    <span class="ds-r"><span class="ds-step" id="dl-step"></span><span class="chev"></span></span>
-  </button>
+       Three zones now, and the first one is the whole point:
 
-  <!-- Only appears once there is a car being tracked. It is a readout, not a
-       menu item: the number people open the app to see, without the tap. -->
-  <button class="gstrip" id="home-strip" data-go="s-garage" hidden>
-    <span class="gs-l">
-      <span class="gs-lab" id="hs-lab">Your garage</span>
-      <span class="gs-amt" id="hs-amt">&mdash;</span>
-      <span class="gs-sub" id="hs-sub"></span>
-    </span>
-    <span class="gs-r"><span class="gs-cars" id="hs-cars"></span><span class="chev"></span></span>
-  </button>
+         1. NOW — a single card that answers "what is happening with my car or
+            my deal", written by the app rather than chosen by the person. It
+            is different for somebody mid-purchase and somebody four years in.
+         2. THE CAR — value, miles, what is coming, and the paperwork.
+         3. EVERYTHING ELSE — one tap down, for people who know what they want.
 
-  <h1 class="h-lead" style="margin-top:22px">ClearDrive checks the deal at every step.</h1>
-  <p class="lede">Tell us the exact car you want and we collect written offers privately,
-    check every number, stay with you at the dealership, and compare the final contract with
-    what you were promised. Start wherever you are &mdash; nothing needs the steps before it.</p>
+       Nothing was deleted. It moved. -->
 
-  <!-- Trust, in the moment somebody is deciding whether to type a real number
-       in. Three words each; the long version is one tap away and stays there. -->
-  <div class="assure">
-    <span class="as">Consumers never pay</span>
-    <span class="as">No account needed</span>
-    <span class="as">Calculations on your phone</span>
-    <span class="as">Nobody can pay to change an answer</span>
-  </div>
-
-  <button class="act filled" data-go="s-live">
-    <span class="ai"><svg viewBox="0 0 24 24" fill="none"><path d="M4 8.6h2.5l1.3-2.3h8.4l1.3 2.3H20A1.6 1.6 0 0121.5 10.2v7.7A1.6 1.6 0 0120 19.5H4a1.6 1.6 0 01-1.5-1.6v-7.7A1.6 1.6 0 014 8.6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="14" r="3.3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    <span class="at"><b>Check this before I sign</b><span>Photograph the worksheet. Every figure is checked, and compared with anything you were promised earlier</span></span>
-    <span class="chev"></span>
-  </button>
-
-  <button class="act c-blue" data-go="s-spec">
-    <span class="ai"><svg viewBox="0 0 24 24" fill="none"><path d="M3 13.2l2-5.2A2.4 2.4 0 017.3 6.5h9.4A2.4 2.4 0 0119 8l2 5.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="13.2" width="18" height="5.3" rx="1.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 16h.6M16.4 16h.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    <span class="at"><b>I know the car I want</b><span>We ask stores in writing, without giving them your name or number</span></span>
-    <span class="chev"></span>
-  </button>
-
-  <button class="act c-indigo" data-go="s-bought">
-    <span class="ai"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3.6h7.8L19 8.6v11.8H6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.8 3.6v5H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.2 15.4l2 2 3.8-4.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    <span class="at"><b>I already signed</b><span>Check the contract and the add-ons, and see what you can reasonably do next</span></span>
-    <span class="chev"></span>
-  </button>
-
-  <button class="act c-teal" data-go="s-parent">
-    <span class="ai"><svg viewBox="0 0 24 24" fill="none"><path d="M20.5 15.2a2 2 0 01-2 2H7.5l-4 3.3V5.8a2 2 0 012-2h13a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.2 10.5h7.6M8.2 13.6h4.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    <span class="at"><b>Someone sent me their deal</b><span>Help them understand it before they sign, in four questions</span></span>
-    <span class="chev"></span>
-  </button>
-
-  <button class="act c-cyan" data-go="s-garage">
-    <span class="ai"><svg viewBox="0 0 24 24" fill="none"><path d="M3.5 10.5L12 4.5l8.5 6v9.5h-17z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 20v-5.5h8V20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    <span class="at"><b>Watch my car</b><span>Loan, equity, warranty, refinance and the dates nobody else is watching for you</span></span>
-    <span class="chev"></span>
-  </button>
-
-  <!-- The two hardest moments in this product, named out loud. Somebody who is
-       frightened does not scroll looking for the right tile; they look for the
-       sentence that describes them. -->
-  <button class="firsttime" data-go="s-parent">
-    <b>Someone you love is at a dealership right now?</b>
-    <span>Have them send you a photo of the worksheet. Four questions to ask them, and
-      what a good answer sounds like.</span>
-  </button>
-
-  <button class="firsttime" data-go="s-alone">
-    <b>Doing this on your own?</b>
-    <span>First car, first time, or nobody to call. Six sentences that do most of the work,
-      and what to say when you are told something is required.</span>
-  </button>
-
-  <button class="firsttime" data-go="s-prequal">
-    <b>Want a rate before you walk in?</b>
-    <span>Several lenders answer with a figure they will honour, without your name attached.
-      You choose one. The finance office then has something to beat.</span>
-  </button>
-
-  <button class="firsttime" data-go="s-power">
-    <b>Not sure what you can afford yet?</b>
-    <span>What a lender programme at your tier typically allows, worked out before anyone
-      runs your credit.</span>
-  </button>
-
-  <div class="sec-hd" style="margin-top:26px">If you already know what you want</div>
-
-  <div class="tiles-grid">
-    <button class="tile-btn c-cyan" data-go="s-garage">
-      <span class="ti">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M3.5 10.5L12 4.5l8.5 6v9.5h-17z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 20v-5.5h8V20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="tt"><b>My garage</b><span class="ts">Value, payoff, what&rsquo;s coming</span></span>
-    </button>
-    <button class="tile-btn c-blue" data-go="s-build">
-      <span class="ti">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M3 13.2l2-5.2A2.4 2.4 0 017.3 6.5h9.4A2.4 2.4 0 0119 8l2 5.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="13.2" width="18" height="5.3" rx="1.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 16h.6M16.4 16h.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="tt"><b>Build a car</b><span class="ts">They answer in writing</span></span>
-    </button>
-    <button class="tile-btn c-teal" data-go="s-sell">
-      <span class="ti">
-        <svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="6.5" width="19" height="11.5" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12.25" r="2.9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 12.25h.5M17.5 12.25h.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="tt"><b>Sell or trade</b><span class="ts">Which way out pays most</span></span>
-    </button>
-    <button class="tile-btn c-violet" data-go="s-funding">
-      <span class="ti">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5v17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.2 7.2H9.9a2.7 2.7 0 000 5.4h4.2a2.7 2.7 0 010 5.4H7.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="tt"><b>Ways of paying</b><span class="ts">Rate vs cash vs lease</span></span>
-    </button>
-    <button class="tile-btn c-indigo" data-go="s-rate">
-      <span class="ti">
-        <svg viewBox="0 0 24 24" fill="none"><circle cx="8.2" cy="8.2" r="2.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15.8" cy="15.8" r="2.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.6 5.4L5.4 18.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="tt"><b>My rate</b><span class="ts">Soft check, no score hit</span></span>
-    </button>
-    <button class="tile-btn c-teal" data-go="s-prequal">
-      <span class="ti">
-        <svg viewBox="0 0 24 24" fill="none"><rect x="2.8" y="4.6" width="18.4" height="14.8" rx="2.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.8 9.4h18.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.6 14.2h4.2M15.4 14.2h2.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="new"></span>
-      <span class="tt"><b>Prequalify</b><span class="ts">Lenders answer, you choose</span></span>
-    </button>
-  </div>
+  <!-- THE LANDING IS A POSITION, NOT A MENU.
+       A car is the second largest asset most households own and the only one
+       nobody can see the value of day to day. So the first screen is the one a
+       brokerage app would show: what it is worth, what is owed against it, and
+       the line where those two cross. Everything else is three tiles and a
+       drawer. -->
+  <div id="home-hero"></div>
+  <div id="home-tiles"></div>
+  <div id="home-now"></div>
 
   <details class="toolbox">
-    <summary>Everything else</summary>
-  <div class="sec-hd">Before you go in</div>
+    <summary>Everything ClearDrive can do</summary>
 
-  <div class="tiles-grid">
-    <button class="tile-btn c-blue" data-go="s-live">
-      <span class="ti">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M4 8.6h2.5l1.3-2.3h8.4l1.3 2.3H20A1.6 1.6 0 0121.5 10.2v7.7A1.6 1.6 0 0120 19.5H4a1.6 1.6 0 01-1.5-1.6v-7.7A1.6 1.6 0 014 8.6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="14" r="3.3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="tt"><b>Their sheet</b><span class="ts">Photo the worksheet</span></span>
-    </button>
-    <button class="tile-btn c-indigo" data-go="s-dealers">
-      <span class="ti">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M3.5 9.8h17v10.4h-17z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.8 9.8L5 4.6h14l2.2 5.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.6 20.2v-5.1h4.8v5.1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="tt"><b>Stores near you</b><span class="ts">Who has published a price</span></span>
-    </button>
-    <button class="tile-btn c-teal" data-go="s-rate">
-      <span class="ti">
-        <svg viewBox="0 0 24 24" fill="none"><circle cx="8.2" cy="8.2" r="2.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15.8" cy="15.8" r="2.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.6 5.4L5.4 18.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="new"></span>
-      <span class="tt"><b>My rate</b><span class="ts">Soft check, no score hit</span></span>
-    </button>
-    <button class="tile-btn c-cyan" data-go="s-value">
-      <span class="ti">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5h7.5a1 1 0 011 1V12a1 1 0 01-.3.7l-7.5 7.5a1 1 0 01-1.4 0l-7.5-7.5a1 1 0 010-1.4l7.5-7.5A1 1 0 0112 3.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.6 7.4h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="new"></span>
-      <span class="tt"><b>My car</b><span class="ts">Trade-in value</span></span>
-    </button>
-    <button class="tile-btn c-violet" data-go="s-prep">
-      <span class="ti">
-        <svg viewBox="0 0 24 24" fill="none"><circle cx="10.8" cy="13.2" r="7.3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10.8" cy="13.2" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.8 13.2L20.5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.2 3.5h4.3v4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="tt"><b>My numbers</b><span class="ts">Target price and payment</span></span>
-    </button>
-    <button class="tile-btn c-blue" data-go="s-offers">
-      <span class="ti">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M6.5 4.8h11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="8" width="18" height="11.2" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.2 9.5L12 15l7.8-5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="new"></span>
-      <span class="tt"><b>Get offers</b><span class="ts">Dealers bid, you compare</span></span>
-    </button>
-    <button class="tile-btn c-indigo" data-go="s-warranty">
-      <span class="ti">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3.2l7.6 3v5.6c0 4.4-3.1 8.3-7.6 9.6-4.5-1.3-7.6-5.2-7.6-9.6V6.2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.8 12.3l2.3 2.3 4.4-4.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="tt"><b>Warranty</b><span class="ts">Is it worth it?</span></span>
-    </button>
-  </div>
+    <div class="sec-hd">Before you buy</div>
+    <div class="tiles-grid">
+      <button class="tile-btn c-blue" data-go="s-spec">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><path d="M3 13.2l2-5.2A2.4 2.4 0 017.3 6.5h9.4A2.4 2.4 0 0119 8l2 5.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="13.2" width="18" height="5.3" rx="1.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 16h.6M16.4 16h.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="tt"><b>Get written offers</b><span class="ts">Without giving your name</span></span>
+      </button>
+      <button class="tile-btn c-teal" data-go="s-prequal">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><rect x="2.8" y="4.6" width="18.4" height="14.8" rx="2.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.8 9.4h18.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.6 14.2h4.2M15.4 14.2h2.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="tt"><b>Prequalify</b><span class="ts">Lenders answer, you choose</span></span>
+      </button>
+      <button class="tile-btn c-violet" data-go="s-funding">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5v17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.2 7.2H9.9a2.7 2.7 0 000 5.4h4.2a2.7 2.7 0 010 5.4H7.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="tt"><b>Ways of paying</b><span class="ts">Rate vs cash vs lease</span></span>
+      </button>
+      <button class="tile-btn c-indigo" data-go="s-protect">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3.2l7.6 3v5.6c0 4.4-3.1 8.3-7.6 9.6-4.5-1.3-7.6-5.2-7.6-9.6V6.2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.8 12.3l2.3 2.3 4.4-4.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="tt"><b>Warranty &amp; GAP</b><span class="ts">Decide before the office</span></span>
+      </button>
+      <button class="tile-btn c-cyan" data-go="s-prep">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.8" cy="13.2" r="7.3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10.8" cy="13.2" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.8 13.2L20.5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.2 3.5h4.3v4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="tt"><b>My numbers</b><span class="ts">Target price and payment</span></span>
+      </button>
+      <button class="tile-btn c-blue" data-go="s-power">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2.6L4.5 13.4h6L11 21.4l8.5-10.8h-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="tt"><b>What can I afford</b><span class="ts">Before anyone runs credit</span></span>
+      </button>
+    </div>
 
-  <div class="sec-hd">After you buy</div>
+    <div class="sec-hd">After you buy</div>
+    <div class="tiles-grid">
+      <button class="tile-btn c-cyan" data-go="s-garage">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><path d="M3.5 10.5L12 4.5l8.5 6v9.5h-17z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 20v-5.5h8V20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="tt"><b>My garage</b><span class="ts">Value, payoff, what&rsquo;s coming</span></span>
+      </button>
+      <button class="tile-btn c-indigo" data-go="s-glovebox">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3.6h7.8L19 8.6v11.8H6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.8 3.6v5H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 13h6M9 16h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="tt"><b>Glovebox</b><span class="ts">Every document, kept</span></span>
+      </button>
+      <button class="tile-btn c-teal" data-go="s-aftersale">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3.6h7.8L19 8.6v11.8H6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.2 15.2l2 2 3.8-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="tt"><b>After the sale</b><span class="ts">Did they keep their word?</span></span>
+      </button>
+      <button class="tile-btn c-violet" data-go="s-sell">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="6.5" width="19" height="11.5" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12.25" r="2.9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="tt"><b>Sell or trade</b><span class="ts">Which way out pays most</span></span>
+      </button>
+    </div>
 
-  <div class="tiles-grid">
-    <button class="tile-btn wide c-cyan" data-go="s-aftersale">
-      <span class="ti">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M6 3.6h7.8L19 8.6v11.8H6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.8 3.6v5H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.2 15.2l2 2 3.8-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="new"></span>
-      <span class="tt"><b>After the sale</b><span class="ts">Did they keep their word?</span></span>
-      <span class="chev"></span>
-    </button>
-  </div>
+    <div class="sec-hd">If you need it</div>
+    <div class="tiles-grid">
+      <button class="tile-btn c-teal" data-go="s-alone">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.6" stroke="currentColor" stroke-width="2"/><path d="M4.8 20.4a7.2 7.2 0 0114.4 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <span class="tt"><b>Doing this alone</b><span class="ts">Six sentences that work</span></span>
+      </button>
+      <button class="tile-btn c-blue" data-go="s-dealers">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><path d="M3.5 9.8h17v10.4h-17z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.8 9.8L5 4.6h14l2.2 5.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="tt"><b>Stores near you</b><span class="ts">Who publishes a price</span></span>
+      </button>
+      <button class="tile-btn c-blue" data-go="s-now">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><path d="M12 8.4v4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 16.2h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="8.8" stroke="currentColor" stroke-width="2"/></svg></span>
+        <span class="tt"><b>Being pressured</b><span class="ts">What they cannot make you buy</span></span>
+      </button>
+      <button class="tile-btn c-cyan" data-go="s-privacy">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5l7.5 3v6c0 4.6-3.1 8.6-7.5 10-4.4-1.4-7.5-5.4-7.5-10v-6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>
+        <span class="tt"><b>What&rsquo;s stored</b><span class="ts">And what never leaves</span></span>
+      </button>
+      <button class="tile-btn c-violet" id="demo-run-2">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5.5l10 6.5-10 6.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>
+        <span class="tt"><b>Worked example</b><span class="ts">See it end to end</span></span>
+      </button>
+    </div>
 
-  <div class="sec-hd">See it work</div>
-
-  <div class="card">
-    <h3>Run a worked example</h3>
-    <p>Fills the app with one complete transaction: a written offer accepted, a desk worksheet
-      $2,195 higher, and a contract where every dollar line matches and the rate and term have
-      moved. Every figure is computed by the same engine the real flows use.</p>
-    <button class="btn" id="demo-run">Load the worked example</button>
-    <button class="btn sec" id="demo-reset">Clear everything on this phone</button>
-    <p class="axisnote">Clearing removes every record this app has written, including ones
-      left by older versions. There is no copy anywhere else to remove.</p>
-  </div>
-
+    <div class="card" style="margin-top:18px">
+      <h3>Clear everything on this phone</h3>
+      <p>Removes every record this app has written, including ones left by older versions.
+        There is no copy anywhere else to remove.</p>
+      <button class="btn sec" id="demo-reset">Clear everything on this phone</button>
+    </div>
   </details>
 
-  <div class="freecard">
-    <span class="pill">Free forever</span>
-    <b>Clarity isn&rsquo;t an add-on.</b>
-    <p>Everything in the finance office is sold to you as an extra. This isn&rsquo;t.
-      No subscription, no trial, no paywall on the useful part. Dealerships and lenders pay
-      a flat monthly fee to be reachable here &mdash; the same fee for every one of them.</p>
-    <p>That fee buys one thing: the ability to answer you when you ask. It can never move a
-      lender up the rate list, never change what we say about a price you were quoted, and
-      never buy your details &mdash; there is nothing to sell, because the maths runs on your
-      phone and never leaves it. Same price for everyone, published. That is the whole
-      arrangement.</p>
-    <button class="btn sec" data-go="s-privacy" style="margin-top:14px">See what&rsquo;s stored on this phone</button>
-    <button class="btn sec" id="demo-run-2">Walk through a worked example</button>
-  </div>
-
   <p class="phrase" data-phrase="beforeYouGo"></p>
+</section>
 
-  <div class="trustrow">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-      <path d="M12 2.5l7.5 3v6c0 4.6-3.1 8.6-7.5 10-4.4-1.4-7.5-5.4-7.5-10v-6z"
-        stroke="var(--muted)" stroke-width="1.7" stroke-linejoin="round"/></svg>
-    <div>Every calculation runs on your phone. Nothing you type is uploaded, sold, or
-      shown to a dealership unless you connect a loan &mdash; and that is off by default.</div>
+<!-- ══════════ BUYING ══════════
+     Two questions before anything else, because they decide what the number
+     is. A cash buyer and a financed buyer looking at the same car are not
+     shopping for the same thing, and the dealership makes its money on
+     whichever one you are not watching. -->
+<section class="screen" id="s-buy">
+  <p class="eyebrow">Buying a car</p>
+  <h1 class="h-lead">Two questions first.</h1>
+  <p class="lede">They take ten seconds and they decide everything after them &mdash; what you are
+    actually negotiating, what gets moved when you are not looking, and what to put in writing.</p>
+
+  <div class="card">
+    <h3>Is it new or used?</h3>
+    <div class="chips" id="by-cond">
+      <button class="chip" data-v="new" aria-pressed="true">New</button>
+      <button class="chip" data-v="used" aria-pressed="false">Used</button>
+    </div>
   </div>
+
+  <div class="card">
+    <h3>How are you paying?</h3>
+    <div class="chips" id="by-route">
+      <button class="chip" data-v="finance" aria-pressed="true">Financing</button>
+      <button class="chip" data-v="cash" aria-pressed="false">Cash</button>
+      <button class="chip" data-v="lease" aria-pressed="false">Leasing</button>
+    </div>
+  </div>
+
+  <div id="by-plan"></div>
+
+  <p class="foot">Nothing here is sent anywhere. The plan is worked out on this phone.</p>
+</section>
+
+<!-- ══════════ INVENTORY ══════════
+     Cars that exist, at stores that will answer. The asking price is shown
+     because it is what they publish, and captioned every time with what it is
+     not: an out-the-door figure. -->
+<section class="screen" id="s-inventory">
+  <p class="eyebrow">What&rsquo;s in stock</p>
+  <h1 class="h-lead">Cars you could actually go and see.</h1>
+  <p class="lede">Filter them, pick the ones worth asking about, and ClearDrive sends one written
+    request per store &mdash; without your name, your number or your email.</p>
+
+  <div class="card">
+    <h3>Narrow it down</h3>
+    <div class="two">
+      <div class="field"><label>Make</label>
+        <div class="inp"><input type="text" id="iv-make" placeholder="Any"></div></div>
+      <div class="field"><label>Model</label>
+        <div class="inp"><input type="text" id="iv-model" placeholder="Any"></div></div>
+    </div>
+    <div class="two">
+      <div class="field"><label>Most I&rsquo;d pay</label>
+        <div class="inp"><span class="pre">$</span><input class="pre" type="number" id="iv-price" placeholder="Any"></div></div>
+      <div class="field"><label>Within</label>
+        <div class="inp"><input class="suf" type="number" id="iv-dist" value="60"><span class="suf">mi</span></div></div>
+    </div>
+    <div class="field"><label>Condition</label>
+      <div class="chips" id="iv-cond">
+        <button class="chip" data-v="" aria-pressed="true">Either</button>
+        <button class="chip" data-v="new" aria-pressed="false">New</button>
+        <button class="chip" data-v="used" aria-pressed="false">Used</button>
+      </div>
+    </div>
+    <button class="scope" id="iv-instock" aria-pressed="false" type="button">
+      <span class="box">&#10003;</span>
+      <span>On the lot only &mdash; hide cars in transit or not yet built</span>
+    </button>
+  </div>
+
+  <div id="iv-out"></div>
+</section>
+
+<!-- ══════════ THE THREAD ══════════
+     What a store said, in their own words, next to what was asked. The reply
+     box is bounded: ClearDrive drafts, the buyer sends, and nothing goes out
+     that names another store or a figure another store quoted. -->
+<section class="screen" id="s-thread">
+  <p class="eyebrow">Your requests</p>
+  <h1 class="h-lead">What the stores said.</h1>
+  <p class="lede">One thread per store. Everything is in writing, which is what makes the contract
+    comparison possible later.</p>
+  <div id="th-body"></div>
+</section>
+
+<!-- ══════════ THE GLOVEBOX ══════════
+     The reason somebody keeps this app after the sale.
+     A car purchase generates a folder of paper that matters for years — the
+     contract, the finance agreement, the service contract and its cancellation
+     clause, the GAP policy, the title work — and it is kept in an actual
+     glovebox until the day it is needed, which is the day it cannot be found.
+     Holding it is a small feature and an enormous reason to still be
+     installed in year three. -->
+<section class="screen" id="s-glovebox">
+  <p class="eyebrow">Your documents</p>
+  <h1 class="h-lead">Everything from the purchase, kept.</h1>
+  <p class="lede">Contracts, the finance agreement, every product you were sold and the clause
+    that says how to cancel it. Held encrypted, readable only by you, and still here in four
+    years when a claim is refused and somebody asks what you actually signed.</p>
+
+  <div id="gb-body"></div>
+
+  <div class="card">
+    <h3>Your ClearDrive address</h3>
+    <p>Email anything here and it lands in your glovebox &mdash; forward it yourself, or give it
+      to the dealership and let them send your copies straight through.</p>
+    <button class="inbox" id="gb-inbox" type="button">
+      <span class="ib-addr" id="gb-addr">&mdash;</span>
+      <span class="ib-copy" id="gb-copy">Copy</span>
+    </button>
+    <p class="axisnote" id="gb-inbox-note"></p>
+  </div>
+
+  <div class="card">
+    <h3>How documents get here</h3>
+    <div class="chain">
+      <div class="ch"><div class="chd"></div><div><b>The dealership sends them</b>
+        <span>A participating store delivers your paperwork to your ClearDrive account at
+          delivery, with your say-so. Nothing arrives without you accepting it.</span></div></div>
+      <div class="ch"><div class="chd"></div><div><b>You photograph them</b>
+        <span>Anything on paper. It is read on this phone, not on a server.</span></div></div>
+      <div class="ch"><div class="chd"></div><div><b>You forward them</b>
+        <span>Email a PDF to your own ClearDrive address and it lands here.</span></div></div>
+    </div>
+    <p class="axisnote">Storing documents needs an account, because a document has to survive
+      a lost phone and a page of local storage cannot. That is the only thing an account is
+      for, and everything else in ClearDrive works without one.</p>
+  </div>
+
+  <button class="btn" data-go="s-auth">Set up document storage</button>
+  <button class="btn sec" data-go="s-privacy">What we can and cannot read</button>
+
+  <p class="foot">A store that sends your paperwork can see that it was delivered. It cannot
+    see anything ClearDrive works out from it, and it cannot see what any other store quoted
+    you.</p>
 </section>
 
 <!-- ══════════ 1. THE EXACT CAR ══════════
@@ -6714,6 +6800,31 @@ td.miss{color:var(--muted);font-style:italic}
     estimate: "Estimated from the figures you entered, not an appraisal, a quote, or an offer.",
     notLegalAdvice: "ClearDrive gives information and calculations. It is not legal advice, and a dispute needs a qualified professional rather than an app."
   };
+  var INBOX_DOMAIN = "docs.cleardrive.app";
+  var ALPHABET = "23456789bcdfghjkmnpqrstvwxz";
+  function inboxAddress(accountId) {
+    if (!accountId) throw new Error("An inbox address needs an account to belong to.");
+    const fnv = (seed) => {
+      let h = seed;
+      for (let i = 0; i < accountId.length; i++) {
+        h ^= accountId.charCodeAt(i);
+        h = Math.imul(h, 16777619) >>> 0;
+      }
+      return h;
+    };
+    let n = BigInt(fnv(2166136261)) * 4294967296n + BigInt(fnv(1099511628211 % 4294967296));
+    let handle = "";
+    for (let i = 0; i < 8; i++) {
+      handle += ALPHABET[Number(n % BigInt(ALPHABET.length))];
+      n /= BigInt(ALPHABET.length);
+    }
+    return `cd-${handle}@${INBOX_DOMAIN}`;
+  }
+  var INBOX_RULES = {
+    whatItIs: "Anything you email here lands in your glovebox. Forward the paperwork from the dealership, a service invoice, an insurance card \u2014 it is yours and it stays yours.",
+    noName: "The address carries no part of your name, so handing it to a dealership discloses nothing about you that they do not already have.",
+    whoCanSend: "Anybody can send to it, which is the point \u2014 you can forward from any address, and a store can send your copies straight through. Nothing is ever sent FROM it."
+  };
   var PROTECTION_PRODUCTS = {
     vsc: {
       code: "vsc",
@@ -7414,6 +7525,131 @@ td.miss{color:var(--muted);font-style:italic}
     appearance: "appearance"
     // light or dark, or unset to follow the phone
   };
+  var ROUTE_LABEL_BUY = {
+    cash: "Paying cash",
+    finance: "Financing it",
+    lease: "Leasing it"
+  };
+  var UNIVERSAL_WATCH = [
+    "Anything added to the car after you agreed a price \u2014 paint, film, nitrogen, tracking. These are the highest-margin lines in the building and the easiest to add quietly."
+  ];
+  function buyingPlan(condition, route) {
+    const usedExtra = condition === "used" ? ["The reconditioning story. Ask what was done to it and what the inspection found. A used car with no paperwork behind it is a used car nobody has looked at."] : ["The destination charge, which is set by the manufacturer and is not a dealer fee \u2014 and any second delivery or prep charge next to it, which usually is."];
+    const base = { condition, route };
+    if (route === "cash") {
+      return {
+        ...base,
+        theNumber: "The out-the-door price",
+        why: "Paying cash makes this simple in a way that is worth protecting: there is exactly one number, and every conversation about payments, terms or monthly figures is a conversation about something you are not buying.",
+        watchFor: [
+          "A price that quietly depends on financing with them. It is common, it is usually not stated up front, and it is the single most important thing for a cash buyer to ask about before anything else.",
+          "Being moved onto a payment conversation anyway. There is nothing to discuss.",
+          ...usedExtra,
+          ...UNIVERSAL_WATCH
+        ],
+        askFor: [
+          "Please send the out-the-door price in writing, itemised, including all fees and taxes.",
+          "Is that price the same if I do not finance through you? If not, tell me both figures."
+        ],
+        rateFirst: false
+      };
+    }
+    if (route === "lease") {
+      return {
+        ...base,
+        theNumber: "The selling price, the money factor and the residual \u2014 all three",
+        why: "A lease payment is built from three figures, and a dealership is only obliged to show you the one at the bottom. The selling price is negotiable on a lease exactly as it is on a purchase, which is the part most people are never told.",
+        watchFor: [
+          "A money factor quoted with no explanation. Multiply it by 2,400 to get the equivalent interest rate. A marked-up money factor is invisible in the payment.",
+          "A selling price nobody mentions. If it is not written down, the discount you negotiated may not be in the lease at all.",
+          "The mileage allowance, and what each extra mile costs. It is a real cost with no line on the quote.",
+          ...usedExtra,
+          ...UNIVERSAL_WATCH
+        ],
+        askFor: [
+          "Please send the selling price, the money factor, the residual and the term in writing.",
+          "What is the mileage allowance and the per-mile charge over it?",
+          "What is the total due at signing, itemised?"
+        ],
+        rateFirst: false
+      };
+    }
+    return {
+      ...base,
+      theNumber: "The out-the-door price first, then the rate \u2014 separately",
+      why: "Financing splits the negotiation in two, and the two get deliberately mixed. Settle what the car costs before any conversation about payments, because a monthly figure can be made to look like anything by moving the term.",
+      watchFor: [
+        "The term moving. A longer term lowers the payment and raises what the car costs, and it is the change most likely to be presented as good news.",
+        "A rate above what a lender already approved you for. A dealership arranges financing and is often permitted to add to the approved rate.",
+        "Being asked what monthly payment you want. Answering it hands over the whole negotiation.",
+        ...usedExtra,
+        ...UNIVERSAL_WATCH
+      ],
+      askFor: [
+        "Please send the out-the-door price in writing, itemised, including all fees and taxes.",
+        "Is that price the same if I arrange my own financing?",
+        "If you can beat the rate I am holding, send the rate and the term in writing."
+      ],
+      rateFirst: true
+    };
+  }
+  var STOCK_LABEL = {
+    "in-stock": "On the lot",
+    "in-transit": "In transit",
+    allocated: "Allocated, not built"
+  };
+  function emptyFilters() {
+    return {
+      condition: null,
+      make: null,
+      model: null,
+      maxPriceUSD: null,
+      maxMiles: null,
+      maxDistanceMiles: null,
+      inStockOnly: false
+    };
+  }
+  var INVENTORY_NOTE = "A published asking price is not an out-the-door price. It excludes tax, title, registration, the documentation fee and anything already added to the car. The only figure worth comparing is the one you get in writing, which is what the next step asks for.";
+  var INVENTORY_ORDER_NOTE = "Ordered by published price, then by distance. Whether a store pays ClearDrive is not an input to this list and cannot move a car up it.";
+  function filterListings(all, f) {
+    const keep = all.filter((l) => {
+      if (f.condition !== null && l.condition !== f.condition) return false;
+      if (f.make !== null && l.make.toLowerCase() !== f.make.toLowerCase()) return false;
+      if (f.model !== null && l.model.toLowerCase() !== f.model.toLowerCase()) return false;
+      if (f.inStockOnly && l.stock !== "in-stock") return false;
+      if (f.maxPriceUSD !== null && l.askingPriceUSD !== null && l.askingPriceUSD > f.maxPriceUSD) return false;
+      if (f.maxMiles !== null && l.miles !== null && l.miles > f.maxMiles) return false;
+      if (f.maxDistanceMiles !== null && l.distanceMiles !== null && l.distanceMiles > f.maxDistanceMiles) return false;
+      return true;
+    });
+    const priced = keep.filter((l) => l.askingPriceUSD !== null).sort((a, b) => a.askingPriceUSD - b.askingPriceUSD || (a.distanceMiles ?? Infinity) - (b.distanceMiles ?? Infinity) || a.storeRef.localeCompare(b.storeRef));
+    const unpriced = keep.filter((l) => l.askingPriceUSD === null).sort((a, b) => a.storeRef.localeCompare(b.storeRef));
+    return {
+      listings: [...priced, ...unpriced],
+      total: all.length,
+      matched: keep.length,
+      unpriced,
+      note: INVENTORY_NOTE,
+      orderNote: INVENTORY_ORDER_NOTE
+    };
+  }
+  function storesIn(listings) {
+    return [...new Set(listings.map((l) => l.storeRef))].sort();
+  }
+  function comparability(listings) {
+    if (listings.length < 2) return null;
+    const key = (l) => `${l.make}|${l.model}|${l.trim}|${l.modelYear}|${l.condition}`.toLowerCase();
+    const kinds = new Set(listings.map(key));
+    if (kinds.size === 1) return null;
+    const conditions = new Set(listings.map((l) => l.condition));
+    return conditions.size > 1 ? "These are not the same car, and some are new and some are used. The prices below answer different questions, so read them as separate options rather than as a race." : `These are ${kinds.size} different specifications. A lower price on a lesser trim is not a better deal \u2014 it is a different car. Their written answers will make the difference visible.`;
+  }
+  var BUYING_RULES = {
+    twoQuestions: "New or used, and how it is paid for. Those two answers decide what the number is, and a buyer who has not settled them is negotiating something they have not defined.",
+    priceBeforeRate: "Settle what the car costs before any conversation about payments. A monthly figure can be made to look like anything by moving the term.",
+    askingIsNotOutTheDoor: "A published asking price is not what the car costs. Only a written, itemised out-the-door figure is comparable to another one.",
+    noStoreCanPayToRank: "Whether a store pays ClearDrive is carried on every listing and read by nothing that filters or orders. A test flips it on every row and asserts the list does not move."
+  };
 
   // apps/web/app.js
   var $ = (id) => document.getElementById(id);
@@ -7548,18 +7784,180 @@ td.miss{color:var(--muted);font-style:italic}
     const line = PHRASES[el.dataset.phrase];
     if (line) el.textContent = line;
   });
-  function renderHomeStrip(p) {
-    const strip = $("home-strip");
-    if (!p || p.cars.length === 0) {
-      strip.hidden = true;
-      return;
+  var homeReady = false;
+  function renderHomeStrip() {
+    renderHome();
+  }
+  function renderHome() {
+    if (!homeReady) return;
+    const hero = $("home-hero");
+    const tiles = $("home-tiles");
+    const now = $("home-now");
+    if (!hero || !tiles || !now) return;
+    const hasDeal = deal && deal.entries.length > 0;
+    const p = fleet.length ? portfolio(fleet, HOME_MONTHS) : null;
+    const hasCar = p !== null && p.totalValueUSD > 0;
+    hero.innerHTML = hasCar ? heroPosition(p) : heroEmpty();
+    if (hasCar) wireScrub(p);
+    tiles.innerHTML = HOME_TILES.map((t) => `
+    <button class="htile ${t.tone}" data-go="${t.go}">
+      <span class="hti">${t.icon}</span>
+      <span class="htt">${t.label}</span>
+      <span class="hts">${t.sub}</span>
+    </button>`).join("");
+    if (hasDeal) {
+      const st = status(deal);
+      const vehicle = dealSpec ? `${dealSpec.modelYear ?? ""} ${dealSpec.make} ${dealSpec.model} ${dealSpec.trim ?? ""}`.trim() : "Your deal";
+      now.innerHTML = `<button class="dealstrip" onclick="go('s-deal')">
+      <span class="ds-l">
+        <span class="ds-lab">${st.signed ? "Signed deal" : acceptedOffer(deal) ? "Offer accepted" : "Deal in progress"}</span>
+        <span class="ds-veh">${vehicle}</span>
+        <span class="ds-sub">${st.headline}</span>
+      </span>
+      <span class="ds-r"><span class="ds-step">${st.reached.length} step${st.reached.length === 1 ? "" : "s"}</span><span class="chev"></span></span>
+    </button>`;
+    } else {
+      now.innerHTML = "";
     }
-    strip.hidden = false;
-    const equity = p.totalEquityUSD;
-    $("hs-lab").textContent = equity === null ? "Your garage" : equity >= 0 ? "Equity across your cars" : "You are behind by";
-    $("hs-amt").textContent = equity === null ? "\u2014" : usd3(Math.abs(equity));
-    $("hs-cars").textContent = p.cars.length === 1 ? "1 car" : `${p.cars.length} cars`;
-    $("hs-sub").textContent = equity === null ? "Add what it is worth and this fills in." : p.monthsToSurface ? `Level in about ${p.monthsToSurface} months.` : equity >= 0 ? "That is leverage most buyers do not have." : "Worth knowing before you walk into a dealership.";
+    document.querySelectorAll("#s-home [data-go]").forEach((b) => {
+      if (b.dataset.wired) return;
+      b.dataset.wired = "1";
+      b.addEventListener("click", () => go(b.dataset.go));
+    });
+  }
+  var HOME_MONTHS = 60;
+  var ICON = {
+    doc: '<svg viewBox="0 0 24 24" fill="none"><path d="M6 3.6h7.8L19 8.6v11.8H6z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M13.8 3.6v5H19M9 13h6M9 16h4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    wrench: '<svg viewBox="0 0 24 24" fill="none"><path d="M15.6 3.6a5.2 5.2 0 00-6.1 6.7L3.8 16a2 2 0 102.8 2.8l5.7-5.7a5.2 5.2 0 006.7-6.1l-2.9 2.9-2.5-.7-.7-2.5z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg>',
+    key: '<svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="12" r="4.2" stroke="currentColor" stroke-width="1.9"/><path d="M12.2 12H21M18.4 12v3.1M15.4 12v2.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>',
+    tag: '<svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5h7.5a1 1 0 011 1V12a1 1 0 01-.3.7l-7.5 7.5a1 1 0 01-1.4 0l-7.5-7.5a1 1 0 010-1.4l7.5-7.5A1 1 0 0112 3.5z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M16.6 7.4h.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>'
+  };
+  var HOME_TILES = [
+    { go: "s-glovebox", tone: "t-indigo", icon: ICON.doc, label: "Glovebox", sub: "Every document" },
+    { go: "s-buy", tone: "t-blue", icon: ICON.key, label: "Buy a car", sub: "From here to signed" },
+    { go: "s-car", tone: "t-cyan", icon: ICON.wrench, label: "Upkeep", sub: "Miles &amp; service" }
+  ];
+  function heroEmpty() {
+    return `<div class="pos">
+    <div class="pos-lab">Your car</div>
+    <div class="pos-amt">&mdash;</div>
+    <div class="pos-sub">Add a car and ClearDrive tracks what it is worth against what you
+      still owe, every month, without you having to ask.</div>
+    ${chartSVG(sampleCurve(), true)}
+    <button class="btn" style="margin-top:6px" data-go="s-addcar">Add my car</button>
+    <button class="btn sec" data-go="s-live">I&rsquo;m buying one right now</button>
+  </div>`;
+  }
+  function sampleCurve() {
+    const out = [];
+    for (let m = 1; m <= HOME_MONTHS; m++) {
+      out.push({
+        monthsFromNow: m,
+        valueUSD: 34e3 * Math.pow(0.86, m / 12),
+        owedUSD: Math.max(0, 33e3 * (1 - m / 66)),
+        equityUSD: 0
+      });
+    }
+    return out;
+  }
+  function heroPosition(p) {
+    const eq = p.totalEquityUSD;
+    const behind = eq !== null && eq < 0;
+    return `<div class="pos">
+    <div class="pos-lab">Market value today</div>
+    <div class="pos-amt" id="pos-amt">${usd3(p.totalValueUSD)}</div>
+    <div class="pos-sub" id="pos-sub">
+      <span class="pos-pill ${behind ? "down" : "up"}">${behind ? "&#9660;" : "&#9650;"} ${usd3(Math.abs(eq ?? 0))}</span>
+      ${behind ? "behind what you owe" : "of equity"}${p.monthsToSurface ? ` &middot; level in about ${p.monthsToSurface} months` : ""}
+    </div>
+    ${chartSVG(p.path, false)}
+    <div class="pos-key">
+      <span><i class="k-val"></i>Worth <b id="k-val">${usd3(p.totalValueUSD)}</b></span>
+      <span><i class="k-owe"></i>Owed <b id="k-owe">${usd3(p.totalOwedUSD)}</b></span>
+    </div>
+    <p class="pos-foot">Projected from today on the same depreciation curve the garage uses.
+      A projection, not a quote.</p>
+  </div>`;
+  }
+  function chartSVG(path, muted) {
+    const W = 340, H = 128, PAD = 3;
+    const vals = path.flatMap((d) => [d.valueUSD, d.owedUSD]);
+    const rawHi = Math.max(...vals), rawLo = Math.min(...vals);
+    const pad = (rawHi - rawLo || rawHi) * 0.1;
+    const hi = rawHi + pad;
+    const lo = Math.max(0, rawLo - pad);
+    const x = (i) => PAD + i / (path.length - 1) * (W - PAD * 2);
+    const y = (v) => H - PAD - (v - lo) / (hi - lo || 1) * (H - PAD * 2);
+    const band = path.slice(1).map((d, i) => {
+      const a = path[i], b = d;
+      const good = a.valueUSD + b.valueUSD >= a.owedUSD + b.owedUSD;
+      return `<polygon points="${x(i)},${y(a.valueUSD)} ${x(i + 1)},${y(b.valueUSD)} ${x(i + 1)},${y(b.owedUSD)} ${x(i)},${y(a.owedUSD)}" fill="var(${good ? "--good" : "--critical"})" opacity="${muted ? ".07" : ".16"}"/>`;
+    }).join("");
+    const line = (key, attrs) => `<polyline fill="none" ${attrs} points="${path.map((d, i) => `${x(i)},${y(d[key])}`).join(" ")}"/>`;
+    const cross = path.findIndex((d, i) => i > 0 && d.equityUSD >= 0 && path[i - 1].equityUSD < 0);
+    return `<svg class="pos-chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"
+      role="img" aria-label="Projected value against the loan balance over five years">
+    ${band}
+    ${line("owedUSD", 'stroke="var(--axis)" stroke-width="1.5" stroke-dasharray="3 3"')}
+    ${line("valueUSD", `stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="${muted ? ".35" : "1"}"`)}
+    ${cross > 0 && !muted ? `<circle cx="${x(cross)}" cy="${y(path[cross].valueUSD)}" r="3.6"
+      fill="var(--good)" stroke="var(--surface-1)" stroke-width="2"/>` : ""}
+    ${muted ? "" : `<line id="scrub-line" x1="0" y1="0" x2="0" y2="${H}"
+      stroke="var(--axis)" stroke-width="1" opacity="0"/>
+    <circle id="scrub-dot" r="4.5" fill="var(--brand)" stroke="var(--surface-1)"
+      stroke-width="2" opacity="0"/>`}
+  </svg>`;
+  }
+  function wireScrub(p) {
+    const svg = document.querySelector("#home-hero .pos-chart");
+    if (!svg) return;
+    const amt = $("pos-amt"), sub = $("pos-sub");
+    const kv = $("k-val"), ko = $("k-owe");
+    const dot = $("scrub-dot"), vline = $("scrub-line");
+    const W = 340, H = 128, PAD = 3;
+    const vals = p.path.flatMap((d) => [d.valueUSD, d.owedUSD]);
+    const rawHi = Math.max(...vals), rawLo = Math.min(...vals);
+    const pad = (rawHi - rawLo || rawHi) * 0.1;
+    const hi = rawHi + pad, lo = Math.max(0, rawLo - pad);
+    const home = { amt: amt.textContent, sub: sub.innerHTML, kv: kv.textContent, ko: ko.textContent };
+    const at = (clientX) => {
+      const r = svg.getBoundingClientRect();
+      const i = Math.max(0, Math.min(
+        p.path.length - 1,
+        Math.round((clientX - r.left) / r.width * (p.path.length - 1))
+      ));
+      const d = p.path[i];
+      const yy = H - PAD - (d.valueUSD - lo) / (hi - lo || 1) * (H - PAD * 2);
+      const xx = PAD + i / (p.path.length - 1) * (W - PAD * 2);
+      amt.textContent = usd3(d.valueUSD);
+      const yrs = d.monthsFromNow / 12;
+      sub.innerHTML = `<span class="pos-pill ${d.equityUSD < 0 ? "down" : "up"}">${d.equityUSD < 0 ? "&#9660;" : "&#9650;"} ${usd3(Math.abs(d.equityUSD))}</span> in ${yrs < 1 ? `${d.monthsFromNow} months` : `${yrs.toFixed(1).replace(".0", "")} years`}`;
+      kv.textContent = usd3(d.valueUSD);
+      ko.textContent = usd3(d.owedUSD);
+      dot.setAttribute("cx", xx);
+      dot.setAttribute("cy", yy);
+      dot.setAttribute("opacity", "1");
+      vline.setAttribute("x1", xx);
+      vline.setAttribute("x2", xx);
+      vline.setAttribute("opacity", ".5");
+    };
+    const clear = () => {
+      amt.textContent = home.amt;
+      sub.innerHTML = home.sub;
+      kv.textContent = home.kv;
+      ko.textContent = home.ko;
+      dot.setAttribute("opacity", "0");
+      vline.setAttribute("opacity", "0");
+    };
+    svg.addEventListener("pointerdown", (e) => {
+      svg.setPointerCapture(e.pointerId);
+      at(e.clientX);
+      e.preventDefault();
+    });
+    svg.addEventListener("pointermove", (e) => {
+      if (svg.hasPointerCapture(e.pointerId)) at(e.clientX);
+    });
+    ["pointerup", "pointercancel", "pointerleave"].forEach((ev) => svg.addEventListener(ev, clear));
   }
   function tuneInputs(root = document) {
     root.querySelectorAll("input[type=number]").forEach((i) => {
@@ -7943,7 +8341,7 @@ td.miss{color:var(--muted);font-style:italic}
 
 Re-quote it at ${t.term} months and show me out-the-door, not the payment."`;
     $("s-verdict").innerHTML = `
-  <div class="hero"><div class="rule" style="background:${st.c}"></div>
+  <div class="pos"><div class="rule" style="background:${st.c}"></div>
     <div class="status" style="color:${st.ink}"><span class="dot" style="background:${st.c}"></span>${st.t}</div>
     <div class="fig">${usd3(a.totalAboveMarket)}</div>
     <p class="cap">above where this deal should land. ${st.m}</p></div>
@@ -8049,7 +8447,7 @@ Re-quote it at ${t.term} months and show me out-the-door, not the payment."`;
     const sevColor = { critical: "var(--critical)", warning: "var(--warning)", good: "var(--good)" };
     const sevGlyph = { critical: "!", warning: "!", good: "&#10003;" };
     $("s-wresult").innerHTML = `
-  <div class="hero"><div class="rule" style="background:${st.c}"></div>
+  <div class="pos"><div class="rule" style="background:${st.c}"></div>
     <div class="status" style="color:${st.ink}"><span class="dot" style="background:${st.c}"></span>${st.t}</div>
     <div class="fig">${usd3(q.price)}</div>
     <p class="cap">${a.overAsk > 0 ? `about <b>${usd3(a.overAsk)} above</b> the top of the normal range. ${st.m}` : st.m}</p></div>
@@ -8237,7 +8635,7 @@ Re-quote it at ${t.term} months and show me out-the-door, not the payment."`;
       m: "What you signed was not what they wrote down. This is the heaviest single factor in their grade."
     };
     $("s-aresult").innerHTML = `
-  <div class="hero"><div class="rule" style="background:${st.c}"></div>
+  <div class="pos"><div class="rule" style="background:${st.c}"></div>
     <div class="status" style="color:${st.ink}"><span class="dot" style="background:${st.c}"></span>${st.t}</div>
     <div class="fig">${r.otdDrift > 0 ? "+" + usd3(r.otdDrift) : usd3(r.otdDrift)}</div>
     <p class="cap">${r.otdDrift > 0 ? "more than they quoted you. " : "against the written quote. "}${st.m}</p></div>
@@ -8366,7 +8764,7 @@ Re-quote it at ${t.term} months and show me out-the-door, not the payment."`;
     </div>`;
     };
     $("s-rresult").innerHTML = `
-  <div class="hero"><div class="rule" style="background:var(--good)"></div>
+  <div class="pos"><div class="rule" style="background:var(--good)"></div>
     <div class="status" style="color:var(--good-ink)">
       <span class="dot" style="background:var(--good)"></span>Soft check complete</div>
     <div class="fig">${best ? best.aprPct.toFixed(2) + "%" : "\u2014"}</div>
@@ -8497,7 +8895,7 @@ Re-quote it at ${t.term} months and show me out-the-door, not the payment."`;
       rough: "var(--critical)"
     };
     $("s-vresult").innerHTML = `
-  <div class="hero"><div class="rule" style="background:${GRADE_COLOUR[cond.grade]}"></div>
+  <div class="pos"><div class="rule" style="background:${GRADE_COLOUR[cond.grade]}"></div>
     <div class="status" style="color:${GRADE_COLOUR[cond.grade]}">
       <span class="dot" style="background:${GRADE_COLOUR[cond.grade]}"></span>
       ${GRADE_LABEL[cond.grade]} condition</div>
@@ -10851,19 +11249,7 @@ Re-quote it at ${t.term} months and show me out-the-door, not the payment."`;
   }
   window.renderDeal = renderDeal;
   function renderDealStrip() {
-    const strip = $("deal-strip");
-    if (!strip) return;
-    if (!deal || deal.entries.length === 0) {
-      strip.hidden = true;
-      return;
-    }
-    const st = status(deal);
-    const accepted = acceptedOffer(deal);
-    strip.hidden = false;
-    $("dl-lab").textContent = st.signed ? "Signed deal" : accepted ? "Offer accepted" : "Deal in progress";
-    $("dl-veh").textContent = dealSpec ? `${dealSpec.modelYear ?? ""} ${dealSpec.make} ${dealSpec.model} ${dealSpec.trim ?? ""}`.trim() : "Your deal";
-    $("dl-sub").textContent = st.headline;
-    $("dl-step").textContent = `${st.reached.length} step${st.reached.length === 1 ? "" : "s"}`;
+    renderHome();
   }
   function renderDesk() {
     const accepted = acceptedOffer(deal ?? newRecord("none", nowISO()));
@@ -11835,9 +12221,323 @@ Re-quote it at ${t.term} months and show me out-the-door, not the payment."`;
   go = (id, push = true) => {
     if (id === "s-protect") renderProtect();
     if (id === "s-desk") renderHeldAtDesk();
+    if (id === "s-glovebox") renderGlovebox();
+    if (id === "s-buy") renderBuyPlan();
+    if (id === "s-inventory") renderInventory();
+    if (id === "s-thread") renderThreads();
     navigateTo4(id, push);
   };
   window.go = go;
+  function renderGlovebox() {
+    const addr = $("gb-addr");
+    const note = $("gb-inbox-note");
+    const body = $("gb-body");
+    if (!addr || !note || !body) return;
+    const id = account?.state === "saved" ? account.handle ?? null : null;
+    if (id) {
+      const a = inboxAddress(id);
+      addr.textContent = a;
+      note.innerHTML = `${INBOX_RULES.noName} ${INBOX_RULES.whoCanSend}`;
+      $("gb-inbox").onclick = () => {
+        navigator.clipboard?.writeText(a);
+        $("gb-copy").textContent = "Copied";
+        setTimeout(() => {
+          $("gb-copy").textContent = "Copy";
+        }, 1500);
+      };
+    } else {
+      addr.textContent = "Available once you set up storage";
+      $("gb-copy").textContent = "";
+      note.textContent = "An address has to belong to an account that survives this phone, so it appears once storage is set up. Nothing else in ClearDrive needs one.";
+      $("gb-inbox").onclick = () => go("s-auth");
+    }
+    const docs = deal ? deal.entries.filter((e) => e.provenance.source !== "derived") : [];
+    body.innerHTML = docs.length === 0 ? `<div class="card"><h3>Nothing filed yet</h3>
+       <p>When a document arrives it is listed here with the date it came in and who sent it.
+         Nothing is ever overwritten &mdash; a corrected copy sits beside the original.</p></div>` : `<div class="card"><h3>${docs.length} document${docs.length === 1 ? "" : "s"} on file</h3>
+       <div class="chain">${docs.map((e) => `<div class="ch"><div class="chd"></div>
+         <div><b>${STAGE_LABEL[e.stage]}</b><span>${e.partyRef ?? "You"} &middot; ${(e.provenance.capturedAt ?? "").slice(0, 10)}</span></div></div>`).join("")}</div></div>`;
+  }
+  var buyCondition = "new";
+  var buyRoute = "finance";
+  var ivPicked = /* @__PURE__ */ new Set();
+  var FIXTURE_STOCK = [
+    {
+      storeRef: "Store A",
+      subscriber: false,
+      vin: "2T3P1RFV8RC000117",
+      modelYear: 2026,
+      make: "Toyota",
+      model: "RAV4",
+      trim: "XLE Premium",
+      condition: "new",
+      miles: 12,
+      askingPriceUSD: 36100,
+      stock: "in-stock",
+      distanceMiles: 14
+    },
+    {
+      storeRef: "Store B",
+      subscriber: true,
+      vin: "2T3P1RFV1RC000482",
+      modelYear: 2026,
+      make: "Toyota",
+      model: "RAV4",
+      trim: "XLE Premium",
+      condition: "new",
+      miles: 8,
+      askingPriceUSD: 35850,
+      stock: "in-transit",
+      distanceMiles: 6
+    },
+    {
+      storeRef: "Store C",
+      subscriber: true,
+      vin: null,
+      modelYear: 2026,
+      make: "Toyota",
+      model: "RAV4",
+      trim: "XLE Premium",
+      condition: "new",
+      miles: null,
+      askingPriceUSD: null,
+      stock: "allocated",
+      distanceMiles: 22
+    },
+    {
+      storeRef: "Store D",
+      subscriber: false,
+      vin: "2T3P1RFV5RC000913",
+      modelYear: 2026,
+      make: "Toyota",
+      model: "RAV4",
+      trim: "LE",
+      condition: "new",
+      miles: 14,
+      askingPriceUSD: 33200,
+      stock: "in-stock",
+      distanceMiles: 31
+    },
+    {
+      storeRef: "Store E",
+      subscriber: false,
+      vin: "2T3W1RFV2PC000221",
+      modelYear: 2024,
+      make: "Toyota",
+      model: "RAV4",
+      trim: "XLE Premium",
+      condition: "used",
+      miles: 24800,
+      askingPriceUSD: 29400,
+      stock: "in-stock",
+      distanceMiles: 9
+    },
+    {
+      storeRef: "Store F",
+      subscriber: false,
+      vin: "5J6RW2H55NL000774",
+      modelYear: 2026,
+      make: "Honda",
+      model: "CR-V",
+      trim: "EX-L",
+      condition: "new",
+      miles: 11,
+      askingPriceUSD: 37450,
+      stock: "in-stock",
+      distanceMiles: 18
+    }
+  ];
+  ["by-cond", "by-route"].forEach((id) => {
+    $(id)?.addEventListener("click", (e) => {
+      const b = e.target.closest(".chip");
+      if (!b) return;
+      $(id).querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", String(c === b)));
+      if (id === "by-cond") buyCondition = b.dataset.v;
+      else buyRoute = b.dataset.v;
+      renderBuyPlan();
+    });
+  });
+  function renderBuyPlan() {
+    const box = $("by-plan");
+    if (!box) return;
+    const p = buyingPlan(buyCondition, buyRoute);
+    box.innerHTML = `
+  <div class="equity t-steel">
+    <div class="lab">What you are negotiating</div>
+    <div class="amt" style="font-size:22px;line-height:1.2">${p.theNumber}</div>
+    <p>${p.why}</p>
+  </div>
+
+  <div class="card">
+    <h3>What gets moved when you are not watching</h3>
+    ${p.watchFor.map((w) => `<div class="flag">
+      <div class="ic" style="background:var(--serious)">!</div><div><p>${w}</p></div></div>`).join("")}
+  </div>
+
+  <div class="card">
+    <h3>Put these in writing before you go</h3>
+    ${p.askFor.map((a) => `<div class="say">${a}</div>`).join("")}
+    <p class="axisnote">${BUYING_RULES.askingIsNotOutTheDoor}</p>
+  </div>
+
+  <div class="sec-hd" style="margin-top:22px">Next</div>
+  ${p.rateFirst ? `<button class="act filled" data-go="s-prequal">
+    <span class="at"><b>Get a rate first</b><span>Lenders answer with a figure they will honour.
+      Walk in holding it and the finance office has something to beat.</span></span>
+    <span class="chev"></span></button>` : ""}
+
+  <button class="act c-blue" data-go="s-inventory">
+    <span class="at"><b>See what&rsquo;s in stock</b><span>Cars you could go and see today, and the
+      stores that will answer in writing</span></span>
+    <span class="chev"></span></button>
+
+  <button class="act c-teal" data-go="s-spec">
+    <span class="at"><b>I know the exact car</b><span>Skip the browsing and ask stores for the
+      same specification, so the answers are comparable</span></span>
+    <span class="chev"></span></button>
+
+  ${buyRoute === "lease" || buyRoute === "cash" ? `<button class="act c-violet" data-go="s-funding">
+    <span class="at"><b>Compare the ways of paying</b><span>What ${ROUTE_LABEL_BUY[buyRoute].toLowerCase()} actually costs against the alternatives, over your own
+      window</span></span>
+    <span class="chev"></span></button>` : ""}`;
+    box.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => go(b.dataset.go)));
+  }
+  $("iv-cond")?.addEventListener("click", (e) => {
+    const b = e.target.closest(".chip");
+    if (!b) return;
+    $("iv-cond").querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", String(c === b)));
+    renderInventory();
+  });
+  $("iv-instock")?.addEventListener("click", function() {
+    this.setAttribute("aria-pressed", this.getAttribute("aria-pressed") === "true" ? "false" : "true");
+    renderInventory();
+  });
+  ["iv-make", "iv-model", "iv-price", "iv-dist"].forEach((id) => $(id)?.addEventListener("input", renderInventory));
+  function renderInventory() {
+    const out = $("iv-out");
+    if (!out) return;
+    const text = (id) => ($(id)?.value ?? "").trim() || null;
+    const number = (id) => {
+      const v = parseFloat($(id)?.value);
+      return Number.isFinite(v) && v > 0 ? v : null;
+    };
+    const cond = $("iv-cond")?.querySelector('[aria-pressed="true"]')?.dataset.v || null;
+    const r = filterListings(FIXTURE_STOCK, {
+      ...emptyFilters(),
+      condition: cond || null,
+      make: text("iv-make"),
+      model: text("iv-model"),
+      maxPriceUSD: number("iv-price"),
+      maxDistanceMiles: number("iv-dist"),
+      inStockOnly: $("iv-instock")?.getAttribute("aria-pressed") === "true"
+    });
+    const picked = r.listings.filter((l) => ivPicked.has(l.storeRef + l.vin));
+    const note = comparability(picked);
+    const stores = storesIn(picked);
+    out.innerHTML = `
+  <div class="simnote"><b>Simulated stock.</b> Six fixture listings so the flow can be seen end to
+    end. No store has been contacted and no live feed is connected.</div>
+
+  <p class="axisnote" style="border:none">${r.orderNote}</p>
+
+  ${r.matched === 0 ? `<div class="card"><h3>Nothing matches</h3>
+    <p>${r.total} car${r.total === 1 ? "" : "s"} in the area, none inside those filters. Widen
+      the price or the distance.</p></div>` : ""}
+
+  ${r.listings.map((l) => {
+      const key = l.storeRef + l.vin;
+      const on = ivPicked.has(key);
+      return `<button class="lender ${on ? "best" : ""}" data-pick="${key}" type="button"
+        style="display:block;width:100%;text-align:left;border:none;font:inherit;color:inherit">
+      <div class="top">
+        <span class="nm">${l.modelYear} ${l.make} ${l.model} ${l.trim}</span>
+        <span class="apr">${l.askingPriceUSD === null ? "\u2014" : usd3(l.askingPriceUSD)}</span>
+      </div>
+      <div class="kind">${l.storeRef} &middot; ${STOCK_LABEL[l.stock]} &middot; ${l.distanceMiles} mi &middot; ${l.condition === "used" ? `${l.miles.toLocaleString()} miles` : "new"}</div>
+      ${l.askingPriceUSD === null ? `<p class="axisnote">This store publishes no price. That is
+        worth knowing on its own &mdash; and it is why they sit at the bottom rather than being
+        given a position they have not earned.</p>` : ""}
+      <div class="ib-copy" style="margin-top:8px">${on ? "&#10003; Selected" : "Select"}</div>
+    </button>`;
+    }).join("")}
+
+  ${picked.length ? `<div class="card" style="margin-top:16px">
+    <h3>${picked.length} car${picked.length === 1 ? "" : "s"} at ${stores.length} store${stores.length === 1 ? "" : "s"}</h3>
+    ${stores.length < picked.length ? `<p class="axisnote">Some of these are at the same store,
+      so ${stores.length} message${stores.length === 1 ? " goes" : "s go"} out, not ${picked.length}. You are not getting ${picked.length} independent answers.</p>` : ""}
+    ${note ? `<div class="flag"><div class="ic" style="background:var(--serious)">!</div>
+      <div><b>Not a like-for-like race</b><p>${note}</p></div></div>` : ""}
+    <p>${r.note}</p>
+    <button class="btn" id="iv-ask">Ask ${stores.length} store${stores.length === 1 ? "" : "s"} in writing</button>
+    <p class="axisnote">The request carries the exact specification and nothing about you &mdash;
+      no name, no number, no email. You see every reply before anyone learns who you are.</p>
+  </div>` : ""}`;
+    out.querySelectorAll("[data-pick]").forEach((b) => b.addEventListener("click", () => {
+      const k = b.dataset.pick;
+      if (ivPicked.has(k)) ivPicked.delete(k);
+      else ivPicked.add(k);
+      renderInventory();
+    }));
+    $("iv-ask")?.addEventListener("click", () => {
+      sendInventoryRequests(picked);
+      go("s-thread");
+    });
+  }
+  var threads = [];
+  function sendInventoryRequests(picked) {
+    const stores = storesIn(picked);
+    const sent = nowISO();
+    threads = stores.map((ref) => {
+      const answer = FIXTURE_ANSWERS.find((a) => a.ref === ref) ?? null;
+      const cars = picked.filter((l) => l.storeRef === ref);
+      return { ref, sentAt: sent, cars, answer };
+    });
+    renderThreads();
+  }
+  function renderThreads() {
+    const body = $("th-body");
+    if (!body) return;
+    if (threads.length === 0) {
+      body.innerHTML = `<div class="card"><h3>Nothing sent yet</h3>
+      <p>Pick a car or two and ClearDrive sends one written request per store.</p>
+      <button class="btn sec" onclick="go('s-inventory')">See what&rsquo;s in stock</button></div>`;
+      return;
+    }
+    body.innerHTML = `
+  <div class="simnote"><b>Simulated replies.</b> Nothing was sent and no store was contacted.</div>
+  ${threads.map((t) => {
+      const a = t.answer;
+      const otd = a?.terms?.outTheDoorUSD ?? null;
+      return `<div class="card">
+      <h3>${t.ref}</h3>
+      <div class="chain">
+        <div class="ch"><div class="chd"></div><div><b>You asked</b>
+          <span>${t.cars.map((c) => `${c.modelYear} ${c.make} ${c.model} ${c.trim}`).join("; ")}
+            &mdash; out-the-door in writing, itemised, and whether the price depends on their
+            financing.</span></div></div>
+        <div class="ch"><div class="chd" style="background:${a ? "var(--good)" : "var(--muted)"}"></div><div><b>${a ? "They answered" : "No answer yet"}</b>
+          <span>${a ? a.note ?? "Figures attached." : "Stores usually reply within a day. Nothing about you has been shared, so there is no cost to waiting."}</span></div></div>
+      </div>
+
+      ${otd !== null ? `<div class="totals" style="grid-template-columns:1fr 1fr;margin-top:12px">
+        <div class="tot"><span>Out the door</span><b>${usd3(otd)}</b></div>
+        <div class="tot"><span>Rate offered</span><b>${a.terms.aprPct == null ? "\u2014" : `${a.terms.aprPct.toFixed(2)}%`}</b></div>
+      </div>
+      <p class="axisnote">${a.terms.financingConditioned === true ? "This price depends on financing with them. Ask for the figure without it." : "This price does not depend on taking their financing."}${a.terms.aprPct == null ? " They did not put a rate in writing, so the rate is still unknown." : ""}</p>` : a ? `<div class="flag" style="margin-top:12px">
+        <div class="ic" style="background:var(--serious)">!</div>
+        <div><b>No price in this answer</b><p>${a.terms?.monthlyPaymentUSD != null ? `They replied with a monthly payment of ${usd3(a.terms.monthlyPaymentUSD)} and no price. A
+       payment is not a price \u2014 it can be made to look like anything by moving the term, and it
+       cannot be compared with anybody else's answer.` : "They replied without an out-the-door figure, so there is nothing here to compare yet."}
+        Ask again for the out-the-door price, itemised, in writing.</p></div></div>` : ""}
+    </div>`;
+    }).join("")}
+
+  <button class="btn" onclick="go('s-quotes')">Compare every answer properly</button>
+  <p class="axisnote">The comparison normalises them onto the same out-the-door basis and says
+    which ones can be verified and which cannot.</p>`;
+  }
+  homeReady = true;
+  renderHome();
 })();
 
 </script>
