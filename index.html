@@ -1601,24 +1601,9 @@ td.miss{color:var(--muted);font-style:italic}
 .pos-foot{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.35}
 .pos .btn{margin-top:10px}
 
-/* three tiles, and the drawer holds everything else */
-.htile{
-  display:flex;flex-direction:column;align-items:flex-start;gap:0;
-  background:var(--surface-1);border:none;border-radius:16px;
-  padding:14px 13px 13px;text-align:left;min-height:104px;
-}
-#home-tiles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:14px}
-.htile .hti{
-  width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
-  margin-bottom:9px;
-}
-.htile .hti svg{width:18px;height:18px}
-.htile .htt{font-size:14px;font-weight:600;letter-spacing:-.02em;line-height:1.2}
-.htile .hts{font-size:11.5px;color:var(--ink-2);margin-top:2px;line-height:1.25}
-.htile.t-indigo .hti{background:var(--t-indigo-bg);color:var(--t-indigo)}
-.htile.t-cyan .hti{background:var(--t-cyan-bg);color:var(--t-cyan)}
-.htile.t-blue .hti{background:var(--t-blue-bg);color:var(--t-blue)}
-.htile:active{opacity:.7}
+/* The landing rows live here. This was a three-column grid when the landing
+   used tiles; leaving it a grid forced the rows into columns 143px wide. */
+#home-tiles{display:block;margin-bottom:14px}
 
 /* the forwarding address, built to be read aloud across a desk */
 .inbox{
@@ -1631,6 +1616,53 @@ td.miss{color:var(--muted);font-style:italic}
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 .ib-copy{flex:none;font-size:14px;font-weight:600;color:var(--brand)}
+
+/* ── the three landing rows ─────────────────────────────────────────────
+   Full-width rows for readability and a 72px tap target, with exactly one
+   promoted to a taller lead. Only the promotion moves between states — the
+   supporting two keep their order so the screen never rearranges under a
+   thumb mid-tap. */
+.hrow{
+  display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+  background:var(--surface-1);border:none;border-radius:16px;
+  padding:14px;min-height:72px;margin-bottom:9px;font:inherit;color:inherit;
+  transition:opacity .15s ease;
+}
+.hrow:active{opacity:.72}
+.hrow .hr-i{
+  flex:none;width:40px;height:40px;border-radius:11px;display:grid;place-items:center;
+}
+.hrow .hr-i svg{width:22px;height:22px}
+.hrow .hr-t{flex:1 1 auto;min-width:0}
+.hrow .hr-n{
+  display:block;font-size:17px;font-weight:600;letter-spacing:-.024em;line-height:1.2;
+}
+.hrow .hr-s{
+  display:block;font-size:13px;color:var(--ink-2);margin-top:2px;line-height:1.3;
+}
+.hrow .hr-st{
+  display:block;font-size:12.5px;font-weight:600;margin-top:4px;line-height:1.3;
+  font-variant-numeric:tabular-nums;
+}
+/* `.chev` is a masked shape with no intrinsic size — it inherits dimensions
+   from whichever component uses it, so a new parent has to state them. */
+.hrow .chev{
+  flex:none;width:8px;height:14px;background:var(--muted);
+  -webkit-mask:var(--chev) center/contain no-repeat;mask:var(--chev) center/contain no-repeat;
+}
+
+/* the promoted row: bigger everything, and the sentence gets room to breathe */
+.hrow.lead{padding:17px 16px;min-height:92px;box-shadow:0 1px 2px rgba(16,18,24,.06)}
+.hrow.lead .hr-i{width:46px;height:46px;border-radius:13px}
+.hrow.lead .hr-i svg{width:25px;height:25px}
+.hrow.lead .hr-n{font-size:19px;letter-spacing:-.026em}
+.hrow.lead .hr-s{font-size:13.5px;margin-top:3px;line-height:1.35}
+.hrow.lead .hr-st{font-size:13px;margin-top:5px}
+
+.hrow.t-cyan .hr-i{background:var(--t-cyan-bg);color:var(--t-cyan)}
+.hrow.t-blue .hr-i{background:var(--t-blue-bg);color:var(--t-blue)}
+.hrow.t-indigo .hr-i{background:var(--t-indigo-bg);color:var(--t-indigo)}
+.hrow.t-green .hr-i{background:rgba(52,199,89,.16);color:var(--good-ink)}
 
 </style>
 </head>
@@ -1812,6 +1844,11 @@ td.miss{color:var(--muted);font-style:italic}
         <span class="ti"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3.6h7.8L19 8.6v11.8H6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.2 15.2l2 2 3.8-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="tt"><b>After the sale</b><span class="ts">Did they keep their word?</span></span>
       </button>
+      <button class="tile-btn c-teal" data-go="s-bids">
+        <span class="ti"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5v12.6M8.2 12.4L12 16.2l3.8-3.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 18.5h15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <span class="new"></span>
+        <span class="tt"><b>Sell my car</b><span class="ts">Stores bid, you choose</span></span>
+      </button>
       <button class="tile-btn c-violet" data-go="s-sell">
         <span class="ti"><svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="6.5" width="19" height="11.5" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12.25" r="2.9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="tt"><b>Sell or trade</b><span class="ts">Which way out pays most</span></span>
@@ -1851,6 +1888,40 @@ td.miss{color:var(--muted);font-style:italic}
   </details>
 
   <p class="phrase" data-phrase="beforeYouGo"></p>
+</section>
+
+<!-- ══════════ CHECK THE DEAL ══════════
+     The row this product exists for, and the only one whose answer can be
+     "you are owed money back". It spans the whole transaction because the
+     question never changes: does this document say what I was told it would
+     say? Before signing that is the pencil; after signing it is the contract,
+     and the money still sitting in cancellable products. -->
+<section class="screen" id="s-check">
+  <p class="eyebrow">Check the deal</p>
+  <h1 class="h-lead">Does it say what they said it would?</h1>
+  <p class="lede">The same question before you sign and years afterwards. Photograph anything with
+    figures on it and every line gets measured against what you were promised.</p>
+
+  <div id="ck-body"></div>
+
+  <p class="foot">ClearDrive gives information and calculations, not legal advice. Cancellation
+    rights come from your own contracts &mdash; we point at the clause, we do not grant it.</p>
+</section>
+
+<!-- ══════════ DEALS ══════════
+     Buying and selling are the same motion pointed in opposite directions:
+     describe a car, ask stores in writing, compare the answers on one basis,
+     release your name to exactly one of them. So they share a roof. -->
+<section class="screen" id="s-deals">
+  <p class="eyebrow">Deals</p>
+  <h1 class="h-lead">Buying, or selling.</h1>
+  <p class="lede">Either way stores answer in writing, without your name attached, and you compare
+    them on the one measure that matters before anybody learns who you are.</p>
+
+  <div id="dl-body"></div>
+
+  <p class="foot">ClearDrive never takes a commission on a purchase or a sale, and is not paid more
+    when a number goes up or down.</p>
 </section>
 
 <!-- ══════════ BUYING ══════════
@@ -1938,6 +2009,54 @@ td.miss{color:var(--muted);font-style:italic}
   <div id="th-body"></div>
 </section>
 
+<!-- ══════════ SELL MY CAR ══════════
+     A bid event, not a listing. One anonymous description goes out, several
+     stores answer with a number, and the seller reads them side by side before
+     anybody learns who they are — which is the only thing that has ever fixed
+     the imbalance at that desk. -->
+<section class="screen" id="s-bids">
+  <p class="eyebrow">Sell my car</p>
+  <h1 class="h-lead">Let stores bid for it.</h1>
+  <p class="lede">Describe the car once. Several stores answer with a number, in writing, and you
+    compare them on what actually reaches you after the loan is cleared. Nobody learns who you are
+    until you pick one.</p>
+
+  <div class="card">
+    <h3>The car</h3>
+    <div class="two">
+      <div class="field"><label>Year</label>
+        <div class="inp"><input type="number" id="sb-year" value="2022"></div></div>
+      <div class="field"><label>Miles</label>
+        <div class="inp"><input class="suf" type="number" id="sb-miles" value="41200"><span class="suf">mi</span></div></div>
+    </div>
+    <div class="two">
+      <div class="field"><label>Make</label>
+        <div class="inp"><input type="text" id="sb-make" value="Toyota"></div></div>
+      <div class="field"><label>Model</label>
+        <div class="inp"><input type="text" id="sb-model" value="RAV4"></div></div>
+    </div>
+    <div class="field"><label>Still owed on it<span class="hint">From your lender, not from a store. It changes daily.</span></label>
+      <div class="inp"><span class="pre">$</span><input class="pre" type="number" id="sb-payoff" value="18500"></div></div>
+    <div class="field"><label>Condition</label>
+      <div class="chips" id="sb-cond">
+        <button class="chip" data-v="excellent" aria-pressed="false">Excellent</button>
+        <button class="chip" data-v="good" aria-pressed="true">Good</button>
+        <button class="chip" data-v="fair" aria-pressed="false">Fair</button>
+        <button class="chip" data-v="rough" aria-pressed="false">Rough</button>
+      </div>
+      <p class="axisnote" id="sb-condmeans" style="border:none"></p>
+    </div>
+  </div>
+
+  <button class="btn" id="sb-go">Ask stores to bid</button>
+  <button class="btn sec" data-go="s-sell">Compare selling against trading first</button>
+
+  <div id="sb-out"></div>
+
+  <p class="foot">ClearDrive does not buy cars, does not take a commission on a sale, and is not
+    paid more when you accept a higher or a lower offer.</p>
+</section>
+
 <!-- ══════════ THE GLOVEBOX ══════════
      The reason somebody keeps this app after the sale.
      A car purchase generates a folder of paper that matters for years — the
@@ -1952,6 +2071,8 @@ td.miss{color:var(--muted);font-style:italic}
   <p class="lede">Contracts, the finance agreement, every product you were sold and the clause
     that says how to cancel it. Held encrypted, readable only by you, and still here in four
     years when a claim is refused and somebody asks what you actually signed.</p>
+
+  <div id="gb-keys"></div>
 
   <div id="gb-body"></div>
 
@@ -6645,9 +6766,9 @@ td.miss{color:var(--muted);font-style:italic}
     }
     const accepted = latestAt(record, "accepted");
     const contract = latestAt(record, "contract");
-    const endToEnd = accepted && contract ? auditPair("accepted", accepted.terms, "contract", contract.terms) : null;
-    const headline = endToEnd ? endToEnd.headline : steps.length ? steps[steps.length - 1].headline : "Nothing to compare yet. Add a second document and every figure is checked against the first.";
-    return { steps, endToEnd, headline };
+    const endToEnd2 = accepted && contract ? auditPair("accepted", accepted.terms, "contract", contract.terms) : null;
+    const headline = endToEnd2 ? endToEnd2.headline : steps.length ? steps[steps.length - 1].headline : "Nothing to compare yet. Add a second document and every figure is checked against the first.";
+    return { steps, endToEnd: endToEnd2, headline };
   }
   var AUDIT_RULES = {
     directionNotAlarm: "Changes are reported as better, worse or neutral. A contract that is cheaper than the worksheet is reported as cheaper.",
@@ -7104,8 +7225,8 @@ td.miss{color:var(--muted);font-style:italic}
         break;
       }
     }
-    const money2 = (n) => `$${Math.round(Math.abs(n)).toLocaleString("en-US")}`;
-    const message = winner === null ? `The two land within ${money2(diff)} of each other, which is inside the noise of these figures. Take whichever has the fewer conditions attached.` : winner === "apr" ? `The special rate wins by about ${money2(diff)} over ${deal2.keepMonths} months` + (breakEven2 !== null ? `, and it keeps winning until you can borrow below about ${breakEven2.toFixed(2)}% somewhere else.` : ".") : `Taking the ${money2(cashBack.rebateUSD)} back and financing elsewhere wins by about ${money2(diff)} over ${deal2.keepMonths} months` + (breakEven2 !== null ? `. The special rate only catches up if your alternative rate is above about ${breakEven2.toFixed(2)}%.` : ".");
+    const money3 = (n) => `$${Math.round(Math.abs(n)).toLocaleString("en-US")}`;
+    const message = winner === null ? `The two land within ${money3(diff)} of each other, which is inside the noise of these figures. Take whichever has the fewer conditions attached.` : winner === "apr" ? `The special rate wins by about ${money3(diff)} over ${deal2.keepMonths} months` + (breakEven2 !== null ? `, and it keeps winning until you can borrow below about ${breakEven2.toFixed(2)}% somewhere else.` : ".") : `Taking the ${money3(cashBack.rebateUSD)} back and financing elsewhere wins by about ${money3(diff)} over ${deal2.keepMonths} months` + (breakEven2 !== null ? `. The special rate only catches up if your alternative rate is above about ${breakEven2.toFixed(2)}%.` : ".");
     return {
       winner,
       aprNetUSD: withApr.netCostUSD,
@@ -7120,7 +7241,7 @@ td.miss{color:var(--muted);font-style:italic}
     const cheapest = costs[0] ?? null;
     const cheapestOwning = costs.find((c) => c.ownsAtEnd) ?? null;
     const hasLease = costs.some((c) => !c.ownsAtEnd);
-    const money2 = (n) => `$${Math.round(Math.abs(n)).toLocaleString("en-US")}`;
+    const money3 = (n) => `$${Math.round(Math.abs(n)).toLocaleString("en-US")}`;
     const spread = costs.length > 1 ? costs[costs.length - 1].netCostUSD - costs[0].netCostUSD : 0;
     return {
       costs,
@@ -7129,7 +7250,7 @@ td.miss{color:var(--muted);font-style:italic}
       // When a lease wins on cash out, saying only that is technically true and
       // practically misleading — you have no car at the end. The headline names
       // both, in one sentence, rather than leaving the correction to a footnote.
-      headline: cheapest === null ? "Nothing to compare yet." : !cheapest.ownsAtEnd && cheapestOwning ? `${cheapest.label} costs least over ${deal2.keepMonths} months at ${money2(cheapest.netCostUSD)} \u2014 but you own nothing at the end. Of the routes that leave you with a car, ${cheapestOwning.label} is cheapest at ${money2(cheapestOwning.netCostUSD)}.` : `${cheapest.label} costs least over ${deal2.keepMonths} months` + (spread > 0 ? `, by ${money2(spread)} against the dearest of these.` : "."),
+      headline: cheapest === null ? "Nothing to compare yet." : !cheapest.ownsAtEnd && cheapestOwning ? `${cheapest.label} costs least over ${deal2.keepMonths} months at ${money3(cheapest.netCostUSD)} \u2014 but you own nothing at the end. Of the routes that leave you with a car, ${cheapestOwning.label} is cheapest at ${money3(cheapestOwning.netCostUSD)}.` : `${cheapest.label} costs least over ${deal2.keepMonths} months` + (spread > 0 ? `, by ${money3(spread)} against the dearest of these.` : "."),
       leaseNote: hasLease ? "A lease is in this list and it is not the same product. The figures are cash out over the same period, which is the fairest comparison available \u2014 but at the end of a lease you have no car, and at the end of a loan you have one you can sell." : null
     };
   }
@@ -7160,7 +7281,7 @@ td.miss{color:var(--muted);font-style:italic}
     const missing = REQUIRED.filter(
       (f) => r[f] === null
     ).map((f) => LENDER_FIELD_LABEL[f]);
-    const money2 = (n) => `$${Math.round(Math.abs(n)).toLocaleString("en-US")}`;
+    const money3 = (n) => `$${Math.round(Math.abs(n)).toLocaleString("en-US")}`;
     const unpriced = {
       response: r,
       totalCostUSD: null,
@@ -7180,7 +7301,7 @@ td.miss{color:var(--muted);font-style:italic}
     const differsBy = [];
     if (principal < amountUSD) {
       differsBy.push(
-        `They will lend ${money2(principal)}, which is ${money2(amountUSD - principal)} less than you asked about. Every figure here prices that smaller loan, so it costs less for the reason that it is less.`
+        `They will lend ${money3(principal)}, which is ${money3(amountUSD - principal)} less than you asked about. Every figure here prices that smaller loan, so it costs less for the reason that it is less.`
       );
     }
     if (askedTermMonths !== null && r.termMonths !== askedTermMonths) {
@@ -7211,7 +7332,7 @@ td.miss{color:var(--muted);font-style:italic}
     const best = answering[0] ?? null;
     const tied = best === null ? [] : answering.filter((c) => Math.abs((c.totalCostUSD ?? 0) - (best.totalCostUSD ?? 0)) <= TIE_USD);
     const spread = answering.length > 1 ? (answering[answering.length - 1].totalCostUSD ?? 0) - (answering[0].totalCostUSD ?? 0) : null;
-    const money2 = (n) => `$${Math.round(Math.abs(n)).toLocaleString("en-US")}`;
+    const money3 = (n) => `$${Math.round(Math.abs(n)).toLocaleString("en-US")}`;
     const counterNote = counters.length === 0 ? "" : ` ${counters.length} other lender${counters.length === 1 ? " has" : "s have"} answered about a different loan, listed underneath and not ranked against these.`;
     return {
       costed,
@@ -7219,7 +7340,7 @@ td.miss{color:var(--muted);font-style:italic}
       tied,
       counters,
       spreadUSD: spread,
-      headline: best === null ? counters.length > 0 ? "No lender has answered the loan you asked about. The answers below are for different amounts or different terms, so none of them is a like-for-like comparison." : "No lender has answered with a figure that can be compared yet." : (tied.length > 1 ? `${tied.length} of these are within ${money2(TIE_USD)} of each other over the whole term. Between them, take whichever has the fewer conditions \u2014 the money is the same.` : spread !== null && spread > 0 ? `The cheapest of these costs ${money2(spread)} less over the term than the dearest.` : "One answer that can be compared so far.") + counterNote,
+      headline: best === null ? counters.length > 0 ? "No lender has answered the loan you asked about. The answers below are for different amounts or different terms, so none of them is a like-for-like comparison." : "No lender has answered with a figure that can be compared yet." : (tied.length > 1 ? `${tied.length} of these are within ${money3(TIE_USD)} of each other over the whole term. Between them, take whichever has the fewer conditions \u2014 the money is the same.` : spread !== null && spread > 0 ? `The cheapest of these costs ${money3(spread)} less over the term than the dearest.` : "One answer that can be compared so far.") + counterNote,
       orderingNote: ORDERING_NOTE
     };
   }
@@ -7262,13 +7383,13 @@ td.miss{color:var(--muted);font-style:italic}
     const dealerTotal = monthlyPayment(amountUSD, dealerAprPct, dealerTermMonths) * dealerTermMonths;
     const heldTotal = monthlyPayment(amountUSD, heldApr, dealerTermMonths) * dealerTermMonths;
     const extra = Math.round(dealerTotal - heldTotal);
-    const money2 = (n) => `$${Math.round(Math.abs(n)).toLocaleString("en-US")}`;
+    const money3 = (n) => `$${Math.round(Math.abs(n)).toLocaleString("en-US")}`;
     if (spread <= 0.01) {
       return {
         spreadPoints: Math.round(spread * 100) / 100,
         extraCostUSD: extra,
         dealerIsBetter: true,
-        message: spread < -0.01 ? `Their rate is ${Math.abs(spread).toFixed(2)} points below the one you brought, which would save about ${money2(extra)} over ${dealerTermMonths} months. Take it \u2014 and keep your preapproval until the paperwork is signed.` : "Their rate matches the one you brought. Either is fine.",
+        message: spread < -0.01 ? `Their rate is ${Math.abs(spread).toFixed(2)} points below the one you brought, which would save about ${money3(extra)} over ${dealerTermMonths} months. Take it \u2014 and keep your preapproval until the paperwork is signed.` : "Their rate matches the one you brought. Either is fine.",
         ask: null
       };
     }
@@ -7276,7 +7397,7 @@ td.miss{color:var(--muted);font-style:italic}
       spreadPoints: Math.round(spread * 100) / 100,
       extraCostUSD: extra,
       dealerIsBetter: false,
-      message: `Their rate is ${spread.toFixed(2)} points above the preapproval you are holding, which is about ${money2(extra)} more over ${dealerTermMonths} months. A dealership arranges financing through a lender and is often permitted to add to the rate that lender approved. You are not obliged to take it.`,
+      message: `Their rate is ${spread.toFixed(2)} points above the preapproval you are holding, which is about ${money3(extra)} more over ${dealerTermMonths} months. A dealership arranges financing through a lender and is often permitted to add to the rate that lender approved. You are not obliged to take it.`,
       ask: `I have a preapproval at ${heldApr.toFixed(2)}%. Can you beat it? If not, I will use it.`
     };
   }
@@ -7333,7 +7454,7 @@ td.miss{color:var(--muted);font-style:italic}
   }
   function checkAgainstPreapproval(held, final) {
     const q = held.response;
-    const money2 = (n) => `$${Math.round(Math.abs(n)).toLocaleString("en-US")}`;
+    const money3 = (n) => `$${Math.round(Math.abs(n)).toLocaleString("en-US")}`;
     if (q.aprPct === null || q.termMonths === null || final.aprPct === null || final.termMonths === null) {
       return {
         verdict: "cannot-verify",
@@ -7372,7 +7493,7 @@ td.miss{color:var(--muted);font-style:italic}
       termDeltaMonths: termDelta,
       extraCostUSD: extra,
       findings,
-      headline: !changed ? "Your loan matches the rate you were quoted." : extra !== null && extra > 0 ? `This loan costs ${money2(extra)} more than the rate you were quoted.` : extra !== null && extra < 0 ? `This loan costs ${money2(extra)} less than the rate you were quoted.` : "The financing is not what you were quoted, and the amount financed is missing so the difference cannot be priced.",
+      headline: !changed ? "Your loan matches the rate you were quoted." : extra !== null && extra > 0 ? `This loan costs ${money3(extra)} more than the rate you were quoted.` : extra !== null && extra < 0 ? `This loan costs ${money3(extra)} less than the rate you were quoted.` : "The financing is not what you were quoted, and the amount financed is missing so the difference cannot be priced.",
       ask: changed && (aprPoints > 0 || termDelta > 0) ? `${q.party.ref} preapproved me at ${q.aprPct.toFixed(2)}% over ${q.termMonths} months. This is different. Please either match it or put the reason in writing.` : null
     };
   }
@@ -7650,6 +7771,412 @@ td.miss{color:var(--muted);font-style:italic}
     askingIsNotOutTheDoor: "A published asking price is not what the car costs. Only a written, itemised out-the-door figure is comparable to another one.",
     noStoreCanPayToRank: "Whether a store pays ClearDrive is carried on every listing and read by nothing that filters or orders. A test flips it on every row and asserts the list does not move."
   };
+  var CONDITION_MEANS = {
+    excellent: "No paint or panel damage, full service history, everything works.",
+    good: "Normal wear for the mileage, a few small marks, nothing outstanding.",
+    fair: "Visible cosmetic damage, or a known mechanical fault, or gaps in the history.",
+    rough: "Significant damage, a warning light, or something that stops it being driven."
+  };
+  var FIRMNESS_LABEL = {
+    firm: "Firm, in writing",
+    "subject-to-inspection": "Subject to inspection",
+    estimate: "Estimate only"
+  };
+  var FIRMNESS_MEANS = {
+    firm: "They will pay this on the described car without re-quoting. A deduction after this point is a change to a written offer, and you can decline it and leave.",
+    "subject-to-inspection": "Normal, and not a red flag on its own. It does mean the number can move when they see the car, so treat it as a ceiling and take photographs before you go.",
+    estimate: "This is not an offer. It is what they think the car might be worth from a description, and it carries no commitment at all. Compare it with other estimates, never with a firm offer."
+  };
+  var UNIVERSAL_BID_CONDITIONS = [
+    "Every bid here assumes the car matches the description you gave. A difference found at the inspection is the normal reason a number changes.",
+    "The payoff figure has to come from your lender, not from the store, and it changes daily.",
+    "You keep making payments until the lender confirms the loan is cleared. The account is yours until they say otherwise."
+  ];
+  function conditionsOn(bid) {
+    const out = [...bid.conditions, ...UNIVERSAL_BID_CONDITIONS];
+    if (bid.holdsUntil === null) {
+      out.unshift("They did not say how long this holds. Ask for a date in writing \u2014 an undated number can be withdrawn on the day you turn up.");
+    }
+    if (!bid.outrightPurchase) {
+      out.unshift("They will only take the car as a trade against buying one from them. That means the same people set both numbers.");
+    }
+    return out;
+  }
+  var FIELD = {
+    amountUSD: "The amount",
+    firmness: "Whether it is firm",
+    holdsUntil: "How long it holds"
+  };
+  function costBid(bid, car) {
+    const missing = ["amountUSD", "firmness", "holdsUntil"].filter((k) => bid[k] === null).map((k) => FIELD[k]);
+    const warnings = [];
+    if (bid.firmness === "estimate") warnings.push(FIRMNESS_MEANS.estimate);
+    if (!bid.outrightPurchase) {
+      warnings.push("This only stands if you buy a car from them. Settle the price of that car in writing BEFORE you agree this number, or the two get shuffled against each other.");
+    }
+    if (bid.amountUSD === null) {
+      return {
+        bid,
+        netToYouUSD: null,
+        clearsLoan: null,
+        shortfallUSD: null,
+        missing,
+        comparable: false,
+        notComparable: "They have not put a number on it, so there is nothing to compare yet.",
+        warnings
+      };
+    }
+    let net = null;
+    let clears = null;
+    let shortfall = null;
+    if (car.loanPayoffUSD !== null) {
+      const p = checkPayoff(bid.amountUSD, car.loanPayoffUSD);
+      clears = !p.negativeEquity;
+      shortfall = p.shortfall;
+      net = bid.amountUSD - car.loanPayoffUSD;
+      if (p.negativeEquity) warnings.push(p.guidance);
+    } else {
+      warnings.push("You have not entered what you still owe, so this shows the offer rather than what you would actually walk away with.");
+      net = bid.amountUSD;
+    }
+    const comparable = bid.firmness !== "estimate" && bid.outrightPurchase;
+    const notComparable = bid.firmness === "estimate" ? "An estimate is not an offer, so it is listed apart from the ones that are." : !bid.outrightPurchase ? "A trade-only number is not a cash offer until the price of the car you are buying is settled in writing." : null;
+    return {
+      bid,
+      netToYouUSD: net,
+      clearsLoan: clears,
+      shortfallUSD: shortfall,
+      missing,
+      comparable,
+      notComparable,
+      warnings
+    };
+  }
+  var BID_TIE_USD = 250;
+  var BID_NO_PREFERENCE = "We do not prefer any store. Nobody here paid to be on this list, to be higher on it, or to have another store left off it.";
+  var BID_ORDER_NOTE = "Ordered by what actually reaches you \u2014 the offer after your loan is cleared \u2014 and by nothing else. Not by the headline number, and not by whether a store pays ClearDrive.";
+  function compareBids(bids, car) {
+    const money3 = (n) => `$${Math.round(Math.abs(n)).toLocaleString("en-US")}`;
+    const costed = bids.map((b) => costBid(b, car)).sort((a, b) => {
+      if (a.comparable !== b.comparable) return a.comparable ? -1 : 1;
+      const av = a.netToYouUSD, bv = b.netToYouUSD;
+      if (av === null && bv === null) return a.bid.storeRef.localeCompare(b.bid.storeRef);
+      if (av === null) return 1;
+      if (bv === null) return -1;
+      return bv - av || a.bid.storeRef.localeCompare(b.bid.storeRef);
+    });
+    const usable = costed.filter((c) => c.comparable && c.netToYouUSD !== null);
+    const aside = costed.filter((c) => !c.comparable && c.bid.amountUSD !== null);
+    const best = usable[0] ?? null;
+    const tied = best === null ? [] : usable.filter((c) => Math.abs((c.netToYouUSD ?? 0) - (best.netToYouUSD ?? 0)) <= BID_TIE_USD);
+    const spread = usable.length > 1 ? usable[0].netToYouUSD - usable[usable.length - 1].netToYouUSD : null;
+    const priced = costed.filter((c) => c.bid.amountUSD !== null);
+    const highest = priced.length ? priced.reduce((a, b) => b.bid.amountUSD > a.bid.amountUSD ? b : a) : null;
+    const headlineBeatsBest = best !== null && highest !== null && highest !== best && highest.bid.amountUSD > best.bid.amountUSD;
+    const headline = best === null ? aside.length > 0 ? "No store has made an offer that can be compared yet. What came back is estimates, or numbers that only stand if you buy a car from them." : "No store has answered with a number yet." : headlineBeatsBest ? `The largest number here is ${money3(highest.bid.amountUSD)} from ${highest.bid.storeRef}, and it is not the best offer: ${highest.notComparable ?? FIRMNESS_LABEL[highest.bid.firmness ?? "estimate"].toLowerCase()} ${best.bid.storeRef} is offering ${money3(best.bid.amountUSD)} firm.` : tied.length > 1 ? `${tied.length} of these are within ${money3(BID_TIE_USD)} of each other. Between them, take whichever is firmest and closest.` : spread !== null && spread > 0 ? `The best offer puts ${money3(spread)} more in your hand than the lowest.` : "One offer that can be compared so far.";
+    return {
+      costed,
+      best,
+      tied,
+      aside,
+      highest,
+      headline,
+      orderNote: BID_ORDER_NOTE,
+      spreadUSD: spread
+    };
+  }
+  function chooseBid(chosen, all) {
+    const others = all.filter((b) => b.storeRef !== chosen.storeRef).length;
+    return {
+      released: ["full name", "phone number", "the vehicle registration and title details"],
+      reason: `Your details go to ${chosen.storeRef} and to nobody else. ${others} other ${others === 1 ? "store" : "stores"} answered and are told nothing \u2014 not your name, not that you chose somebody else, and not what anybody else offered.`,
+      bringWithYou: [
+        "The title, or your lender's details if they hold it.",
+        "Photographs taken today, timestamped, of every panel and the odometer.",
+        "This offer in writing, with the mileage and the expiry on it.",
+        "A second written offer, if you have one. It is the only leverage that works at that desk."
+      ]
+    };
+  }
+  var BID_RULES = {
+    highestIsNotBest: "The largest number is not the best offer. An estimate that reserves the right to change after inspection is worth less than a smaller figure somebody has committed to in writing, and it is offered precisely because it looks better in a list.",
+    tradeOnlyIsNotCash: "A store that will only take your car against buying one from them sets both numbers, and can hand back on the price of the new car whatever it just gave you on the trade. Settle the purchase price in writing first, or the two get shuffled.",
+    cashNotOffer: "What matters is what clears the loan. An offer below your payoff is not money you receive; it is a cheque you write.",
+    noStoreCanPayToRank: "Whether a store pays ClearDrive is carried on every bid and read by nothing that orders the list. A test flips it on every bid and asserts the order does not move.",
+    chipping: CHIPPING.what,
+    chippingDefence: CHIPPING.defence,
+    reinspection: OFFER_TERMS.reinspectionWarning
+  };
+  var WRAP_LABEL = {
+    "passkey-prf": "Face ID on this phone",
+    "recovery-code": "Your recovery code",
+    "second-device": "Another device you enrolled",
+    "server-escrow": "ClearDrive can restore it"
+  };
+  var WRAP_MEANS = {
+    "passkey-prf": "The key is derived from your passkey and never leaves this phone. If your passkey is backed up by your phone\u2019s keychain it arrives with your next device; if it is not, it does not.",
+    "recovery-code": "A code only you hold. It is the one route that survives losing every device you own, and it is worthless to anybody who cannot also reach your account.",
+    "second-device": "A second phone or laptop you have already signed in on. Convenient, and not a substitute for the code \u2014 two devices in one bag are one accident.",
+    "server-escrow": "ClearDrive holds a key that can open your documents. Recovery becomes easy and the promise changes: we would be trusting ourselves not to look, rather than being unable to."
+  };
+  function endToEnd(wraps) {
+    return !wraps.includes("server-escrow");
+  }
+  function noKeys() {
+    return { wraps: [], passkeySynced: false, recoveryCodeConfirmed: false, documentCount: 0 };
+  }
+  function independentRoutes(s) {
+    return s.wraps.filter((w) => {
+      if (w === "recovery-code") return s.recoveryCodeConfirmed;
+      if (w === "passkey-prf") return s.passkeySynced;
+      return true;
+    });
+  }
+  function readinessToStore(s) {
+    const routes = independentRoutes(s);
+    if (routes.length === 0) {
+      return {
+        canStore: false,
+        routes,
+        blocker: "set-recovery",
+        message: s.wraps.includes("passkey-prf") && !s.passkeySynced ? "Your passkey exists only on this phone and is not backed up by its keychain. If the phone goes, so does every document. Set a recovery code before storing anything." : "There is no way to open this vault yet. Set up a passkey and a recovery code first."
+      };
+    }
+    if (routes.length === 1) {
+      return {
+        canStore: false,
+        routes,
+        blocker: routes[0] === "recovery-code" ? "add-passkey" : "set-recovery",
+        message: `One way in is not enough to trust with documents you will need in four years. You have ${WRAP_LABEL[routes[0]].toLowerCase()}; add a second route and the vault opens.`
+      };
+    }
+    return {
+      canStore: true,
+      routes,
+      blocker: null,
+      message: `Two independent ways in: ${routes.map((r) => WRAP_LABEL[r].toLowerCase()).join(" and ")}. Losing one is an inconvenience rather than a loss.`
+    };
+  }
+  function whatServerHolds(wraps) {
+    const e2e = endToEnd(wraps);
+    return {
+      canRead: !e2e,
+      holds: [
+        "Your email or passkey handle, so you can sign in.",
+        "An encrypted blob per document, its size, and when it arrived.",
+        "The wrapped copies of your key \u2014 each one useless without the thing that unwraps it."
+      ],
+      neverHolds: e2e ? [
+        "Anything that can decrypt a document. The key exists only on your devices.",
+        "The contents, the figures, the store, or the car \u2014 none of it is readable server-side."
+      ] : ["The contents are readable by ClearDrive under this configuration."],
+      underSubpoena: e2e ? "We would hand over what we have: encrypted blobs, sizes and dates. We could not decrypt them, because we have never held anything that can." : "We would be able to produce the documents themselves, because we hold a key that opens them. That is worth knowing before you choose this configuration."
+    };
+  }
+  var CODE_ALPHABET = "23456789BCDFGHJKMNPQRSTVWXZ";
+  var RECOVERY_CODE_GROUPS = 5;
+  var RECOVERY_CODE_GROUP_SIZE = 5;
+  function formatRecoveryCode(bytes) {
+    const need = RECOVERY_CODE_GROUPS * RECOVERY_CODE_GROUP_SIZE;
+    if (bytes.length < need) {
+      throw new Error(`A recovery code needs ${need} bytes of randomness, got ${bytes.length}.`);
+    }
+    const chars = [];
+    for (let i = 0; i < need; i++) chars.push(CODE_ALPHABET[bytes[i] % CODE_ALPHABET.length]);
+    const groups = [];
+    for (let g = 0; g < RECOVERY_CODE_GROUPS; g++) {
+      groups.push(chars.slice(g * RECOVERY_CODE_GROUP_SIZE, (g + 1) * RECOVERY_CODE_GROUP_SIZE).join(""));
+    }
+    return groups.join("-");
+  }
+  function normaliseRecoveryCode(input) {
+    const cleaned = input.toUpperCase().replace(/[O]/g, "0").replace(/[IL]/g, "1").replace(/[^A-Z0-9]/g, "");
+    const groups = [];
+    for (let i = 0; i < cleaned.length; i += RECOVERY_CODE_GROUP_SIZE) {
+      groups.push(cleaned.slice(i, i + RECOVERY_CODE_GROUP_SIZE));
+    }
+    return groups.join("-");
+  }
+  var VAULT_KEY_RULES = {
+    gate: "No document is accepted until there are two independent ways to get back in. A vault with one route is a vault with one way to lose everything.",
+    linkIsNotAKey: "An emailed link proves who you are. It does not decrypt anything. Recovering an account and recovering documents are different problems, and treating them as one is how document lockers lose documents.",
+    passkeyIsNotABackup: "A passkey backed up by your phone\u2019s keychain arrives with your next device. A device-bound one does not, and the difference is invisible at the moment you create it \u2014 so it is checked rather than assumed.",
+    theHonestCost: "Because ClearDrive cannot read your documents, ClearDrive cannot restore them either. That is the same fact stated twice, and both halves are said before you upload anything."
+  };
+  function noSignals() {
+    return {
+      hasCar: false,
+      valueUSD: null,
+      milesToService: null,
+      serviceOverdue: false,
+      repliesWaiting: 0,
+      dealOpen: false,
+      documentCount: 0,
+      documentsToCheck: 0,
+      refundableUSD: null,
+      cancellableCount: 0
+    };
+  }
+  var money2 = (n) => `$${Math.round(Math.abs(n)).toLocaleString("en-US")}`;
+  var plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+  function garageRow(s) {
+    if (!s.hasCar) {
+      return {
+        key: "garage",
+        title: "Garage",
+        sub: "The car you have",
+        status: "No car added yet",
+        lead: "Add your car and ClearDrive tracks what it is worth against what you still owe, every month, without you having to ask.",
+        tone: "plain"
+      };
+    }
+    const worth = s.valueUSD === null ? "Value not set" : money2(s.valueUSD);
+    if (s.serviceOverdue) {
+      return {
+        key: "garage",
+        title: "Garage",
+        sub: "The car you have",
+        status: `${worth} \xB7 service overdue`,
+        lead: `Worth about ${worth}, and a scheduled service is past due. Keeping to the schedule is what protects both the warranty and that number.`,
+        tone: "attention"
+      };
+    }
+    const svc = s.milesToService === null ? "nothing due" : `service in ${s.milesToService.toLocaleString("en-US")} mi`;
+    return {
+      key: "garage",
+      title: "Garage",
+      sub: "The car you have",
+      status: `${worth} \xB7 ${svc}`,
+      lead: `Worth about ${worth} today, with ${svc}. Tap for what you owe against it and where the two lines cross.`,
+      tone: "plain"
+    };
+  }
+  function dealsRow(s) {
+    if (s.repliesWaiting > 0) {
+      return {
+        key: "deals",
+        title: "Deals",
+        sub: "Buying and selling",
+        status: `${plural(s.repliesWaiting, "store has", "stores have")} replied`,
+        lead: `${plural(s.repliesWaiting, "store has", "stores have")} answered in writing and are waiting on you. Compare them on the same out-the-door basis before you reply.`,
+        tone: "good"
+      };
+    }
+    if (s.dealOpen) {
+      return {
+        key: "deals",
+        title: "Deals",
+        sub: "Buying and selling",
+        status: "Purchase in progress",
+        lead: "A purchase is under way. Everything you are promised gets checked against what you are eventually asked to sign.",
+        tone: "plain"
+      };
+    }
+    return {
+      key: "deals",
+      title: "Deals",
+      sub: "Buying and selling",
+      status: "Nothing open",
+      lead: "Buy a car or sell one. Either way stores answer in writing, without your name, and you compare them side by side.",
+      tone: "plain"
+    };
+  }
+  function gloveboxRow(s) {
+    if (s.documentCount > 0) {
+      return {
+        key: "glovebox",
+        title: "Glovebox",
+        sub: "Everything you signed",
+        status: `${plural(s.documentCount, "document", "documents")} kept`,
+        lead: `${plural(s.documentCount, "document", "documents")} kept, and still here in four years when a claim is refused and somebody asks what you actually signed.`,
+        tone: "plain"
+      };
+    }
+    return {
+      key: "glovebox",
+      title: "Glovebox",
+      sub: "Everything you signed",
+      status: "Nothing filed yet",
+      lead: "Every document from the purchase, kept where you can find it. Forward them to your ClearDrive address, or let a participating store send them at delivery.",
+      tone: "plain"
+    };
+  }
+  function checkRow(s) {
+    if (s.documentsToCheck > 0) {
+      return {
+        key: "check",
+        title: "Check the deal",
+        sub: "Before and after you sign",
+        status: `${plural(s.documentsToCheck, "document", "documents")} to check`,
+        lead: `${s.documentsToCheck === 1 ? "A document has" : `${s.documentsToCheck} documents have`} arrived and not been measured against what you were promised \u2014 while there is still something you can do about it.`,
+        tone: "attention"
+      };
+    }
+    if (s.refundableUSD !== null && s.refundableUSD > 0) {
+      return {
+        key: "check",
+        title: "Check the deal",
+        sub: "Before and after you sign",
+        status: `${money2(s.refundableUSD)} may be refundable`,
+        lead: `About ${money2(s.refundableUSD)} looks recoverable from ${plural(s.cancellableCount, "product", "products")} sold with the car. They are contracts of their own, with their own cancellation rights.`,
+        tone: "attention"
+      };
+    }
+    if (s.dealOpen) {
+      return {
+        key: "check",
+        title: "Check the deal",
+        sub: "Before and after you sign",
+        status: "Check the pencil before you sign",
+        lead: "Photograph the worked-up figures before anything is signed. Every line gets compared with the offer you accepted, and the rate you are holding.",
+        tone: "good"
+      };
+    }
+    return {
+      key: "check",
+      title: "Check the deal",
+      sub: "Before and after you sign",
+      status: "Nothing outstanding",
+      lead: "Photograph a worksheet or a contract at any point \u2014 before you sign or years after \u2014 and every figure gets measured against what you were told.",
+      tone: "plain"
+    };
+  }
+  function homeRows(s) {
+    const rows = {
+      check: checkRow(s),
+      garage: garageRow(s),
+      deals: dealsRow(s),
+      glovebox: gloveboxRow(s)
+    };
+    let leadKey;
+    let reason;
+    if (s.documentsToCheck > 0) {
+      leadKey = "check";
+      reason = "a document has not been checked against what was promised";
+    } else if (s.serviceOverdue) {
+      leadKey = "garage";
+      reason = "service is overdue";
+    } else if (s.repliesWaiting > 0) {
+      leadKey = "deals";
+      reason = "a store is waiting on an answer";
+    } else if (s.refundableUSD !== null && s.refundableUSD > 0) {
+      leadKey = "check";
+      reason = "there is money still recoverable from the finance office";
+    } else if (s.dealOpen) {
+      leadKey = "check";
+      reason = "a purchase is under way and the pencil has not been checked";
+    } else if (s.hasCar) {
+      leadKey = "garage";
+      reason = "nothing is outstanding, so the car leads";
+    } else {
+      leadKey = "deals";
+      reason = "there is no car yet, so the way in is a purchase";
+    }
+    const order = ["check", "garage", "deals", "glovebox"];
+    const lead = rows[leadKey];
+    const rest = order.filter((k) => k !== leadKey).map((k) => rows[k]);
+    return { lead, rest, rows: [lead, ...rest], reason };
+  }
 
   // apps/web/app.js
   var $ = (id) => document.getElementById(id);
@@ -7799,12 +8326,8 @@ td.miss{color:var(--muted);font-style:italic}
     const hasCar = p !== null && p.totalValueUSD > 0;
     hero.innerHTML = hasCar ? heroPosition(p) : heroEmpty();
     if (hasCar) wireScrub(p);
-    tiles.innerHTML = HOME_TILES.map((t) => `
-    <button class="htile ${t.tone}" data-go="${t.go}">
-      <span class="hti">${t.icon}</span>
-      <span class="htt">${t.label}</span>
-      <span class="hts">${t.sub}</span>
-    </button>`).join("");
+    const layout = homeRows(homeSignals());
+    tiles.innerHTML = rowMarkup(layout.lead, true) + layout.rest.map((r) => rowMarkup(r, false)).join("");
     if (hasDeal) {
       const st = status(deal);
       const vehicle = dealSpec ? `${dealSpec.modelYear ?? ""} ${dealSpec.make} ${dealSpec.model} ${dealSpec.trim ?? ""}`.trim() : "Your deal";
@@ -7826,17 +8349,54 @@ td.miss{color:var(--muted);font-style:italic}
     });
   }
   var HOME_MONTHS = 60;
-  var ICON = {
-    doc: '<svg viewBox="0 0 24 24" fill="none"><path d="M6 3.6h7.8L19 8.6v11.8H6z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M13.8 3.6v5H19M9 13h6M9 16h4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    wrench: '<svg viewBox="0 0 24 24" fill="none"><path d="M15.6 3.6a5.2 5.2 0 00-6.1 6.7L3.8 16a2 2 0 102.8 2.8l5.7-5.7a5.2 5.2 0 006.7-6.1l-2.9 2.9-2.5-.7-.7-2.5z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg>',
-    key: '<svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="12" r="4.2" stroke="currentColor" stroke-width="1.9"/><path d="M12.2 12H21M18.4 12v3.1M15.4 12v2.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>',
-    tag: '<svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5h7.5a1 1 0 011 1V12a1 1 0 01-.3.7l-7.5 7.5a1 1 0 01-1.4 0l-7.5-7.5a1 1 0 010-1.4l7.5-7.5A1 1 0 0112 3.5z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M16.6 7.4h.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>'
+  var ROW_ICON = {
+    check: '<path d="M12 3.2l7.6 3v5.6c0 4.4-3.1 8.3-7.6 9.6-4.5-1.3-7.6-5.2-7.6-9.6V6.2z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M8.8 12.3l2.3 2.3 4.4-4.7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>',
+    garage: '<path d="M3.5 10.5L12 4.5l8.5 6v9.5h-17z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M8 20v-5.5h8V20" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>',
+    deals: '<path d="M3.5 11.4l3.3-3.3 3.6 1.1 2.6-1.1 3.3 1.1 4.2 2.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.6 13.4l3 2.9 2.1-1.2 2.4 1.6 2.2-1.6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>',
+    glovebox: '<path d="M6 3.6h7.8L19 8.6v11.8H6z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M13.8 3.6v5H19" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.2 15.1l1.8 1.8 3.6-3.9" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>'
   };
-  var HOME_TILES = [
-    { go: "s-glovebox", tone: "t-indigo", icon: ICON.doc, label: "Glovebox", sub: "Every document" },
-    { go: "s-buy", tone: "t-blue", icon: ICON.key, label: "Buy a car", sub: "From here to signed" },
-    { go: "s-car", tone: "t-cyan", icon: ICON.wrench, label: "Upkeep", sub: "Miles &amp; service" }
-  ];
+  var ROW_GO = { check: "s-check", garage: "s-garage", deals: "s-deals", glovebox: "s-glovebox" };
+  var ROW_TONE = { check: "t-green", garage: "t-cyan", deals: "t-blue", glovebox: "t-indigo" };
+  function homeSignals() {
+    const p = fleet.length ? portfolio(fleet, HOME_MONTHS) : null;
+    const car = fleet[0] ?? null;
+    const miles = car?.readings?.[car.readings.length - 1]?.miles ?? 0;
+    const due = car ? serviceDue(car.log ?? [], miles) ?? [] : [];
+    const soonest = due.filter((d) => !d.overdue).sort((a, b) => a.milesRemaining - b.milesRemaining)[0] ?? null;
+    const docs = deal ? deal.entries.filter((e) => e.provenance.source !== "derived") : [];
+    const signed = deal ? entriesAt(deal, "contract").length : 0;
+    const audit = deal && signed > 0 ? auditStage(deal, "contract") : null;
+    const unsettled = signed === 0 ? 0 : audit === null || !audit.matches ? signed : 0;
+    const signedTerms = deal && signed > 0 ? latestAt(deal, "contract")?.terms ?? null : null;
+    const cancellable = (signedTerms?.products ?? []).filter((x) => (x.priceUSD ?? 0) > 0);
+    const refundable = cancellable.length === 0 ? null : Math.round(cancellable.reduce((t, x) => t + (x.priceUSD ?? 0) * 0.7, 0));
+    return {
+      ...noSignals(),
+      hasCar: p !== null && p.totalValueUSD > 0,
+      valueUSD: p && p.totalValueUSD > 0 ? p.totalValueUSD : null,
+      milesToService: soonest ? soonest.milesRemaining : null,
+      serviceOverdue: due.some((d) => d.overdue),
+      repliesWaiting: threads.filter((t) => t.answer !== null).length,
+      dealOpen: !!deal && deal.entries.length > 0 && !status(deal).signed,
+      documentCount: docs.length,
+      documentsToCheck: unsettled,
+      refundableUSD: refundable,
+      cancellableCount: cancellable.length
+    };
+  }
+  function rowMarkup(r, isLead) {
+    const tone = ROW_TONE[r.key];
+    const statusColour = r.tone === "attention" ? "var(--critical)" : r.tone === "good" ? "var(--good-ink)" : "var(--ink-2)";
+    return `<button class="hrow ${isLead ? "lead" : ""} ${tone}" data-go="${ROW_GO[r.key]}">
+    <span class="hr-i"><svg viewBox="0 0 24 24" fill="none">${ROW_ICON[r.key]}</svg></span>
+    <span class="hr-t">
+      <span class="hr-n">${r.title}</span>
+      <span class="hr-s">${isLead ? r.lead : r.sub}</span>
+      <span class="hr-st" style="color:${statusColour}">${r.status}</span>
+    </span>
+    <span class="chev"></span>
+  </button>`;
+  }
   function heroEmpty() {
     return `<div class="pos">
     <div class="pos-lab">Your car</div>
@@ -7877,6 +8437,7 @@ td.miss{color:var(--muted);font-style:italic}
     </div>
     <p class="pos-foot">Projected from today on the same depreciation curve the garage uses.
       A projection, not a quote.</p>
+    <button class="btn sec" data-go="s-bids" style="margin-top:12px">${behind ? "See what stores would actually give you" : "Ask what stores would give you for it"}</button>
   </div>`;
   }
   function chartSVG(path, muted) {
@@ -12221,10 +12782,16 @@ Re-quote it at ${t.term} months and show me out-the-door, not the payment."`;
   go = (id, push = true) => {
     if (id === "s-protect") renderProtect();
     if (id === "s-desk") renderHeldAtDesk();
-    if (id === "s-glovebox") renderGlovebox();
+    if (id === "s-glovebox") {
+      renderGlovebox();
+      renderVaultKeys();
+    }
     if (id === "s-buy") renderBuyPlan();
     if (id === "s-inventory") renderInventory();
     if (id === "s-thread") renderThreads();
+    if (id === "s-bids") renderBids();
+    if (id === "s-deals") renderDeals();
+    if (id === "s-check") renderCheck();
     navigateTo4(id, push);
   };
   window.go = go;
@@ -12535,6 +13102,412 @@ Re-quote it at ${t.term} months and show me out-the-door, not the payment."`;
   <button class="btn" onclick="go('s-quotes')">Compare every answer properly</button>
   <p class="axisnote">The comparison normalises them onto the same out-the-door basis and says
     which ones can be verified and which cannot.</p>`;
+  }
+  var sellCondition = "good";
+  var bidState = null;
+  var FIXTURE_BIDS = [
+    {
+      storeRef: "Store A",
+      subscriber: false,
+      amountUSD: 22400,
+      firmness: "estimate",
+      holdsUntil: null,
+      outrightPurchase: true,
+      conditions: [],
+      receivedAt: "",
+      note: "Great car! Come in today and we will take a look."
+    },
+    {
+      storeRef: "Store B",
+      subscriber: true,
+      amountUSD: 23500,
+      firmness: "firm",
+      holdsUntil: "2026-09-18",
+      outrightPurchase: false,
+      conditions: [],
+      receivedAt: "",
+      note: "We can do this as a trade against anything on our lot."
+    },
+    {
+      storeRef: "Store C",
+      subscriber: false,
+      amountUSD: 21900,
+      firmness: "firm",
+      holdsUntil: "2026-09-18",
+      outrightPurchase: true,
+      receivedAt: "",
+      conditions: ["Assumes no accident history on the report."],
+      note: "Firm on the described car. We pay the lender directly."
+    },
+    {
+      storeRef: "Store D",
+      subscriber: true,
+      amountUSD: 21750,
+      firmness: "subject-to-inspection",
+      holdsUntil: "2026-09-11",
+      outrightPurchase: true,
+      conditions: [],
+      receivedAt: "",
+      note: "Subject to seeing it. Bring the title if you have it."
+    },
+    {
+      storeRef: "Store E",
+      subscriber: false,
+      amountUSD: null,
+      firmness: null,
+      holdsUntil: null,
+      outrightPurchase: true,
+      conditions: [],
+      receivedAt: "",
+      note: "We would need to see it before quoting anything."
+    }
+  ];
+  $("sb-cond")?.addEventListener("click", (e) => {
+    const b = e.target.closest(".chip");
+    if (!b) return;
+    $("sb-cond").querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", String(c === b)));
+    sellCondition = b.dataset.v;
+    $("sb-condmeans").textContent = CONDITION_MEANS[sellCondition];
+  });
+  if ($("sb-condmeans")) $("sb-condmeans").textContent = CONDITION_MEANS.good;
+  function sellCarFromForm() {
+    const n = (id) => {
+      const v = parseFloat($(id)?.value);
+      return Number.isFinite(v) && v > 0 ? v : null;
+    };
+    return {
+      vin: null,
+      modelYear: n("sb-year") ?? 2022,
+      make: ($("sb-make")?.value ?? "").trim() || "Unknown",
+      model: ($("sb-model")?.value ?? "").trim() || "Unknown",
+      trim: null,
+      miles: n("sb-miles"),
+      condition: sellCondition,
+      loanPayoffUSD: n("sb-payoff"),
+      titleInHand: null
+    };
+  }
+  $("sb-go")?.addEventListener("click", () => {
+    const car = sellCarFromForm();
+    const at = nowISO();
+    const bids = FIXTURE_BIDS.map((b) => ({ ...b, receivedAt: at }));
+    bidState = { car, bids, comparison: compareBids(bids, car) };
+    renderBids();
+    $("sb-out").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  function renderBids() {
+    const out = $("sb-out");
+    if (!out || !bidState) return;
+    const { car, comparison: c } = bidState;
+    const row = (x) => {
+      const b = x.bid;
+      const isBest = x === c.best && c.tied.length === 1;
+      const tied = c.tied.length > 1 && c.tied.includes(x);
+      const conds = conditionsOn(b);
+      return `<div class="lender ${isBest || tied ? "best" : ""}">
+      <div class="top">
+        <span class="nm">${b.storeRef}</span>
+        ${isBest ? '<span class="ltag free">Most in your hand</span>' : ""}
+        ${tied ? '<span class="ltag free">Tied</span>' : ""}
+        ${!x.comparable && b.amountUSD !== null ? '<span class="ltag">Not like-for-like</span>' : ""}
+        <span class="apr">${b.amountUSD === null ? "\u2014" : usd3(b.amountUSD)}</span>
+      </div>
+      <div class="kind">${b.firmness ? FIRMNESS_LABEL[b.firmness] : "No offer yet"}${b.holdsUntil ? ` &middot; holds to ${b.holdsUntil}` : ""}${b.outrightPurchase ? "" : " &middot; trade only"}</div>
+
+      ${x.notComparable ? `<div class="flag" style="margin-top:10px">
+        <div class="ic" style="background:var(--serious)">!</div>
+        <div><p>${x.notComparable}</p></div></div>` : ""}
+
+      ${b.amountUSD !== null ? `<div class="totals" style="margin:12px 0 0">
+        <div class="tot"><span>${x.clearsLoan === false ? "You would pay" : "Reaches you"}</span>
+          <b class="${x.clearsLoan === false ? "owe" : ""}">${x.netToYouUSD === null ? "\u2014" : usd3(x.clearsLoan === false ? Math.abs(x.netToYouUSD) : x.netToYouUSD)}</b></div>
+        <div class="tot"><span>After payoff of</span><b>${car.loanPayoffUSD === null ? "\u2014" : usd3(car.loanPayoffUSD)}</b></div>
+      </div>` : ""}
+
+      ${b.firmness ? `<p class="axisnote">${FIRMNESS_MEANS[b.firmness]}</p>` : ""}
+      ${b.note ? `<div class="say">${b.note}</div>` : ""}
+      ${x.missing.length ? `<p class="axisnote">Not answered: ${x.missing.join(", ")}.</p>` : ""}
+
+      <details style="margin-top:10px">
+        <summary>What this still depends on (${conds.length})</summary>
+        ${conds.map((t) => `<p class="axisnote" style="border:none">${t}</p>`).join("")}
+      </details>
+
+      ${b.amountUSD !== null ? `<button class="btn sec" data-accept="${b.storeRef}"
+        style="margin-top:12px">Take this one</button>` : ""}
+    </div>`;
+    };
+    const main = c.costed.filter((x) => x.comparable);
+    const rest = c.costed.filter((x) => !x.comparable);
+    out.innerHTML = `
+  <div class="simnote"><b>Simulated bids.</b> Five fixture replies so the screen can be seen
+    working. No store has been contacted.</div>
+
+  <div class="card">
+    <h3>No store is preferred here</h3>
+    <p>${BID_NO_PREFERENCE}</p>
+    <p class="axisnote" style="border:none">${BID_ORDER_NOTE}</p>
+  </div>
+
+  <div class="equity ${c.best && c.highest && c.best !== c.highest ? "t-steel" : "t-teal"}">
+    <div class="lab">${c.best ? "Most in your hand" : "Nothing comparable yet"}</div>
+    <div class="amt">${c.best && c.best.netToYouUSD !== null ? usd3(c.best.netToYouUSD) : "\u2014"}</div>
+    <p>${c.headline}</p>
+  </div>
+
+  ${main.map(row).join("")}
+
+  ${rest.length ? `<div class="sec-hd" style="margin-top:24px">Answers to a different question</div>
+    <p class="axisnote" style="border:none;margin:0 0 12px">${BID_RULES.highestIsNotBest}</p>
+    ${rest.map(row).join("")}` : ""}
+
+  <div class="card">
+    <h3>Before you drive anywhere</h3>
+    <p>${BID_RULES.reinspection}</p>
+    ${BID_RULES.chippingDefence.map((d) => `<div class="flag">
+      <div class="ic" style="background:var(--s450)">i</div><div><p>${d}</p></div></div>`).join("")}
+  </div>
+
+  <div id="sb-choice"></div>`;
+    out.querySelectorAll("[data-accept]").forEach((b) => b.addEventListener("click", () => confirmBid(b.dataset.accept)));
+  }
+  function confirmBid(ref) {
+    const chosen = bidState.bids.find((b) => b.storeRef === ref);
+    const r = chooseBid(chosen, bidState.bids);
+    $("sb-choice").innerHTML = `<div class="card">
+    <h3>Accept ${ref}?</h3>
+    <p>${r.reason}</p>
+    <div class="chain">
+      ${r.released.map((f) => `<div class="ch"><div class="chd"></div>
+        <div><b>${f}</b><span>Released to ${ref} only</span></div></div>`).join("")}
+    </div>
+    <h3 style="margin-top:18px">Take these with you</h3>
+    ${r.bringWithYou.map((x) => `<div class="say">${x}</div>`).join("")}
+    <button class="btn" id="sb-confirm">Yes, send it to ${ref}</button>
+    <button class="btn sec" id="sb-cancel">Not yet</button>
+  </div>`;
+    $("sb-choice").scrollIntoView({ behavior: "smooth", block: "center" });
+    $("sb-cancel").addEventListener("click", () => {
+      $("sb-choice").innerHTML = "";
+    });
+    $("sb-confirm").addEventListener("click", () => {
+      $("sb-choice").innerHTML = `<div class="equity t-teal">
+      <div class="lab">Sent to ${ref}</div>
+      <div class="amt">${usd3(chosen.amountUSD)}</div>
+      <p>Only ${ref} has your details. The other stores were told nothing. Keep making your loan
+        payments until your lender confirms the payoff has landed &mdash; the account is yours
+        until they say otherwise.</p>
+    </div>`;
+    });
+  }
+  var vaultKeys = noKeys();
+  var pendingCode = null;
+  function renderVaultKeys() {
+    const box = $("gb-keys");
+    if (!box) return;
+    const signedIn = account?.state === "saved";
+    if (!signedIn) {
+      box.innerHTML = `<div class="card">
+      <h3>Storage needs an account</h3>
+      <p>A document has to survive a lost phone, and a page of local storage cannot do that.
+        That is the only thing an account is for \u2014 everything else in ClearDrive works without
+        one.</p>
+      <button class="btn" onclick="go('s-auth')">Set up storage</button>
+    </div>`;
+      return;
+    }
+    vaultKeys = { ...vaultKeys, documentCount: deal ? deal.entries.length : 0 };
+    const r = readinessToStore(vaultKeys);
+    const d = whatServerHolds(vaultKeys.wraps);
+    box.innerHTML = `
+  <div class="equity ${r.canStore ? "t-teal" : "t-steel"}">
+    <div class="lab">${r.canStore ? "Your vault is open" : "Not ready to store documents"}</div>
+    <div class="amt" style="font-size:24px;line-height:1.2">${r.routes.length} way${r.routes.length === 1 ? "" : "s"} back in</div>
+    <p>${r.message}</p>
+  </div>
+
+  ${r.canStore ? "" : `<div class="card">
+    <h3>Add the second route</h3>
+    <p>${VAULT_KEY_RULES.gate}</p>
+    ${r.blocker === "set-recovery" ? `
+      <p class="axisnote">${WRAP_MEANS["recovery-code"]}</p>
+      <button class="btn" id="gk-code">Create my recovery code</button>` : `
+      <p class="axisnote">${WRAP_MEANS["passkey-prf"]}</p>
+      <button class="btn" id="gk-passkey">Add Face ID on this phone</button>`}
+  </div>`}
+
+  <div id="gk-flow"></div>
+
+  <div class="card">
+    <h3>What our server actually holds</h3>
+    <div class="chain">
+      ${d.holds.map((x) => `<div class="ch"><div class="chd"></div>
+        <div><span>${x}</span></div></div>`).join("")}
+    </div>
+    <h3 style="margin-top:16px">${d.canRead ? "What that means" : "What it never holds"}</h3>
+    ${d.neverHolds.map((x) => `<div class="flag">
+      <div class="ic" style="background:var(${d.canRead ? "--serious" : "--good"})">${d.canRead ? "!" : "&#10003;"}</div><div><p>${x}</p></div></div>`).join("")}
+    <p class="axisnote"><b>If we were subpoenaed:</b> ${d.underSubpoena}</p>
+  </div>
+
+  <div class="card">
+    <h3>The honest cost</h3>
+    <p>${VAULT_KEY_RULES.theHonestCost}</p>
+    <p class="axisnote">${VAULT_KEY_RULES.linkIsNotAKey}</p>
+  </div>`;
+    $("gk-passkey")?.addEventListener("click", () => {
+      vaultKeys = {
+        ...vaultKeys,
+        wraps: [.../* @__PURE__ */ new Set([...vaultKeys.wraps, "passkey-prf"])],
+        passkeySynced: true
+      };
+      renderVaultKeys();
+    });
+    $("gk-code")?.addEventListener("click", showRecoveryCode);
+  }
+  function showRecoveryCode() {
+    const bytes = new Uint8Array(25);
+    (window.crypto ?? {}).getRandomValues?.(bytes);
+    pendingCode = formatRecoveryCode(bytes);
+    $("gk-flow").innerHTML = `<div class="card">
+    <h3>Write this down now</h3>
+    <p>This is the only route that survives losing every device you own. We cannot show it to you
+      again and we cannot reset it &mdash; if we could, we could also read your documents.</p>
+    <button class="inbox" id="gk-copy" type="button">
+      <span class="ib-addr">${pendingCode}</span>
+      <span class="ib-copy">Copy</span>
+    </button>
+    <div class="field" style="margin-top:16px">
+      <label>Type it back<span class="hint">So we know it is somewhere other than this screen</span></label>
+      <div class="inp"><input type="text" id="gk-check" placeholder="XXXXX-XXXXX-\u2026"></div>
+    </div>
+    <p class="axisnote" id="gk-msg"></p>
+    <button class="btn" id="gk-confirm">Confirm and open the vault</button>
+    <button class="btn sec" id="gk-cancel">Not now</button>
+  </div>`;
+    $("gk-flow").scrollIntoView({ behavior: "smooth", block: "center" });
+    $("gk-copy").addEventListener("click", () => {
+      navigator.clipboard?.writeText(pendingCode);
+      $("gk-copy").querySelector(".ib-copy").textContent = "Copied";
+    });
+    $("gk-cancel").addEventListener("click", () => {
+      $("gk-flow").innerHTML = "";
+    });
+    $("gk-confirm").addEventListener("click", () => {
+      const typed = normaliseRecoveryCode($("gk-check").value ?? "");
+      if (typed !== pendingCode) {
+        $("gk-msg").textContent = "That does not match. Spaces and capitals do not matter, and the letter O is read as a zero \u2014 but the code itself has to be right, because it is the only copy.";
+        return;
+      }
+      vaultKeys = {
+        ...vaultKeys,
+        wraps: [.../* @__PURE__ */ new Set([...vaultKeys.wraps, "recovery-code", "passkey-prf"])],
+        passkeySynced: true,
+        recoveryCodeConfirmed: true
+      };
+      pendingCode = null;
+      $("gk-flow").innerHTML = "";
+      renderVaultKeys();
+    });
+  }
+  function renderDeals() {
+    const body = $("dl-body");
+    if (!body) return;
+    const replies = threads.filter((t) => t.answer !== null).length;
+    const open = deal && deal.entries.length > 0 && !status(deal).signed;
+    const act = (go2, tone, title, sub, badge) => `<button class="act ${tone}" data-go="${go2}">
+    <span class="at"><b>${title}${badge ? ` <span class="ltag free">${badge}</span>` : ""}</b>
+      <span>${sub}</span></span>
+    <span class="chev"></span></button>`;
+    body.innerHTML = `
+  ${replies > 0 ? `<div class="equity t-teal">
+    <div class="lab">Waiting on you</div>
+    <div class="amt">${replies}</div>
+    <p>${replies === 1 ? "One store has" : `${replies} stores have`} answered in writing.
+      Compare them on the same out-the-door basis before you reply to any of them.</p>
+  </div>
+  <button class="btn" onclick="go('s-thread')">Read what they said</button>` : ""}
+
+  ${act("s-buy", "filled", "Buy a car", "Two questions, then what to negotiate, what is in stock, and stores answering in writing", open ? "In progress" : "")}
+  ${act("s-bids", "c-teal", "Sell my car", "Stores bid for it. You compare on what actually reaches you after the loan is cleared")}
+  ${act("s-prequal", "c-cyan", "Get a rate first", "Lenders answer with a figure they will honour, before anybody is at a desk")}
+  ${act("s-funding", "c-violet", "Ways of paying", "Cash, finance or lease, over your own window")}`;
+    body.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => go(b.dataset.go)));
+  }
+  function renderCheck() {
+    const body = $("ck-body");
+    if (!body) return;
+    const s = homeSignals();
+    const st = deal ? status(deal) : null;
+    const signedNow = !!st && st.signed;
+    const act = (go2, tone, title, sub, badge) => `<button class="act ${tone}" data-go="${go2}">
+    <span class="at"><b>${title}${badge ? ` <span class="ltag free">${badge}</span>` : ""}</b>
+      <span>${sub}</span></span>
+    <span class="chev"></span></button>`;
+    body.innerHTML = `
+  ${s.documentsToCheck > 0 ? `<div class="equity t-red">
+    <div class="lab">Not yet reconciled</div>
+    <div class="amt">${s.documentsToCheck}</div>
+    <p>${s.documentsToCheck === 1 ? "A document has arrived that has not been measured" : `${s.documentsToCheck} documents have arrived that have not been measured`} against what you
+      were promised. This is the moment it is worth doing &mdash; cancellation windows and
+      correction windows both close.</p>
+  </div>` : ""}
+
+  ${s.refundableUSD !== null && s.refundableUSD > 0 ? `<div class="equity t-teal">
+    <div class="lab">May still be refundable</div>
+    <div class="amt">${usd3(s.refundableUSD)}</div>
+    <p>An estimate on ${s.cancellableCount === 1 ? "one product" : `${s.cancellableCount} products`}
+      sold with the car, pro-rated on the unused term. The real figure is in each product's own
+      cancellation clause, and the app shows you where to find it.</p>
+  </div>` : ""}
+
+  <div class="sec-hd">Before you sign</div>
+  ${act(
+      "s-live",
+      signedNow ? "c-blue" : "filled",
+      "Check the pencil",
+      "Photograph the worked-up figures at the desk. Price, fees, term, rate and anything added \u2014 each line against the offer you accepted",
+      s.dealOpen ? "Now" : ""
+    )}
+  ${act(
+      "s-now",
+      "c-blue",
+      "I am being pressured",
+      "What they cannot make you buy, and what walking away actually costs"
+    )}
+
+  <div class="sec-hd" style="margin-top:22px">After you sign</div>
+  ${act(
+      "s-bought",
+      "c-indigo",
+      "Check the contract",
+      "Every figure against what you were promised, including the two that move quietly \u2014 the rate and the term",
+      s.documentsToCheck > 0 ? `${s.documentsToCheck} to check` : ""
+    )}
+  ${act(
+      "s-aftersale",
+      "c-teal",
+      "Warranty and GAP refunds",
+      "What you can still cancel, roughly what comes back, and the clause that says so",
+      s.refundableUSD ? usd3(s.refundableUSD) : ""
+    )}
+  ${act(
+      "s-warranty",
+      "c-violet",
+      "Is the warranty worth it",
+      "Priced against what it actually covers and what a repair would cost"
+    )}
+
+  <div class="card" style="margin-top:22px">
+    <h3>Why this is one screen and not two</h3>
+    <p>The question does not change when you sign. Before, it is whether the sheet matches the
+      offer. After, it is whether the contract matches the sheet \u2014 and whether the products on it
+      are still cancellable. The same comparison, run against whatever document you have.</p>
+    <p class="axisnote">A product sold in the finance office is a contract of its own, with its own
+      cancellation rights. Most are refundable pro-rata for years, and almost nobody is told so at
+      the point of sale.</p>
+  </div>`;
+    body.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => go(b.dataset.go)));
   }
   homeReady = true;
   renderHome();
