@@ -1,0 +1,87 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>ClearDrive Inventory</title><meta name="description" content="ClearDrive: the buyer's side of the desk. Choose the car, collect written offers from Ourisman, and check the paperwork against the offer. Free for buyers."><meta name="theme-color" content="#06101C"><link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png"><meta property="og:title" content="ClearDrive Inventory"><meta property="og:description" content="Everything a car broker does, free to the buyer. Written offers from Ourisman, the paperwork checked against the offer."><meta property="og:image" content="assets/img/og.png"><meta property="og:type" content="website"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap"><link rel="stylesheet" href="css/cleardrive.css?v=684f1c"><link rel="stylesheet" href="css/inventory.css?v=684f1c"></head><body class="page-inventory"><!-- title: ClearDrive Inventory -->
+<div class="shell">
+<div id="nav" data-active="inventory"></div>
+
+<main class="wrap inv">
+  <header class="inv-head">
+    <div class="row between" style="--gap:16px;align-items:flex-end">
+      <div>
+        <p class="eyebrow">Ourisman Automotive Group · Maryland, Virginia and beyond</p>
+        <h1>Every new brand Ourisman sells. <i>Preowned too.</i></h1>
+        <p class="lede mt16">Pick a model here and the written offer request starts with it filled in. Starting prices are manufacturer MSRPs, approximate and before destination. Preowned listings are samples for the demonstration.</p>
+      </div>
+      <div class="stats inv-stats" id="inv-stats"></div>
+    </div>
+    <nav class="tabs mt32" id="inv-tabs" aria-label="Inventory sections">
+      <a href="#new" data-tab="new" class="on">New <span class="count" id="count-new">0</span></a>
+      <a href="#preowned" data-tab="preowned">Preowned <span class="count" id="count-preowned">0</span></a>
+      <a href="#rooftops" data-tab="rooftops">Rooftops <span class="count" id="count-rooftops">0</span></a>
+    </nav>
+  </header>
+
+  <!-- NEW -->
+  <section id="view-new" class="inv-view" aria-labelledby="new-h">
+    <h2 id="new-h" class="sr-only">New vehicles</h2>
+    <div class="filters card quiet" id="new-filters">
+      <div class="filters-row">
+        <div class="field"><label for="f-brand">Brand</label><select class="input sm" id="f-brand"><option value="">All brands</option></select></div>
+        <div class="field"><label for="f-fuel">Powertrain</label><select class="input sm" id="f-fuel"><option value="">Any</option><option value="gas">Gas</option><option value="hybrid">Hybrid</option><option value="phev">Plug-in hybrid</option><option value="ev">Electric</option><option value="diesel">Diesel</option></select></div>
+        <div class="field"><label for="f-price">Starting price</label><select class="input sm" id="f-price"><option value="">Any</option><option value="0-30000">Under $30,000</option><option value="30000-45000">$30,000 to $45,000</option><option value="45000-60000">$45,000 to $60,000</option><option value="60000-999999">$60,000 and up</option></select></div>
+        <div class="field"><label for="f-sort">Sort</label><select class="input sm" id="f-sort"><option value="price">Price, low to high</option><option value="price-desc">Price, high to low</option><option value="name">Model name</option><option value="brand">Brand</option></select></div>
+        <label class="check pop"><input type="checkbox" id="f-popular"><span>Best sellers only</span></label>
+      </div>
+      <div class="filters-row">
+        <div class="chips" id="f-body" role="group" aria-label="Body style"></div>
+      </div>
+      <div class="filters-row">
+        <div class="chips" id="f-feats" role="group" aria-label="Features"></div>
+        <button class="ghost" id="f-clear" type="button">Clear filters</button>
+      </div>
+    </div>
+    <div class="row between mt24" style="--gap:12px">
+      <p class="small" id="new-summary"></p>
+      <div class="logo-row brands-strip" id="brand-strip"></div>
+    </div>
+    <div class="grid models mt16" id="new-grid"></div>
+  </section>
+
+  <!-- PREOWNED -->
+  <section id="view-preowned" class="inv-view" hidden aria-labelledby="pre-h">
+    <h2 id="pre-h" class="sr-only">Preowned vehicles</h2>
+    <div class="callout gold mb24"><span>Sample listings. Every preowned vehicle on this page is generated for the demonstration from the new-model catalog: real models and plausible prices, not cars on a lot today.</span></div>
+    <div class="filters card quiet" id="pre-filters">
+      <div class="filters-row">
+        <div class="field"><label for="p-rooftop">Rooftop</label><select class="input sm" id="p-rooftop"><option value="">All rooftops</option></select></div>
+        <div class="field"><label for="p-brand">Brand</label><select class="input sm" id="p-brand"><option value="">All brands</option></select></div>
+        <div class="field"><label for="p-body">Body</label><select class="input sm" id="p-body"><option value="">Any</option></select></div>
+        <div class="field"><label for="p-price">Price</label><select class="input sm" id="p-price"><option value="">Any</option><option value="0-20000">Under $20,000</option><option value="20000-30000">$20,000 to $30,000</option><option value="30000-45000">$30,000 to $45,000</option><option value="45000-999999">$45,000 and up</option></select></div>
+        <div class="field"><label for="p-miles">Mileage</label><select class="input sm" id="p-miles"><option value="">Any</option><option value="0-30000">Under 30,000</option><option value="30000-60000">30,000 to 60,000</option><option value="60000-100000">60,000 to 100,000</option><option value="100000-999999">100,000 and up</option></select></div>
+        <div class="field"><label for="p-year">Year</label><select class="input sm" id="p-year"><option value="">Any</option></select></div>
+        <div class="field"><label for="p-sort">Sort</label><select class="input sm" id="p-sort"><option value="price">Price, low to high</option><option value="price-desc">Price, high to low</option><option value="miles">Lowest mileage</option><option value="year">Newest year</option><option value="days">Just arrived</option></select></div>
+        <label class="check pop"><input type="checkbox" id="p-cert"><span>Certified only</span></label>
+      </div>
+    </div>
+    <p class="small mt24" id="pre-summary"></p>
+    <div class="grid models mt16" id="pre-grid"></div>
+  </section>
+
+  <!-- ROOFTOPS -->
+  <section id="view-rooftops" class="inv-view" hidden aria-labelledby="roof-h">
+    <h2 id="roof-h" class="sr-only">Rooftops</h2>
+    <div class="cols roof-intro" style="align-items:start">
+      <div>
+        <p class="eyebrow">The founding dealer</p>
+        <h2>Family-owned since 1921.</h2>
+        <p class="lede mt16">Benjamin Ourisman opened on H Street in Washington after two years selling Chevrolets on Connecticut Avenue. Four generations later the group answers requests from every rooftop below. Enter a zip code to sort by distance.</p>
+        <div class="field mt24 zipf"><label for="r-zip">Your zip code</label><div class="row" style="--gap:10px"><input class="input" id="r-zip" inputmode="numeric" maxlength="5" placeholder="22030" value="22030"><span class="small" id="r-zip-note"></span></div></div>
+      </div>
+      <div class="stats" id="roof-stats"></div>
+    </div>
+    <div class="roof-list mt32" id="roof-list"></div>
+  </section>
+</main>
+
+<div id="footer"></div>
+</div>
+
+<script src="js/data.js?v=684f1c"></script><script src="js/core.js?v=684f1c"></script><script src="js/inventory.js?v=684f1c"></script><script>CD.chrome("inventory");</script></body></html>

@@ -1,0 +1,162 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>ClearDrive Trust Center</title><meta name="description" content="ClearDrive: the buyer's side of the desk. Choose the car, collect written offers from Ourisman, and check the paperwork against the offer. Free for buyers."><meta name="theme-color" content="#06101C"><link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png"><meta property="og:title" content="ClearDrive Trust Center"><meta property="og:description" content="Everything a car broker does, free to the buyer. Written offers from Ourisman, the paperwork checked against the offer."><meta property="og:image" content="assets/img/og.png"><meta property="og:type" content="website"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap"><link rel="stylesheet" href="css/cleardrive.css?v=684f1c"><link rel="stylesheet" href="css/trust.css?v=684f1c"></head><body class="page-trust"><!-- title: ClearDrive Trust Center -->
+<div class="shell">
+<div id="nav" data-active="trust"></div>
+
+<main class="wrap trust">
+  <header class="trust-head">
+    <p class="eyebrow">Trust center</p>
+    <h1>The rules are the product. <i>Here is each one.</i></h1>
+    <p class="lede mt16">What a dealer can see, what the software refuses to do, what is connected today and what is not. Written so a buyer, a general manager and an engineer can each check it.</p>
+    <p class="small mt16">Last reviewed October 8, 2026 · ClearDrive 2.0.0 build 2026.10.08</p>
+  </header>
+
+  <div class="trust-grid">
+    <nav class="trust-index" aria-label="Sections">
+      <p class="label">On this page</p>
+      <a href="#privacy">Privacy</a>
+      <a href="#rules">Fairness rules</a>
+      <a href="#security">Security</a>
+      <a href="#connected">What is connected</a>
+      <a href="#data">Your data</a>
+      <a href="#accessibility">Accessibility</a>
+      <a href="#changelog">Release notes</a>
+      <a href="#credits">Imagery credits</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="trust-body">
+      <section id="privacy" class="tsec">
+        <p class="eyebrow">Privacy</p>
+        <h2>What a dealer sees. What a dealer never sees.</h2>
+        <div class="grid two mt24" style="--gap:14px">
+          <div class="card">
+            <h4 class="teal">The desk sees</h4>
+            <ul class="check-list mt16">
+              <li>The model, trim and body style you chose, and the two alternatives</li>
+              <li>How you will pay and your limit: monthly, due at signing or cash out the door</li>
+              <li>Your trade: year, make, model, mileage, condition, four photos and the loan payoff</li>
+              <li>The lender rate you chose, if any, because that is the number to beat</li>
+              <li>Which protection products you want quoted, declined or explained in person</li>
+              <li>Your private ClearDrive address and a first name</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4 class="bad">The desk never sees</h4>
+            <ul class="check-list x mt16">
+              <li>Your phone number</li>
+              <li>Your personal email or home address</li>
+              <li>Your credit file, score or application</li>
+              <li>Any other dealer's offer</li>
+              <li>Your survey answers before the sale is complete</li>
+              <li>Anything after you close the private address</li>
+            </ul>
+          </div>
+        </div>
+        <p class="prose mt16">The private address is the only channel between a buyer and a rooftop. It forwards messages into the deal record and nowhere else. When the buyer closes it, every rooftop loses the ability to write.</p>
+      </section>
+
+      <section id="rules" class="tsec">
+        <p class="eyebrow">Fairness rules</p>
+        <h2>Six commitments, and the line of code behind each.</h2>
+        <dl class="rules-list mt24">
+          <div><dt>No dealer input affects ordering.</dt><dd>Offers are sorted by the buyer's own priority: lowest payment, lowest total cost, highest trade allowance or best fit. The sort function takes the buyer's priority and the priced offer. It has no field for subscription, fee or placement, so there is nothing a store could set.</dd></div>
+          <div><dt>A product you declined cannot carry a price.</dt><dd>Every quote passes through one guard, <code>CD.cleanProd</code>, before it is priced or shown. The guard keeps a price only for products marked "yes, quote it". Whatever a desk types for a declined product is dropped.</dd></div>
+          <div><dt>Both sides see the same number.</dt><dd>One function, <code>CD.priceQuote</code>, builds the out-the-door figure and the payment for the buyer's screen and the desk's screen from the same inputs: state tax rule, processing fee, title and registration, trade equity and the chosen rate.</dd></div>
+          <div><dt>Saved terms are frozen.</dt><dd>When a buyer books on an offer, that offer is copied into the deal record. A later revision creates a new offer beside it. Nothing overwrites the terms the buyer booked on, and the paperwork check compares the contract to the frozen copy.</dd></div>
+          <div><dt>Grades come from three questions after the sale.</dt><dd>Was the price the one you were shown? Did the paperwork match the offer? Was your time respected? Only buyers who completed a deal through ClearDrive are asked, and only those answers feed the public grade. No star ratings, no paid placement, no dealer replies to reviews.</dd></div>
+          <div><dt>Sample data is labeled.</dt><dd>Every demonstration screen carries "Demonstration · sample data" in the top bar, and every generated listing carries a sample marker. No screen presents a figure as a real customer, offer or dealer reply.</dd></div>
+        </dl>
+      </section>
+
+      <section id="security" class="tsec">
+        <p class="eyebrow">Security</p>
+        <h2>Where security stands today, and what production adds.</h2>
+        <div class="callout warn mt24"><span><b>Today this is a static demonstration.</b> There are no accounts, no servers and no databases. Everything you enter stays in your own browser's storage on this device and is cleared with "Restart". No data leaves the page.</span></div>
+        <div class="grid two mt16" style="--gap:14px">
+          <div class="card"><h4>Production design</h4><ul class="check-list mt16"><li>Separate buyer and dealer accounts with passkeys or verified email</li><li>Encryption in transit (TLS 1.3) and at rest for every record</li><li>Least-privilege dealer roles: a desk sees only requests routed to its rooftop</li><li>An append-only audit log of every offer, revision and message</li><li>Trade photos stored with the deal record, never shared outside it</li><li>No sale, rental or exchange of buyer data, written into the terms</li></ul></div>
+          <div class="card"><h4>What we will not claim</h4><p class="soft mt16">No certification is claimed here. SOC 2 or similar attestation is part of the production plan and will be listed on this page only when an auditor has issued it. Until then, the honest statement is the one above: a demonstration with nothing to breach.</p><p class="soft mt16">Found a problem on this site? Use the contact address at the end of this page. Reports are acknowledged within two business days.</p></div>
+        </div>
+      </section>
+
+      <section id="connected" class="tsec">
+        <p class="eyebrow">What is connected</p>
+        <h2>Implemented in this demonstration, and planned for the pilot.</h2>
+        <div class="tablewrap mt24">
+          <table class="t">
+            <thead><tr><th>Capability</th><th>In this demonstration</th><th>Pilot plan</th></tr></thead>
+            <tbody>
+              <tr><td>New-model catalog, 23 brands</td><td class="yes">Built, compiled October 2026</td><td>Refreshed from manufacturer feeds</td></tr>
+              <tr><td>Ourisman rooftops with addresses and phones</td><td class="yes">Built, 49 rooftops</td><td>Managed by the group</td></tr>
+              <tr><td>Real model silhouettes</td><td class="yes">Built from Creative Commons photos</td><td>Manufacturer imagery under license</td></tr>
+              <tr><td>Buyer brief, matching, trade, payment, protection</td><td class="yes">Built</td><td>Same</td></tr>
+              <tr><td>Written offers priced by one shared function</td><td class="yes">Built, sample desk replies</td><td>Real desks reply from the dealer app</td></tr>
+              <tr><td>Paperwork check against the offer</td><td class="part">Built for typed contract figures</td><td>Photo capture with reviewed extraction</td></tr>
+              <tr><td>Private address and messages</td><td class="part">Simulated inside one browser</td><td>Real forwarding address per deal</td></tr>
+              <tr><td>Preowned inventory</td><td class="part">Sample listings generated from the catalog</td><td>Live feed from the group's inventory system</td></tr>
+              <tr><td>Lead delivery to the CRM (ADF/XML)</td><td class="part">Preview of the file the desk would send</td><td>Delivered through the CRM's lead intake</td></tr>
+              <tr><td>Lender rate listings</td><td class="part">Three sample lenders</td><td>Credit unions and banks on a flat fee</td></tr>
+              <tr><td>Accounts, cross-device records</td><td class="no">Not built</td><td>Pilot engineering, about six weeks</td></tr>
+              <tr><td>Credit application, e-signature, payments</td><td class="no">Not built</td><td>After the pilot, through partners</td></tr>
+              <tr><td>Native iOS and Android apps</td><td class="no">Installable web app only</td><td>Store release after accounts exist</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="data" class="tsec">
+        <p class="eyebrow">Your data</p>
+        <h2>Kept for the deal. Deleted when you say so. Never resold.</h2>
+        <div class="grid three mt24" style="--gap:14px">
+          <div class="card sm"><h4>Retention</h4><p class="soft mt8">A deal record is kept while the deal is open and for the ownership period the buyer chooses afterwards, so the paperwork check and the survey remain available. In this demonstration, the record lives only in your browser.</p></div>
+          <div class="card sm"><h4>Deletion</h4><p class="soft mt8">A buyer can delete a deal record, including trade photos, from the record itself. In production, deletion is complete within 30 days, with the audit log keeping only that a deletion happened.</p></div>
+          <div class="card sm"><h4>No resale</h4><p class="soft mt8">Buyer data is not sold, rented or shared with anyone other than the rooftops a buyer has chosen to ask. Lenders see only the rate request a buyer sends them. Dealers pay a flat fee; they do not buy data.</p></div>
+        </div>
+      </section>
+
+      <section id="accessibility" class="tsec">
+        <p class="eyebrow">Accessibility</p>
+        <h2>Usable by keyboard, legible by design.</h2>
+        <ul class="check-list mt24">
+          <li>Every control is reachable with Tab and operated with Enter or Space. Focus is visible as a teal ring.</li>
+          <li>Text contrast on the navy surfaces is at least 4.5:1 for body copy and 3:1 for large headings. Colors never carry a meaning alone; a label or icon accompanies them.</li>
+          <li>Motion respects the system "reduce motion" setting: the sky stops moving and entrance animations are removed.</li>
+          <li>Layouts hold from a 390-pixel phone to a wide desktop without horizontal scrolling. Tables scroll inside their own frame.</li>
+          <li>Images of vehicles carry the model name as alternative text. Decorative graphics are hidden from screen readers.</li>
+        </ul>
+      </section>
+
+      <section id="changelog" class="tsec">
+        <p class="eyebrow">Release notes</p>
+        <h2>What changed, and when.</h2>
+        <ol class="tl mt24">
+          <li class="tl-item now"><span class="tl-dot" aria-hidden="true"></span><div class="tl-body"><div class="when">2.0.0 · October 8, 2026</div><h3>Ourisman edition</h3><p>New-model catalog across 23 brands and 49 rooftops with addresses, phones and distance sorting. Real model silhouettes derived from Creative Commons photographs. Buyer workspace rebuilt on a shared pricing core with Virginia and Maryland tax rules. Dealer desk with group routing across rooftops. Inventory with sample preowned listings. This trust center.</p></div></li>
+          <li class="tl-item done"><span class="tl-dot" aria-hidden="true"></span><div class="tl-body"><div class="when">1.x · September 2026</div><h3>Showcase</h3><p>Guided tour for dealer presentations, the protection step with the buyer-controlled product guard, lender rate listings sorted by rate only, the three-question survey and public grades, and routing inside a dealer group. Published as an installable web app.</p></div></li>
+          <li class="tl-item done"><span class="tl-dot" aria-hidden="true"></span><div class="tl-body"><div class="when">0.x · August to September 2026</div><h3>Deal Room</h3><p>The original buyer brief, manual entry of finance, lease and purchase offers, the ranking engine, the payment-change checker, and the first Ourisman dealer inbox with replies, revisions and saved-offer snapshots.</p></div></li>
+        </ol>
+      </section>
+
+      <section id="credits" class="tsec">
+        <p class="eyebrow">Imagery credits</p>
+        <h2>Real models, drawn from open photographs.</h2>
+        <p class="prose mt16">Every vehicle silhouette on this site is derived from a photograph published on Wikimedia Commons under a Creative Commons or public-domain license. The background is removed and the vehicle is rendered as a darkened outline with a rim light, so each model is recognizable while the treatment stays consistent. Photographers and licenses are listed below. Manufacturer and model names identify vehicles only; no affiliation with or endorsement by any manufacturer is implied.</p>
+        <div class="tablewrap mt24"><table class="t" id="credits-table"><thead><tr><th>Model</th><th>Photographer</th><th>License</th><th>Source</th></tr></thead><tbody></tbody></table></div>
+        <p class="note mt8" id="credits-note"></p>
+      </section>
+
+      <section id="contact" class="tsec">
+        <p class="eyebrow">Contact</p>
+        <h2>Questions, corrections, security reports.</h2>
+        <div class="card mt24 contact-card">
+          <p class="label">Email (placeholder address for the demonstration)</p>
+          <div class="row mt8" style="--gap:12px"><span class="alias" id="contact-email">hello<span class="dom">@cleardrive.app</span></span><button class="btn sm" id="copy-email" type="button">Copy</button></div>
+          <p class="small mt16">Security reports are acknowledged within two business days. Corrections to rooftop or model data are welcome; name the page and the line.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<div id="footer"></div>
+</div>
+
+<script src="js/data.js?v=684f1c"></script><script src="js/core.js?v=684f1c"></script><script src="js/trust.js?v=684f1c"></script><script>CD.chrome("trust");</script></body></html>

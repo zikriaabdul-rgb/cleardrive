@@ -1,1339 +1,247 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#06101C">
-<meta name="description" content="ClearDrive demonstration. Sample data.">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="ClearDrive">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ClearDrive">
-<meta property="og:description" content="Find the right car. Meet the dealers who earn it. Demonstration with sample data.">
-<meta property="og:image" content="https://zikriaabdul-rgb.github.io/cleardrive/og.png">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/favicon-64.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<style>html{background:#06101C}body{margin:0}</style>
-<title>ClearDrive · Demonstration</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@300;400;500;600&display=swap">
-<style>
-/* Single-theme by choice: the navy-and-teal ClearDrive world, painted explicitly. */
-:root{
-  --ink:#06101C; --deep:#0A1828; --panel:#0F2135; --raise:#152B43;
-  --line:rgba(190,215,235,.13); --line2:rgba(190,215,235,.26);
-  --text:#ECF2F7; --soft:#B4C3D2; --mute:#7F93A8;
-  --teal:#63D2C6; --teal-d:#1E8F86; --teal-wash:rgba(99,210,198,.10);
-  --gold:#DCC9A0; --warn:#E9B872;
-  --serif:"Instrument Serif","Iowan Old Style",Georgia,serif;
-  --sans:"Hanken Grotesk","Helvetica Neue",Arial,sans-serif;
-  --ease:cubic-bezier(.2,.7,.15,1);
-}
-html,body{height:100%}
-body{background:var(--ink);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.55;font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-*{box-sizing:border-box}
-button,input,select{font:inherit;color:inherit}
-button{cursor:pointer}
-:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:6px}
-#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.9;transition:opacity 1.2s var(--ease)}
-body.working #sky{opacity:.32}
-.shell{position:relative;z-index:1;min-height:100%;display:flex;flex-direction:column;padding-inline:clamp(16px,4vw,48px)}
-
-/* header */
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;gap:16px;padding-block:18px;background:linear-gradient(var(--ink) 78%,transparent)}
-.mark{font-family:var(--serif);font-size:24px;letter-spacing:.01em;background:none;border:0;padding:0}
-.mark i{color:var(--teal);font-style:italic}
-.tag{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);border:1px solid var(--line);padding:4px 10px;border-radius:99px;white-space:nowrap}
-.top .sp{flex:1}
-.where{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);white-space:nowrap}
-.ghost{background:none;border:0;color:var(--mute);font-size:13px;padding:6px 4px}
-.ghost:hover{color:var(--text)}
-.rail{height:1px;background:var(--line);position:relative;overflow:hidden}
-.rail b{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--teal-d),var(--teal));width:0;transition:width .9s var(--ease)}
-body.intro .where,body.intro .rail,body.intro #restart{visibility:hidden}
-
-/* stage */
-main{flex:1;display:flex;flex-direction:column;width:100%;max-width:1080px;margin-inline:auto;padding-block:28px 132px}
-body.intro main{justify-content:center;padding-block:0 40px}
-.view>*{animation:rise .8s var(--ease) both;animation-delay:calc(var(--i,0)*90ms)}
-.view.still>*{animation:none}
-@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-.eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal)}
-h1{font-family:var(--serif);font-weight:400;font-size:clamp(34px,5.4vw,58px);line-height:1.04;letter-spacing:-.01em;margin:10px 0 12px;text-wrap:balance}
-h1 em{font-style:italic;color:var(--gold)}
-.lede{color:var(--soft);max-width:60ch;margin:0 0 30px;font-weight:300;font-size:17px}
-h2{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);font-weight:500;margin:0 0 12px}
-.block{margin-bottom:30px}
-.note{font-size:13px;color:var(--mute);max-width:70ch}
-.num{font-variant-numeric:tabular-nums}
-
-/* intro */
-.hero{text-align:left;max-width:820px}
-.hero .word{font-family:var(--serif);font-size:clamp(56px,11vw,128px);line-height:.95;letter-spacing:-.02em;margin:0 0 22px;display:flex;flex-wrap:wrap}
-.hero .word span{display:inline-block;animation:letter 1.1s var(--ease) both;animation-delay:calc(var(--n)*55ms + 200ms)}
-.hero .word .it{font-style:italic;color:var(--teal)}
-@keyframes letter{from{opacity:0;transform:translateY(.35em);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
-.hero p{font-size:clamp(18px,2.3vw,23px);font-weight:300;color:var(--soft);max-width:34ch;margin:0 0 36px;animation:rise 1s var(--ease) 1s both}
-.hero .go{animation:rise 1s var(--ease) 1.25s both;display:flex;flex-wrap:wrap;align-items:center;gap:18px}
-
-/* buttons */
-.btn{border:1px solid var(--line2);background:transparent;border-radius:99px;padding:14px 30px;font-weight:500;letter-spacing:.02em;min-width:150px;transition:background .3s,border-color .3s,transform .3s var(--ease),color .3s}
-.btn:hover{border-color:var(--text)}
-.btn:active{transform:scale(.98)}
-.btn.pri{background:var(--text);color:var(--ink);border-color:var(--text)}
-.btn.pri:hover{background:var(--teal);border-color:var(--teal)}
-.btn[disabled]{opacity:.35;cursor:not-allowed}
-
-/* choice tiles */
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
-.tile{background:transparent;border:1px solid transparent;border-radius:20px;padding:18px 14px 14px;text-align:center;transition:border-color .45s,background .45s}
-.tile:hover{background:var(--deep)}
-.tile .sil{margin-bottom:10px;opacity:.55;transition:opacity .5s,transform .8s var(--ease),filter .5s}
-.tile:hover .sil{opacity:.9;transform:translateX(4px)}
-.tile[aria-pressed=true]{background:linear-gradient(180deg,transparent,var(--teal-wash));border-color:rgba(99,210,198,.55)}
-.tile[aria-pressed=true] .sil{opacity:1;filter:drop-shadow(0 10px 18px rgba(99,210,198,.22))}
-.tile span{font-weight:500;letter-spacing:.02em}
-/* car silhouettes */
-.sil{width:100%;height:auto;display:block;overflow:visible}
-.sil-body{fill:url(#cdBody)}
-.sil-glass{fill:url(#cdGlass)}
-.sil-pillar{stroke:#213c58;stroke-width:3.2}
-.sil-edge{fill:none;stroke:url(#cdEdge);stroke-width:1.3;stroke-linecap:round;transition:stroke .4s}
-.sil-head{fill:#EAF6F4}
-.sil-tail{fill:#E58F6B}
-.sil-sill{stroke:rgba(255,255,255,.10);stroke-width:1}
-.sil-shadow{fill:url(#cdShadow)}
-.sil-ground{stroke:url(#cdGround);stroke-width:1}
-.sil-wheel .tyre{fill:#04090F;stroke:#1d3148;stroke-width:1}
-.sil-wheel .rim{fill:#0C1928;stroke:#93A9BD;stroke-width:1.2}
-.sil-wheel line{stroke:#6F879D;stroke-width:1.7;stroke-linecap:round}
-.sil-wheel .hub{fill:#C2D0DD}
-.stage{display:block;padding:16px 4px 2px;border-radius:16px;background:radial-gradient(ellipse at 50% 88%,rgba(99,210,198,.12),transparent 66%)}
-.card.on .sil-edge,.tile[aria-pressed=true] .sil-edge{stroke:var(--teal)}
-.real{font-size:15px;color:var(--soft);max-width:52ch;margin:12px 0 0;line-height:1.5}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:1px solid var(--line);background:transparent;border-radius:99px;padding:9px 16px;font-size:14px;color:var(--soft);transition:all .3s}
-.chip:hover{border-color:var(--line2);color:var(--text)}
-.chip[aria-pressed=true]{background:var(--teal-wash);border-color:var(--teal);color:var(--text)}
-
-/* slider */
-.dial{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin-bottom:10px}
-.dial .big{font-family:var(--serif);font-size:clamp(44px,7vw,68px);line-height:1}
-.dial small{color:var(--mute);font-size:14px}
-input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:28px;background:transparent;margin:0}
-input[type=range]::-webkit-slider-runnable-track{height:2px;background:linear-gradient(90deg,var(--teal) var(--p,50%),var(--line2) var(--p,50%))}
-input[type=range]::-moz-range-track{height:2px;background:var(--line2)}
-input[type=range]::-moz-range-progress{height:2px;background:var(--teal)}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--text);border:0;margin-top:-11px;box-shadow:0 0 0 6px rgba(99,210,198,.16)}
-input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--text);border:0;box-shadow:0 0 0 6px rgba(99,210,198,.16)}
-.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:30px 48px}
-
-/* cards */
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:16px;align-items:stretch}
-.card{position:relative;display:flex;flex-direction:column;gap:12px;text-align:left;background:linear-gradient(170deg,var(--panel),var(--deep));border:1px solid var(--line);border-radius:22px;padding:22px;transition:border-color .4s,transform .5s var(--ease),box-shadow .5s}
-button.card:hover,.card.pick:hover{transform:translateY(-3px);border-color:var(--line2)}
-.card.on{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal),0 24px 60px -30px rgba(99,210,198,.5)}
-.rank{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
-.card h3{font-family:var(--serif);font-weight:400;font-size:28px;line-height:1.1;margin:0}
-.card .from{color:var(--soft);font-size:14px}
-.why{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:14px;color:var(--soft)}
-.why li{padding-left:18px;position:relative}
-.why li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:1px;background:var(--teal)}
-.why li.miss::before{background:var(--warn)}
-.sel{margin-top:auto;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
-.card.on .sel{color:var(--teal)}
-
-/* forms */
-.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}
-.f{display:grid;gap:6px}
-.f label{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
-.f input,.f select{background:var(--deep);border:1px solid var(--line);border-radius:12px;padding:13px 14px;width:100%;transition:border-color .3s}
-.f input:focus,.f select:focus{outline:none;border-color:var(--teal)}
-.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:99px;padding:4px;gap:2px}
-.seg button{border:0;background:none;border-radius:99px;padding:8px 16px;font-size:14px;color:var(--soft);transition:all .3s}
-.seg button[aria-pressed=true]{background:var(--text);color:var(--ink)}
-
-/* alias */
-.alias{border:1px solid var(--line);border-radius:22px;padding:26px;background:linear-gradient(170deg,var(--panel),var(--deep));display:grid;gap:10px}
-.alias .addr{font-family:var(--serif);font-size:clamp(24px,4.4vw,40px);line-height:1.15;overflow-wrap:anywhere;min-height:1.2em}
-.alias .addr .dom{color:var(--teal)}
-.caret{display:inline-block;width:2px;height:.9em;background:var(--teal);vertical-align:-.08em;animation:blink 1s steps(2) infinite}
-@keyframes blink{50%{opacity:0}}
-.shield{display:grid;gap:8px;margin:0;padding:0;list-style:none;font-size:14px;color:var(--soft)}
-.shield b{color:var(--text);font-weight:500}
-
-/* payment */
-.pay{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(290px,100%),1fr));gap:30px 48px;align-items:start}
-.figure{border:1px solid var(--line);border-radius:22px;padding:26px;background:linear-gradient(170deg,var(--panel),var(--deep))}
-.figure .range{font-family:var(--serif);font-size:clamp(40px,6.5vw,64px);line-height:1.05;margin:4px 0 6px}
-.figure .range small{font-family:var(--sans);font-size:15px;color:var(--mute)}
-.verdict{font-size:14px;color:var(--teal)}
-.verdict.over{color:var(--warn)}
-dl.rows{margin:18px 0 0;display:grid;gap:0}
-dl.rows div{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
-dl.rows dt{color:var(--soft)}
-dl.rows dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
-dl.rows .unk dd{color:var(--mute);font-style:italic}
-dl.rows .tot{font-weight:500}
-dl.rows .flag dt{color:var(--warn)}
-
-/* offers */
-.bar{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;margin-bottom:18px}
-.dealer{display:flex;align-items:center;gap:14px}
-.grade{flex:none;width:54px;height:54px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;font-family:var(--serif);font-size:26px;color:var(--gold)}
-.dealer h3{font-size:22px}
-.dealer small{display:block;color:var(--mute);font-size:12.5px}
-.monthly{font-family:var(--serif);font-size:44px;line-height:1}
-.monthly small{font-family:var(--sans);font-size:14px;color:var(--mute)}
-.badges{display:flex;flex-wrap:wrap;gap:6px;min-height:24px}
-.badge{font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:99px;border:1px solid var(--teal);color:var(--teal)}
-.badge.g{border-color:var(--gold);color:var(--gold)}
-.meters{display:grid;gap:7px;font-size:12.5px;color:var(--soft)}
-.meter{display:grid;grid-template-columns:1fr 38px;gap:4px 10px;align-items:center}
-.meter i{grid-column:1/-1;height:2px;background:var(--line);border-radius:2px;overflow:hidden;display:block}
-.meter i b{display:block;height:100%;background:var(--gold);width:var(--w);animation:grow 1.2s var(--ease) both .3s}
-.view.still .meter i b{animation:none}
-@keyframes grow{from{width:0}}
-details{font-size:14px}
-summary{cursor:pointer;color:var(--soft);font-size:13px;letter-spacing:.06em;list-style:none;padding:4px 0}
-summary::-webkit-details-marker{display:none}
-summary::after{content:" +";color:var(--teal)}
-details[open] summary::after{content:" –"}
-.pickbtn{margin-top:auto;width:100%}
-
-/* confirm */
-.slots{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.slot{border:1px solid var(--line);border-radius:14px;background:var(--deep);padding:14px;text-align:left;transition:all .3s}
-.slot b{display:block;font-weight:500}
-.slot small{color:var(--mute)}
-.slot[aria-pressed=true]{border-color:var(--teal);background:var(--teal-wash)}
-.pair{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
-.pair .btn{flex:1 1 180px}
-.check{width:72px;height:72px}
-.check circle,.check path{fill:none;stroke:var(--teal);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:240;stroke-dashoffset:240;animation:draw 1.4s var(--ease) forwards .2s}
-.check path{animation-delay:.8s}
-@keyframes draw{to{stroke-dashoffset:0}}
-.desk{border:1px solid var(--line2);border-radius:22px;overflow:hidden;background:var(--deep)}
-.desk header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding:14px 22px;background:var(--raise);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
-.desk header span:last-child{color:var(--teal)}
-.desk .in{padding:6px 22px 20px}
-
-/* trade media */
-.vh{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;clip-path:inset(50%)}
-.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
-.shot{position:relative;aspect-ratio:4/3;max-width:100%;border:1px dashed var(--line2);border-radius:16px;background:var(--deep) center/cover no-repeat;display:flex;flex-direction:column;justify-content:flex-end;padding:12px;cursor:pointer;overflow:hidden;transition:border-color .3s,transform .4s var(--ease)}
-.shot:hover{transform:translateY(-2px);border-color:var(--teal)}
-.shot:focus-within{outline:2px solid var(--teal);outline-offset:3px}
-.shot b{font-weight:500;font-size:14px;position:relative}
-.shot small{color:var(--mute);font-size:12px;position:relative}
-.shot.has{border-style:solid;border-color:var(--teal);background-color:var(--teal-wash)}
-.shot.has small{color:var(--teal)}
-.shot.img::before{content:"";position:absolute;inset:0;background:linear-gradient(transparent 30%,rgba(6,16,28,.88))}
-.shot.key{border-color:var(--gold)}
-.shot.key.has{border-color:var(--teal)}
-.inline{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:16px}
-.link{background:none;border:0;padding:0;color:var(--teal);font-size:14px;border-bottom:1px solid transparent}
-.link:hover{border-color:var(--teal)}
-
-/* dealers */
-.ask{border:1px solid var(--line);border-radius:22px;padding:22px 24px;background:linear-gradient(170deg,var(--panel),var(--deep));display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px;margin-bottom:22px}
-.ask>div{flex:1 1 320px;min-width:0}
-.ask p{margin:4px 0 0;font-family:var(--serif);font-size:clamp(20px,2.6vw,26px);line-height:1.25}
-.facts{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--soft)}
-.facts b{color:var(--text);font-weight:500}
-.status{font-size:13px;color:var(--teal);display:flex;gap:8px;align-items:baseline}
-.status.over{color:var(--warn)}
-.status::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:currentColor;transform:translateY(-2px)}
-.wait{color:var(--mute);font-size:14px;display:flex;align-items:center;gap:10px;padding:22px 0}
-.wait::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--teal);animation:pulse 1.4s ease-in-out infinite}
-@keyframes pulse{50%{opacity:.2;transform:scale(.7)}}
-.arrive{animation:rise .8s var(--ease) both}
-
-/* footer bar */
-.dock{position:fixed;left:0;right:0;bottom:0;z-index:6;padding:40px clamp(16px,4vw,48px) calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(rgba(6,16,28,0),rgba(6,16,28,.94) 42%,var(--ink) 70%);pointer-events:none;transition:opacity .5s,transform .6s var(--ease)}
-.dock .in{max-width:1080px;margin-inline:auto;display:flex;align-items:center;gap:14px}
-.dock .hint{flex:1;font-size:13px;color:var(--mute);text-align:right;min-width:0}
-body.intro .dock,body.done .dock{opacity:0;transform:translateY(20px);pointer-events:none}
-@media (max-width:560px){.dock .hint{display:none}.dock .in{justify-content:space-between}.btn{min-width:120px;padding:13px 22px}.where{display:none}}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0ms!important;transition-duration:.01ms!important}}
-
-/* role switch */
-.top{flex-wrap:wrap;row-gap:10px}
-.seg.role{padding:3px}
-.seg.role button{padding:6px 14px;font-size:13px}
-body.intro .seg.role{visibility:hidden}
-body.deskmode .rail{visibility:hidden}
-@media (max-width:560px){.tag{display:none}}
-
-/* deal record timeline */
-.tl{list-style:none;margin:0 0 30px;padding:0;display:grid;gap:0;max-width:760px}
-.tl-item{display:grid;grid-template-columns:20px 1fr;gap:18px;position:relative;padding-bottom:30px}
-.tl-item::before{content:"";position:absolute;left:9.5px;top:20px;bottom:0;width:1px;background:var(--line)}
-.tl-item:last-child::before{display:none}
-.tl-dot{width:11px;height:11px;border-radius:50%;border:1px solid var(--line2);margin:6px 0 0 4px;background:var(--ink)}
-.tl-item.done .tl-dot{background:var(--teal);border-color:var(--teal)}
-.tl-item.next .tl-dot{border-color:var(--gold);box-shadow:0 0 0 5px rgba(220,201,160,.14)}
-.tl-body{min-width:0;display:grid;gap:10px;justify-items:start}
-.tl-body h3{font-family:var(--serif);font-weight:400;font-size:24px;line-height:1.15;margin:0}
-.tl-body p{margin:0}
-.tl-body .btn{margin-top:4px}
-.tl-big{font-family:var(--serif);font-size:40px;line-height:1}
-.tl-big small{font-family:var(--sans);font-size:14px;color:var(--mute)}
-.thread{display:grid;gap:8px;width:100%;max-width:520px}
-.msg{max-width:88%;padding:10px 14px;border-radius:16px;background:var(--panel);font-size:14.5px;justify-self:start;overflow-wrap:anywhere}
-.msg.me{justify-self:end;background:var(--teal-wash);border:1px solid rgba(99,210,198,.35)}
-.msg small{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-bottom:2px}
-.sayrow{display:flex;gap:10px;width:100%;max-width:520px;margin-top:4px}
-.sayrow input{flex:1;min-width:0;background:var(--deep);border:1px solid var(--line);border-radius:99px;padding:12px 18px}
-.sayrow input:focus{outline:none;border-color:var(--teal)}
-.sayrow .btn{min-width:0;padding:12px 22px;margin:0}
-
-/* paperwork check */
-.form.two-up{grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr))}
-.verdictbox{border-radius:22px;padding:24px 26px;border:1px solid var(--line);background:linear-gradient(170deg,var(--panel),var(--deep));margin-bottom:12px}
-.verdictbox.good{border-color:rgba(99,210,198,.55)}
-.verdictbox.bad{border-color:rgba(233,184,114,.55)}
-.vline{font-family:var(--serif);font-size:clamp(24px,3.4vw,32px);line-height:1.15;margin:4px 0 8px}
-.vcost{font-family:var(--serif);font-size:clamp(30px,4.4vw,44px);line-height:1.05;margin:0;color:var(--warn)}
-.vcost small{display:block;font-family:var(--sans);font-size:13.5px;color:var(--mute);margin-top:6px}
-.finding{border-top:1px solid var(--line);padding:16px 2px;display:grid;gap:6px}
-.fhead{display:flex;justify-content:space-between;gap:14px;align-items:baseline}
-.fhead b{font-weight:500}
-.fhead .up{color:var(--warn)}
-.fhead .down{color:var(--teal)}
-.fdiff{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;color:var(--soft);font-size:15px}
-.fdiff i{font-style:normal;color:var(--mute)}
-.fdiff span:last-child{color:var(--text)}
-
-/* dealer desk */
-.deskgrid{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:34px 44px;align-items:start}
-@media (max-width:820px){.deskgrid{grid-template-columns:minmax(0,1fr)}.deskgrid .inbox{order:2}}
-.inbox{display:grid;gap:8px}
-.lead{display:grid;gap:4px;text-align:left;background:transparent;border:1px solid var(--line);border-radius:16px;padding:14px 16px;transition:border-color .3s,background .3s}
-.lead:hover{border-color:var(--line2)}
-.lead[aria-pressed=true]{background:var(--teal-wash);border-color:rgba(99,210,198,.55)}
-.lead b{font-weight:500;display:flex;justify-content:space-between;gap:8px;align-items:center}
-.lead small{color:var(--mute);font-size:12.5px;line-height:1.4}
-.pill{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line2);color:var(--soft);border-radius:99px;padding:2px 8px;font-weight:400;white-space:nowrap}
-.pill.hot{border-color:var(--gold);color:var(--gold)}
-.month{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
-.leadhead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;align-items:flex-start;margin-bottom:14px}
-.leadhead>div{flex:1 1 320px;min-width:0}
-.asking{font-family:var(--serif);font-size:clamp(22px,2.8vw,30px);line-height:1.2;margin:0}
-.clock{font-size:13px;letter-spacing:.06em;color:var(--gold);border:1px solid rgba(220,201,160,.45);border-radius:99px;padding:6px 14px;white-space:nowrap}
-.clock:empty{display:none}
-.thumbs{display:flex;flex-wrap:wrap;gap:8px}
-.thumbs span{width:84px;height:63px;border-radius:10px;background:var(--deep) center/cover;border:1px solid var(--line)}
-.adf{border-top:1px solid var(--line);padding-top:14px}
-.adf pre{margin:0;padding:16px 18px;background:#040B14;border:1px solid var(--line);border-radius:14px;overflow-x:auto;font:12.5px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;color:#9FD8D0;max-width:100%}
-
-
-/* intro extras, car paints */
-.hero .go2{animation:rise 1s var(--ease) 1.45s both;display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px;margin-top:20px}
-.sil.p1 .sil-body{fill:url(#cdBody1)}
-.sil.p2 .sil-body{fill:url(#cdBody2)}
-.terms{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-size:15px;color:var(--soft)}
-.terms li{padding-left:20px;position:relative}
-.terms li::before{content:"";position:absolute;left:0;top:.7em;width:9px;height:1px;background:var(--teal)}
-
-/* why it pays */
-.versus{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:16px}
-.versus .figure{padding:22px 24px}
-.versus .dim{background:transparent;opacity:.78}
-.versus .lit{border-color:rgba(99,210,198,.55);box-shadow:0 24px 60px -34px rgba(99,210,198,.5)}
-.versus dl.rows{margin-top:6px}
-.versus dd{max-width:62%;overflow-wrap:anywhere}
-.duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px 24px;margin:4px 0 6px}
-.duo>div{display:grid;gap:2px;align-content:start}
-.duo small{color:var(--mute);font-size:12.5px}
-.duo .range{font-size:clamp(36px,5vw,52px)}
-
-/* guided tour */
-.tour{position:fixed;left:0;right:0;bottom:0;z-index:8;background:linear-gradient(180deg,rgba(10,24,40,.94),rgba(6,16,28,.98));border-top:1px solid var(--line2);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding-bottom:env(safe-area-inset-bottom,0px)}
-.tour[hidden]{display:none}
-.tour .in{max-width:1080px;margin-inline:auto;padding:16px clamp(16px,4vw,48px) 14px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 28px}
-.tcap{flex:1 1 420px;min-width:0;display:grid;gap:3px}
-.twho{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal)}
-.twho.d{color:var(--gold)}
-.tcap b{font-family:var(--serif);font-weight:400;font-size:clamp(21px,2.6vw,27px);line-height:1.15}
-.tcap p{margin:0;color:var(--soft);font-size:14.5px;line-height:1.45;max-width:74ch}
-.tctl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.tctl .num{font-size:13px;color:var(--mute);min-width:52px;text-align:center}
-.tbtn{border:1px solid var(--line2);background:transparent;border-radius:99px;width:44px;height:44px;font-size:22px;line-height:1;display:grid;place-items:center;transition:border-color .3s,background .3s,color .3s}
-.tbtn.wide{width:auto;padding:0 18px;font-size:13.5px;letter-spacing:.02em}
-.tbtn:hover{border-color:var(--text)}
-.tbtn[disabled]{opacity:.3;cursor:default}
-#tnext{background:var(--text);color:var(--ink);border-color:var(--text)}
-#tauto[aria-pressed=true]{background:var(--teal-wash);border-color:var(--teal)}
-.tprog{height:2px;background:var(--line)}
-.tprog b{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal-d),var(--gold));transition:width .7s var(--ease)}
-body.touring .dock{opacity:0;transform:translateY(20px);pointer-events:none}
-body.touring main{padding-bottom:min(46vh,300px)}
-body.touring.intro main{padding-bottom:180px}
-body.touring #tourbtn{display:none}
-body.intro #tourbtn{visibility:hidden}
-.spot{outline:1px solid rgba(220,201,160,.7);outline-offset:8px;border-radius:18px;box-shadow:0 0 60px -10px rgba(220,201,160,.35);transition:outline-color .6s,box-shadow .6s}
-#texit .sm{display:none}
-@media (max-width:560px){#texit .lg{display:none}#texit .sm{display:inline}.tbtn.wide{padding:0 14px}.tcap b{font-size:20px}.top{gap:10px}.tcap p{font-size:13.5px}.tour .in{padding-top:12px;gap:10px}.tbtn{width:40px;height:40px}.tctl{width:100%;justify-content:space-between}}
-@media (max-width:560px){.mark{font-size:21px}.ghost{font-size:12.5px;padding:6px 2px}.seg.role button{padding:6px 11px}.top .sp{min-width:0}}
-
-.dock .in{pointer-events:auto}
-/* lenders, membership */
-.lenders{display:grid;gap:8px}
-.lender{display:flex;justify-content:space-between;align-items:center;gap:16px;text-align:left;background:transparent;border:1px solid var(--line);border-radius:16px;padding:13px 16px;transition:border-color .3s,background .3s}
-.lender:hover{border-color:var(--line2)}
-.lender[aria-pressed=true]{background:var(--teal-wash);border-color:var(--teal)}
-.lender span{display:grid;gap:1px;min-width:0}
-.lender b{font-weight:500}
-.lender small{color:var(--mute);font-size:12.5px}
-.lender .r{text-align:right;flex:none}
-.lender .r b{font-family:var(--serif);font-weight:400;font-size:24px;line-height:1.1}
-.terms.no li::before{background:var(--warn)}
-
-/* protection step, and the same choices on the dealer desk */
-.protlist{display:grid;gap:14px;max-width:900px;margin-bottom:22px}
-.prot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px 28px;border:1px solid var(--line);border-radius:20px;padding:20px 22px;background:linear-gradient(170deg,var(--panel),var(--deep))}
-.prot>div:first-child{flex:1 1 300px;min-width:0}
-.prot h3{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.1;margin:0 0 6px}
-.prot .note{margin:0}
-.deskprot{margin-top:24px;display:grid;gap:8px}
-.deskprot h2{margin-bottom:4px}
-.pd{display:flex;justify-content:space-between;align-items:center;gap:14px;border:1px solid var(--line);border-radius:14px;padding:11px 14px}
-.pd>div{display:grid;gap:1px;min-width:0}
-.pd b{font-weight:500}
-.pd small{color:var(--mute);font-size:12.5px}
-.pd.is-yes{border-color:rgba(99,210,198,.45)}
-.pd.is-no{opacity:.75}
-.pd input{flex:none;width:112px;background:var(--deep);border:1px solid var(--line);border-radius:12px;padding:10px 12px;text-align:right;transition:border-color .3s}
-.pd input:focus{outline:none;border-color:var(--teal)}
-.prodcheck{margin-top:14px}
-.prodcheck h2{margin-bottom:0}
-
-/* the group */
-.gwrap{overflow-x:auto;border:1px solid var(--line);border-radius:22px;background:linear-gradient(170deg,var(--panel),var(--deep))}
-.gtable{width:100%;min-width:720px;border-collapse:collapse;font-size:14px}
-.gtable th,.gtable td{padding:14px 18px;text-align:right;border-top:1px solid var(--line);vertical-align:top}
-.gtable thead th{border-top:0;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);font-weight:500;vertical-align:bottom}
-.gtable th:first-child{text-align:left}
-.gtable tbody th{font-weight:500}
-.gtable tbody th small{display:block;color:var(--mute);font-weight:400;font-size:12.5px;margin-top:2px}
-.gtable td{font-variant-numeric:tabular-nums}
-.gtable td.warn{color:var(--warn)}
-.gtable tr.here th:first-child{box-shadow:inset 2px 0 0 var(--teal)}
-.routing{display:grid;gap:12px;align-content:start}
-.route{border:1px solid var(--line);border-radius:18px;padding:16px 18px;display:grid;gap:8px}
-.route.sister{border-color:rgba(99,210,198,.55)}
-.rhead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;color:var(--soft);font-size:14px}
-.rhead b{color:var(--text);font-weight:500}
-.rpath{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;font-family:var(--serif);font-size:20px;line-height:1.25}
-.rpath i{font-style:normal;color:var(--mute)}
-.route .note{margin:0}
-@media (max-width:560px){.prot .seg{display:grid;width:100%;border-radius:18px}.prot .seg button{border-radius:14px;text-align:left}}
-
-/* ===== polish pass (2026-09-23): light, depth and glass. Later rules win on purpose. ===== */
-body::after{content:"";position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.045;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-#sky{opacity:1}
-body.working #sky{opacity:.55}
-
-/* glass surfaces */
-.card,.figure,.alias,.ask,.prot,.verdictbox,.gwrap{background:linear-gradient(170deg,rgba(21,43,67,.74),rgba(10,24,40,.66));backdrop-filter:blur(16px) saturate(1.25);-webkit-backdrop-filter:blur(16px) saturate(1.25)}
-.card,.figure,.alias,.ask,.prot,.verdictbox,.gwrap,.desk,.slot,.lead,.lender,.route,.pd,.shot{box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 30px 60px -44px rgba(0,0,0,.9)}
-.card.on,.card.pick.on:hover{border-color:var(--teal);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 0 1px var(--teal),0 34px 80px -30px rgba(99,210,198,.55)}
-button.card:hover,.card.pick:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 36px 70px -40px rgba(0,0,0,.95)}
-.verdictbox.good{box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 30px 70px -36px rgba(99,210,198,.45)}
-.verdictbox.bad{box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 30px 70px -36px rgba(233,184,114,.4)}
-.lead[aria-pressed=true],.lender[aria-pressed=true],.slot[aria-pressed=true]{box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 20px 50px -30px rgba(99,210,198,.5)}
-.tile[aria-pressed=true]{box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 24px 56px -30px rgba(99,210,198,.5)}
-.desk header{background:linear-gradient(90deg,var(--raise),rgba(21,43,67,.6))}
-.adf pre{background:rgba(4,11,20,.8)}
-
-/* controls */
-.btn{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.btn:not(.pri):hover{background:rgba(190,215,235,.07)}
-.btn.pri{background:linear-gradient(180deg,#FFFFFF,#D9E5EE);border-color:transparent;box-shadow:0 14px 34px -14px rgba(99,210,198,.6),inset 0 -1px 0 rgba(6,16,28,.14)}
-.btn.pri:hover{background:linear-gradient(180deg,#86E2D8,#4CC2B5);border-color:transparent;box-shadow:0 18px 40px -14px rgba(99,210,198,.85)}
-.btn.pri[disabled]{box-shadow:none}
-.seg{background:rgba(6,16,28,.35);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.seg button[aria-pressed=true]{box-shadow:0 6px 16px -8px rgba(0,0,0,.7)}
-.chip[aria-pressed=true]{box-shadow:0 10px 24px -14px rgba(99,210,198,.7)}
-.f input,.f select,.sayrow input,.pd input{background:rgba(10,24,40,.72)}
-.f input:focus,.f select:focus,.sayrow input:focus,.pd input:focus{box-shadow:0 0 0 4px var(--teal-wash)}
-input[type=range]::-webkit-slider-thumb{box-shadow:0 0 0 6px rgba(99,210,198,.16),0 6px 18px -4px rgba(99,210,198,.8)}
-.rail{height:2px}
-.rail b{box-shadow:0 0 16px rgba(99,210,198,.75)}
-.grade{border-color:rgba(220,201,160,.75);background:radial-gradient(circle at 35% 28%,rgba(220,201,160,.24),rgba(220,201,160,.03) 72%);box-shadow:0 0 0 1px rgba(220,201,160,.18),0 14px 30px -14px rgba(220,201,160,.65)}
-.monthly,.dial .big,.figure .range,.tl-big{text-shadow:0 0 40px rgba(99,210,198,.18)}
-.check{filter:drop-shadow(0 0 18px rgba(99,210,198,.45))}
-.top{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
-
-/* photo tiles: a quiet icon for each kind, hidden once a real photo is in */
-.shot{border-color:var(--line2);background-color:rgba(10,24,40,.55);--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.6' stroke-linejoin='round'%3E%3Cpath d='M4 8h3l2-2.5h6L17 8h3v10H4z'/%3E%3Ccircle cx='12' cy='13' r='3.2'/%3E%3C/svg%3E")}
-.shot[data-k=video]{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.6' stroke-linejoin='round'%3E%3Crect x='3' y='7' width='12' height='10' rx='1.5'/%3E%3Cpath d='M15 10.5l6-3v9l-6-3z'/%3E%3C/svg%3E")}
-.shot[data-k=vin]{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.6' stroke-linejoin='round'%3E%3Crect x='3' y='8' width='18' height='8' rx='1.5'/%3E%3Cpath d='M7 11v2M10 11v2M13 11v2M16 11v2'/%3E%3C/svg%3E")}
-.shot::after{content:"";position:absolute;top:12px;right:12px;width:22px;height:22px;background:currentColor;color:var(--soft);opacity:.6;-webkit-mask:var(--ico) center/contain no-repeat;mask:var(--ico) center/contain no-repeat;transition:opacity .3s,color .3s}
-.shot:hover::after,.shot.has::after{color:var(--teal);opacity:1}
-.shot.img::after{display:none}
-
-/* opening screen: wordmark left, an edge-lit car right, three quiet proof lines */
-body.intro main{max-width:1180px}
-.hero{max-width:none;display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);align-items:center;gap:24px 44px}
-.herotext{min-width:0}
-.herocar{position:relative;min-width:0;padding-bottom:12%;animation:rise 1.6s var(--ease) .45s both}
-.herocar .sil{width:100%;max-width:660px;margin-inline:auto;display:block;filter:drop-shadow(0 34px 44px rgba(99,210,198,.16))}
-.herocar .sil.big .sil-edge{stroke:var(--teal);stroke-width:1.5;stroke-dasharray:1200;stroke-dashoffset:1200;animation:trace 2.8s var(--ease) .7s forwards}
-@keyframes trace{to{stroke-dashoffset:0}}
-.herocar .sil.big .sil-body,.herocar .sil.big .sil-glass,.herocar .sil.big .sil-wheel,.herocar .sil.big .sil-pillar,.herocar .sil.big .sil-sill{animation:fadein 1.8s var(--ease) 1.5s both}
-@keyframes fadein{from{opacity:0}}
-.herocar .sil.big .sil-head{filter:drop-shadow(0 0 7px #EAF6F4) drop-shadow(0 0 18px rgba(234,246,244,.6))}
-.herocar .sil.mirror{position:absolute;left:0;right:0;top:calc(100% - 12% - 6px);transform:scaleY(-1);opacity:.14;filter:blur(2px);-webkit-mask-image:linear-gradient(rgba(0,0,0,.8),transparent 60%);mask-image:linear-gradient(rgba(0,0,0,.8),transparent 60%);pointer-events:none;animation:fadein 2s var(--ease) 2s both}
-.herocar .floor{position:absolute;left:6%;right:6%;top:calc(100% - 12%);height:1px;background:linear-gradient(90deg,transparent,rgba(99,210,198,.75) 38%,rgba(220,201,160,.6) 72%,transparent);box-shadow:0 0 24px rgba(99,210,198,.45);animation:fadein 1.6s var(--ease) 1.2s both}
-.trust{list-style:none;margin:30px 0 0;padding:0;display:grid;gap:8px;font-size:14px;color:var(--mute);animation:rise 1s var(--ease) 1.65s both}
-.trust li{padding-left:18px;position:relative}
-.trust li::before{content:"";position:absolute;left:0;top:.72em;width:8px;height:1px;background:var(--gold)}
-.trust b{color:var(--soft);font-weight:500}
-@media (max-width:900px){.hero{grid-template-columns:1fr}.herocar{max-width:480px;margin-top:8px;padding-bottom:14%}.trust{margin-top:22px}}
-@media (max-width:560px){.trust{display:none}.herocar{margin-top:0}}
-/* header spans the full width, so the sky shows no seam at the gutters */
-.top{margin-inline:calc(-1*clamp(16px,4vw,48px));padding-inline:clamp(16px,4vw,48px);background:linear-gradient(rgba(6,16,28,.92) 40%,rgba(6,16,28,0))}
-</style>
-</head>
-<body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
-<linearGradient id="cdBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#46688A"/><stop offset=".42" stop-color="#1F3B57"/><stop offset="1" stop-color="#0B1827"/></linearGradient>
-<linearGradient id="cdGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A4764"/><stop offset=".5" stop-color="#0A1522"/><stop offset="1" stop-color="#132A40"/></linearGradient>
-<linearGradient id="cdEdge" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".3" stop-color="#fff" stop-opacity=".8"/><stop offset=".72" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
-<linearGradient id="cdBody1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9D3DC"/><stop offset=".42" stop-color="#77889A"/><stop offset="1" stop-color="#2A3644"/></linearGradient>
-<linearGradient id="cdBody2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9A4B55"/><stop offset=".42" stop-color="#5A1F2B"/><stop offset="1" stop-color="#1F0A10"/></linearGradient>
-<radialGradient id="cdShadow"><stop offset="0" stop-color="#000" stop-opacity=".7"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
-<linearGradient id="cdGround" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#BED7EB" stop-opacity="0"/><stop offset=".5" stop-color="#BED7EB" stop-opacity=".35"/><stop offset="1" stop-color="#BED7EB" stop-opacity="0"/></linearGradient>
-</defs></svg>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>ClearDrive</title><meta name="description" content="ClearDrive: the buyer's side of the desk. Choose the car, collect written offers from Ourisman, and check the paperwork against the offer. Free for buyers."><meta name="theme-color" content="#06101C"><link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png"><meta property="og:title" content="ClearDrive"><meta property="og:description" content="Everything a car broker does, free to the buyer. Written offers from Ourisman, the paperwork checked against the offer."><meta property="og:image" content="assets/img/og.png"><meta property="og:type" content="website"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap"><link rel="stylesheet" href="css/cleardrive.css?v=684f1c"><link rel="stylesheet" href="css/index.css?v=684f1c"></head><body class="page-index"><!-- title: ClearDrive -->
 <canvas id="sky" aria-hidden="true"></canvas>
 <div class="shell">
-  <div class="top">
-    <button class="mark" id="home" aria-label="ClearDrive, back to the opening">Clear<i>Drive</i></button>
-    <span class="tag">Demonstration · sample data</span>
-    <span class="sp"></span>
-    <span class="where" id="where"></span>
-    <div class="seg role" id="role" role="group" aria-label="View as"><button data-act="role" data-v="client">Client</button><button data-act="role" data-v="dealer">Dealer</button></div>
-    <button class="ghost" id="tourbtn" data-act="tour">Tour</button>
-    <button class="ghost" id="restart">Restart</button>
-  </div>
-  <div class="rail"><b id="railfill"></b></div>
-  <main><div class="view" id="view" aria-live="polite"></div></main>
+<div id="nav" data-active="home"></div>
+
+<main>
+  <!-- hero -->
+  <section class="hero-wrap">
+    <div class="wrap hero">
+      <div class="hero-copy">
+        <div class="row" style="--gap:10px"><span class="badge teal plain">Free for buyers</span><span class="badge plain">Founding dealer · Ourisman Automotive Group</span></div>
+        <h1 class="rise" style="--i:1">Everything a car broker does. <em>Free.</em></h1>
+        <p class="lede rise" style="--i:2">Tell ClearDrive the car, the payment and the trade. Ourisman's rooftops answer in writing, ranked by the terms alone. Before you sign, the paperwork is checked line by line against the offer you accepted.</p>
+        <div class="row rise" style="--i:3;--gap:14px"><a class="btn pri lg" href="app.html">Start your brief</a><a class="btn lg" href="dealer.html">See the dealer desk</a></div>
+        <ul class="proof rise" style="--i:4">
+          <li>Written offers, never a phone call you did not ask for</li>
+          <li>No dealer can pay for position</li>
+          <li>Paperwork checked against the offer before you sign</li>
+        </ul>
+      </div>
+      <div class="hero-car rise" style="--i:2">
+        <figure class="car hero"><img src="assets/cars/kia-telluride.webp" alt="Silhouette of a Kia Telluride" onerror="this.outerHTML=CD.bodySVG('suv')"></figure>
+        <div class="hero-chip"><span class="label">A buyer's request, as the desk sees it</span><div class="hero-row"><span>2026 Kia Telluride S</span><span class="num">$650<small>/mo cap</small></span></div><div class="hero-row small"><span>Trade: 2018 Accord · 82k mi · photographed</span><span class="ok">Finance · Good credit</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- brand bar -->
+  <section class="section tight brandbar">
+    <div class="wrap">
+      <div class="row between" style="--gap:16px">
+        <p class="label">One group. <span id="rooftop-count">45</span> rooftops. Every new brand Ourisman sells, plus certified preowned.</p>
+        <a class="link" href="inventory.html">Browse new and preowned</a>
+      </div>
+      <div class="logo-row mt16" id="brand-row"></div>
+    </div>
+  </section>
+
+  <!-- lineup -->
+  <section class="section tight" id="lineup" hidden>
+    <div class="wrap">
+      <div class="row between" style="--gap:16px;align-items:flex-end">
+        <div><p class="eyebrow">The lineup</p><h3>Real models. Priced to your limit, not the sticker.</h3></div>
+        <p class="small maxw">Every new model Ourisman sells, shown as a blacked-out silhouette of the real car. Starting MSRPs are approximate and exclude destination.</p>
+      </div>
+      <div class="grid mt24" style="--min:200px;--gap:12px" id="lineup-grid"></div>
+    </div>
+  </section>
+
+  <!-- versus -->
+  <section class="section" id="why">
+    <div class="wrap">
+      <div class="why-head">
+        <p class="eyebrow">Why ClearDrive</p>
+        <h2>You should not have to pay someone to protect you from the people selling you a car.</h2>
+        <p class="lede mt16">Brokers charge a fee to do what the buyer's side of the desk should do for free. Listing sites sell your phone number to five dealers. Buying programs rank the dealer that pays them. ClearDrive does none of that. Buyers never pay. Dealers pay a flat fee for a buyer who has already chosen the car, stated a payment and photographed the trade.</p>
+      </div>
+      <div class="tablewrap mt32">
+          <table class="t compare">
+            <thead><tr><th>What you get</th><th>Car broker</th><th>Listing site</th><th>Buying program</th><th>ClearDrive</th></tr></thead>
+            <tbody>
+              <tr><td>Cost to the buyer</td><td class="part">$200 to $1,000</td><td class="yes">Free</td><td class="yes">Free</td><td class="yes">Free</td></tr>
+              <tr><td>Your phone number stays private</td><td class="yes">Yes</td><td class="no">Sold to dealers</td><td class="no">Shared</td><td class="yes">Private address</td></tr>
+              <tr><td>Offers in writing, itemized</td><td class="part">Sometimes</td><td class="no">Calls and emails</td><td class="part">Price only</td><td class="yes">Every line</td></tr>
+              <tr><td>Who decides the ranking</td><td class="part">The broker</td><td class="no">Paid placement</td><td class="no">Paid placement</td><td class="yes">Your terms, nothing else</td></tr>
+              <tr><td>Trade valued from photos before you visit</td><td class="part">Sometimes</td><td class="no">—</td><td class="no">—</td><td class="yes">Yes</td></tr>
+              <tr><td>Protection products quoted only if you ask</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">Yes</td></tr>
+              <tr><td>Paperwork checked against the offer</td><td class="part">If you pay for it</td><td class="no">—</td><td class="no">—</td><td class="yes">Line by line</td></tr>
+              <tr><td>Dealer grade from verified buyers</td><td class="no">—</td><td class="part">Star reviews</td><td class="part">Star reviews</td><td class="yes">Three questions, after the sale</td></tr>
+              <tr class="us"><td>Who pays</td><td>You</td><td>Dealers, per lead</td><td>Dealers, per sale</td><td>Dealers, one flat fee</td></tr>
+            </tbody>
+          </table>
+      </div>
+      <p class="note mt16">Broker fees and competitor practices summarized from public pricing pages and buyer reports in September 2026; the comparison describes product design, not a guarantee of any outcome.</p>
+    </div>
+  </section>
+
+  <!-- how it works -->
+  <section class="section" id="how">
+    <div class="wrap">
+      <p class="eyebrow">How it works</p>
+      <h2>Seven steps from "I need a car" to a signed contract that matches the offer.</h2>
+      <div class="grid three mt32" style="--gap:14px" id="steps-grid">
+        <div class="card sm step"><span class="n">1</span><h4>Your brief</h4><p>How you will pay, your monthly or cash limit, the body style and the features you will not give up. Takes two minutes.</p></div>
+        <div class="card sm step"><span class="n">2</span><h4>Your three</h4><p>Three real models from Ourisman's lineup that fit the brief and the budget, with the reason each one made the list.</p></div>
+        <div class="card sm step"><span class="n">3</span><h4>Your trade</h4><p>Four photos, the odometer and the VIN. The desk sees the car before you arrive, so the allowance is in the written offer.</p></div>
+        <div class="card sm step"><span class="n">4</span><h4>Payment and protection</h4><p>Pick a lender rate to beat if you want one. Decide which protection products a dealer may quote, and which to skip.</p></div>
+        <div class="card sm step"><span class="n">5</span><h4>Private address</h4><p>Dealers write to a ClearDrive address you control. Your phone and email never leave the workspace.</p></div>
+        <div class="card sm step"><span class="n">6</span><h4>Written offers</h4><p>Each rooftop prices the exact car to your limit: selling price, fees, taxes, trade, payment. Ranked by terms. Nobody can buy a better spot.</p></div>
+        <div class="card sm step"><span class="n">7</span><h4>The visit and the check</h4><p>Book the drive. Enter the contract figures at the desk. Every line that differs from the offer is flagged with the question to ask.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- product look -->
+  <section class="section" id="product">
+    <div class="wrap">
+      <div class="cols" style="align-items:start">
+        <div>
+          <p class="eyebrow">Inside the workspace</p>
+          <h2>An offer you can read. A check you can trust.</h2>
+          <p class="lede mt16">Every figure a dealer sends lives on one itemized card. One function prices the offer for the buyer and the desk, so both sides see the same number. When the contract arrives, the same card becomes the checklist.</p>
+          <ul class="check-list mt24">
+            <li>Out-the-door figure built from Virginia or Maryland tax rules, not a guess</li>
+            <li>Trade equity, positive or negative, carried into the payment</li>
+            <li>A lender rate the desk must beat, chosen by the buyer</li>
+            <li>Protection products appear only when the buyer said "yes, quote it"</li>
+          </ul>
+        </div>
+        <div class="stack" style="--gap:14px">
+          <div class="card lift">
+            <div class="head"><div><p class="label">Written offer · Ourisman Kia of Fairfax</p><h3 style="margin:4px 0 0">2026 Kia Telluride S</h3></div><span class="badge ok">On the lot</span></div>
+            <dl class="kv">
+              <div><dt>Selling price</dt><dd>$37,210</dd></div>
+              <div><dt>Processing fee</dt><dd>$899</dd></div>
+              <div><dt>Virginia sales and use tax (4.15%)</dt><dd>$1,544</dd></div>
+              <div><dt>Title and registration</dt><dd>$95</dd></div>
+              <div><dt>Trade allowance · 2018 Accord</dt><dd>−$13,800</dd></div>
+              <div><dt>Loan payoff</dt><dd>$9,000</dd></div>
+              <div><dt>Cash down</dt><dd>−$3,000</dd></div>
+              <div class="total"><dt>Amount financed</dt><dd>$31,948</dd></div>
+              <div><dt>72 months at 6.49% APR</dt><dd><b>$537</b> a month</dd></div>
+            </dl>
+          </div>
+          <div class="card">
+            <div class="head"><div><p class="label">Paperwork check · at the desk</p></div><span class="badge warn">1 line to ask about</span></div>
+            <dl class="kv">
+              <div class="ok"><dt>Selling price</dt><dd>Matches</dd></div>
+              <div class="flag"><dt>Processing fee · $1,099 on the contract</dt><dd>+$200</dd></div>
+              <div class="ok"><dt>Trade allowance</dt><dd>Matches</dd></div>
+              <div class="ok"><dt>Products · none quoted, none on contract</dt><dd>Matches</dd></div>
+            </dl>
+            <p class="note mt8">Ask which fee this is, and whether the state requires it. Processing fees are negotiable in Virginia.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- for dealers -->
+  <section class="section dealers" id="dealers">
+    <div class="wrap">
+      <div class="cols" style="align-items:start">
+        <div>
+          <p class="eyebrow gold">For dealer groups</p>
+          <h2>A buyer who has chosen the car, stated the payment and photographed the trade, delivered to the CRM you already use.</h2>
+          <p class="lede mt16">A bought lead is a phone number and a hope. A ClearDrive request is a deal in progress. The desk sees the exact model, the payment cap, the trade with photos, the lender rate to beat and the products the buyer wants quoted. It prices once, in writing, and the response clock starts.</p>
+          <div class="row mt24" style="--gap:12px"><a class="btn gold" href="dealer.html">Open the dealer desk</a><a class="btn" href="#pricing">See pricing</a></div>
+        </div>
+        <div class="stack" style="--gap:14px">
+          <div class="stats">
+            <div class="stat"><div class="k">Response clock</div><div class="v">6<small>min median</small></div><div class="d">Illustrative pilot target</div></div>
+            <div class="stat"><div class="k">Show rate</div><div class="v">81<small>%</small></div><div class="d up">vs 34% bought leads</div></div>
+            <div class="stat"><div class="k">Cost per sale</div><div class="v">$62</div><div class="d up">vs $410 bought leads</div></div>
+          </div>
+          <div class="card sm">
+            <p class="label mb16">Cost per sold unit, illustrative</p>
+            <div class="hbars">
+              <div class="hbar"><span>Third-party leads</span><div class="track s3"><b style="--w:100%"></b></div><span class="n">$410</span></div>
+              <div class="hbar"><span>Group website</span><div class="track s2"><b style="--w:44%"></b></div><span class="n">$180</span></div>
+              <div class="hbar"><span>ClearDrive request</span><div class="track"><b style="--w:15%"></b></div><span class="n">$62</span></div>
+            </div>
+            <p class="note mt16">Starting numbers are placeholders the store replaces with its own. The dealer desk has the calculator.</p>
+          </div>
+          <ul class="check-list">
+            <li>Lead delivered as ADF/XML to the CRM, with the trade photos attached</li>
+            <li>Group routing: a Honda request to the Kia store is worked by the Honda rooftop</li>
+            <li>One flat fee per rooftop. No per-lead charges, no placement auctions</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- the group -->
+  <section class="section" id="group">
+    <div class="wrap">
+      <div class="row between" style="--gap:16px;align-items:flex-end">
+        <div><p class="eyebrow">The founding dealer</p><h2>Ourisman, rooftop by rooftop.</h2></div>
+        <p class="small maxw">Family-owned since 1921, when Benjamin Ourisman opened on H Street in Washington. Today the group sells across Maryland and Virginia. Every rooftop below can answer a ClearDrive request.</p>
+      </div>
+      <div id="regions" class="regions mt32"></div>
+    </div>
+  </section>
+
+  <!-- pricing -->
+  <section class="section" id="pricing">
+    <div class="wrap">
+      <p class="eyebrow">Pricing</p>
+      <h2>Buyers never pay. Dealers pay one flat fee.</h2>
+      <p class="lede mt16">No tiers of access, no add-on charges and nothing that changes where a store appears on a buyer's screen. Lenders who want to list a real rate pay a flat fee too, and are sorted by rate only.</p>
+      <div class="grid three mt32" id="plans"></div>
+    </div>
+  </section>
+
+  <!-- trust -->
+  <section class="section" id="trust">
+    <div class="wrap">
+      <div class="cols" style="align-items:start">
+        <div>
+          <p class="eyebrow">Trust</p>
+          <h2>The rules are the product.</h2>
+          <p class="lede mt16">These are not settings. They are commitments written into how the software works, and the trust center explains each one.</p>
+          <a class="btn mt24" href="trust.html">Read the trust center</a>
+        </div>
+        <ul class="rules">
+          <li><b>No dealer input affects ordering.</b> Offers are ranked by the buyer's own priority: payment, total cost, trade allowance or best fit.</li>
+          <li><b>Buyers are never contacted outside the workspace.</b> The private address is the only channel, and the buyer can close it.</li>
+          <li><b>A product the buyer declined cannot carry a price.</b> The guard runs on every quote, whatever the desk types.</li>
+          <li><b>Saved terms are frozen.</b> A later revision cannot silently replace the offer the buyer booked on.</li>
+          <li><b>Grades come from three questions after the sale,</b> answered by buyers who completed a deal, and nothing else.</li>
+          <li><b>Sample data is labeled.</b> Every demonstration screen says so.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- faq -->
+  <section class="section" id="faq">
+    <div class="wrap narrow">
+      <p class="eyebrow">Questions</p>
+      <h2>Straight answers.</h2>
+      <div class="faq mt32">
+        <details open><summary>Is it really free for buyers?</summary><p>Yes. Buyers never pay ClearDrive anything, for any feature. Dealers pay a flat fee per rooftop to receive requests. That fee does not buy ranking, visibility or access to the buyer's contact details.</p></details>
+        <details><summary>What does a dealer actually see?</summary><p>The model and trim, the payment type and limit, the required features, the trade with photos and odometer, the protection products you want quoted, and your private ClearDrive address. Not your phone number, email, home address or credit file.</p></details>
+        <details><summary>How is this different from a car broker?</summary><p>A broker negotiates for a fee, usually a few hundred dollars, and you are trusting one person's relationships. ClearDrive gives you written offers from every participating rooftop, ranks them by your own terms, and checks the contract against the offer. There is no fee and no middleman holding the information.</p></details>
+        <details><summary>Can Ourisman see other dealers' offers?</summary><p>No. Each desk sees the buyer's request and its own offer. It sees the lender rate the buyer chose, because that is the number it has to beat.</p></details>
+        <details><summary>What happens if the contract does not match?</summary><p>The paperwork check flags each line that differs and tells you what to ask. You decide whether to sign. After the sale, the three-question survey feeds the dealer's public grade.</p></details>
+        <details><summary>Is this live today?</summary><p>This is a demonstration built with sample data for the Ourisman pilot. No real customers, offers, dealer replies or CRM connections are active. The trust center lists exactly what is and is not connected.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- final cta -->
+  <section class="section final">
+    <div class="wrap center">
+      <h2>Put your needs first. <i>Compare written deal terms.</i></h2>
+      <p class="lede mt16" style="margin-inline:auto">Two minutes to a brief. Written offers from Ourisman. Nothing to pay.</p>
+      <div class="row mt32" style="justify-content:center;--gap:14px"><a class="btn pri lg" href="app.html">Start your brief</a><a class="btn lg" href="inventory.html">Browse the lineup</a></div>
+    </div>
+  </section>
+</main>
+
+<div id="footer"></div>
 </div>
-<div class="dock"><div class="in">
-  <button class="btn" id="back">Back</button>
-  <span class="hint" id="hint"></span>
-  <button class="btn pri" id="next">Continue</button>
-</div></div>
 
-<div class="tour" id="tour" hidden><div class="in">
-  <div class="tcap"><span class="twho" id="twho"></span><b id="tt"></b><p id="ts"></p></div>
-  <div class="tctl"><button class="tbtn" id="tprev" aria-label="Previous scene">&#8249;</button><span class="num" id="tn"></span><button class="tbtn" id="tnext" aria-label="Next scene">&#8250;</button>
-   <button class="tbtn wide" id="tauto" aria-pressed="false">Auto-play</button><button class="tbtn wide" id="texit"><span class="lg">Take it from here</span><span class="sm">Exit</span></button></div>
-</div><div class="tprog"><b id="tfill"></b></div></div>
-<script>
-(function(){
-"use strict";
-/* ---------- sample data (illustrative, not live pricing) ---------- */
-var ARCH=function(rx){return" L"+(rx+22)+" 82 A22 22 0 0 0 "+(rx-22)+" 82 L100 82 A22 22 0 0 0 56 82 "};
-var BODIES=[
- {k:"suv",n:"SUV",sizes:1,rx:246,x0:14,x1:300,d:"M14 82 C12 72 13 62 20 56 C40 49 66 46 92 44 C108 26 130 16 158 15 L250 15 C268 16 280 22 288 36 C296 46 302 58 302 72 L300 82",w:"M100 42 C114 28 134 21 158 20 L246 20 C262 21 272 28 278 40 Z",p:[170,226],top:20},
- {k:"sedan",n:"Sedan",sizes:1,rx:246,x0:14,x1:304,d:"M14 82 C12 72 14 64 22 60 C40 53 70 50 98 47 C116 30 140 22 170 21 C200 20 224 25 246 40 C262 44 280 45 294 49 C304 52 308 62 306 74 L304 82",w:"M106 45 C122 32 142 27 168 26 L200 26 C218 27 232 33 242 42 Z",p:[174],top:26},
- {k:"truck",n:"Truck",sizes:1,rx:254,x0:12,x1:308,d:"M12 82 C10 70 12 58 20 54 C40 48 64 45 88 43 C102 24 120 15 146 14 L190 14 C198 14 202 18 203 26 L206 46 L300 46 C306 46 308 50 308 56 L308 82",w:"M96 42 C108 27 124 20 146 19 L188 19 C194 19 196 22 197 28 L199 42 Z",p:[150],top:19},
- {k:"minivan",n:"Minivan",rx:246,x0:14,x1:302,d:"M14 82 C12 72 14 62 24 56 C40 50 56 47 74 45 C92 24 118 13 150 12 L262 12 C278 13 290 22 296 40 C302 54 304 66 303 76 L302 82",w:"M82 43 C98 26 120 18 150 17 L258 17 C272 18 282 26 288 41 Z",p:[160,224],top:17},
- {k:"hatch",n:"Hatchback",rx:246,x0:22,x1:294,d:"M22 82 C20 73 22 65 30 61 C48 55 76 52 104 49 C122 32 146 24 174 23 L226 23 C246 24 264 32 280 46 C290 54 296 64 295 76 L294 82",w:"M112 47 C128 34 148 29 174 28 L224 28 C242 29 256 36 268 46 Z",p:[182],top:28}
-];
-var SIZES=[["compact","Compact"],["mid","Midsize"],["large","Full-size"]];
-var GROUPS=[
- {n:"Technology",f:[["carplay","Wireless CarPlay / Android Auto"],["heated","Heated seats"],["hybrid","Hybrid"],["cam360","360° camera"]]},
- {n:"Safety",f:[["acc","Adaptive cruise"],["blind","Blind-spot monitoring"],["awd","All-wheel drive"]]},
- {n:"Space",f:[["third","Third row"]]}
-];
-var UNIVERSAL=["carplay","acc"];
-var M=function(b,s,mk,md,p,f,trim){return{body:b,size:s,make:mk,model:md,msrp:p,f:f,trim:trim}};
-var MODELS=[
- M("suv","compact","Toyota","RAV4 Hybrid",33000,["awd","hybrid","blind"],"XLE"),M("suv","compact","Honda","CR-V",31500,["awd","heated","blind"],"EX-L"),
- M("suv","compact","Mazda","CX-50",31000,["awd","heated","blind","cam360"],"Preferred"),M("suv","compact","Hyundai","Tucson",30000,["awd","hybrid","heated","blind"],"SEL"),
- M("suv","compact","Subaru","Forester",31000,["awd","heated","blind"],"Premium"),
- M("suv","mid","Subaru","Outback",30500,["awd","heated","blind"],"Premium"),M("suv","mid","Kia","Sorento",33000,["awd","third","heated","blind"],"S"),
- M("suv","mid","Hyundai","Santa Fe",35000,["awd","third","hybrid","heated","blind"],"SEL"),M("suv","mid","Honda","Passport",43000,["awd","heated","blind"],"RTL"),
- M("suv","mid","BMW","X3",50000,["awd","heated","blind","cam360"],"30 xDrive"),M("suv","mid","Lexus","RX",51000,["awd","hybrid","heated","blind","cam360"],"350h"),
- M("suv","large","Kia","Telluride",37500,["awd","third","heated","blind"],"S"),M("suv","large","Ford","Explorer",40000,["awd","third","blind"],"Active"),
- M("suv","large","Toyota","Highlander",41000,["awd","hybrid","third","blind"],"LE"),M("suv","large","Honda","Pilot",41500,["awd","third","heated","blind"],"Sport"),
- M("sedan","compact","Hyundai","Elantra",23000,["hybrid","heated","blind"],"SEL"),M("sedan","compact","Toyota","Corolla",23500,["hybrid","blind"],"LE"),
- M("sedan","compact","Mazda","Mazda3 Sedan",25000,["awd","heated","blind"],"Select"),M("sedan","compact","Honda","Civic",25500,["blind","heated"],"Sport"),
- M("sedan","compact","BMW","3 Series",47000,["awd","heated","blind","cam360"],"330i"),
- M("sedan","mid","Hyundai","Sonata",28000,["hybrid","heated","blind","cam360"],"SEL"),M("sedan","mid","Toyota","Camry",29500,["hybrid","awd","blind"],"SE"),
- M("sedan","mid","Honda","Accord",29500,["hybrid","heated","blind"],"EX"),
- M("sedan","large","Toyota","Crown",42000,["awd","hybrid","heated","blind"],"XLE"),M("sedan","large","Lexus","ES",44000,["hybrid","heated","blind","cam360"],"350"),
- M("truck","compact","Ford","Maverick",27500,["hybrid","awd","blind"],"XLT"),M("truck","compact","Hyundai","Santa Cruz",30000,["awd","heated","blind"],"SEL"),
- M("truck","mid","Toyota","Tacoma",33000,["awd","blind"],"SR5"),M("truck","mid","Honda","Ridgeline",41500,["awd","heated","blind"],"Sport"),
- M("truck","large","Chevrolet","Silverado",39000,["awd"],"Custom"),M("truck","large","Ford","F-150",40000,["awd","hybrid","blind","cam360"],"STX"),
- M("minivan","","Kia","Carnival",38000,["third","hybrid","blind"],"LX"),M("minivan","","Toyota","Sienna",40500,["third","hybrid","awd","blind"],"LE"),
- M("minivan","","Honda","Odyssey",43000,["third","heated","blind"],"EX-L"),M("minivan","","Chrysler","Pacifica",43500,["third","awd","heated","blind","cam360"],"Select"),
- M("hatch","","Subaru","Impreza",25000,["awd","blind"],"Sport"),M("hatch","","Mazda","Mazda3 Hatchback",26500,["awd","heated","blind"],"Select"),
- M("hatch","","Honda","Civic Hatchback",27500,["hybrid","heated","blind"],"Sport"),M("hatch","","Toyota","Prius",29500,["hybrid","awd","blind"],"LE"),
- M("hatch","","Volkswagen","Golf GTI",33500,["heated","blind"],"S")
-];
-var TIERS={excellent:{n:"Excellent",lo:5.4,hi:6.9},good:{n:"Good",lo:6.9,hi:8.4},fair:{n:"Fair",lo:9.5,hi:12.5},rebuilding:{n:"Rebuilding",lo:13.5,hi:18}};
-var DEALERS=[
- {id:"our",name:"Ourisman",grade:"A",reports:214,dist:4.2,reply:6,m:[96,94,88],price:.985,fee:795,add:0,apr:0,trade:0,stock:"On the lot",prod:{gap:795,vsc:2150,maint:695,tire:595}},
- {id:"ngt",name:"Northgate Motors",grade:"A−",reports:131,dist:2.8,reply:22,m:[91,89,84],price:.97,fee:995,add:1295,apr:.6,trade:-400,stock:"On the lot",prod:{gap:995,vsc:2600,maint:895,tire:795}},
- {id:"hbl",name:"Harbor Line Auto",grade:"B+",reports:87,dist:11.5,reply:3,m:[86,88,79],price:1.035,fee:695,add:0,apr:.9,trade:1500,stock:"Arrives in 4 days",prod:{gap:850,vsc:2300,maint:750,tire:650}}
-];
-function metersOf(d){if(!(S.surveyDone&&d.id===S.offer))return d.m;var sc={yes:100,mostly:60,no:0};
- return d.m.map(function(v,i){return Math.round((v*d.reports+sc[S.survey[i]])/(d.reports+1)*10)/10})}
-function reportsOf(d){return d.reports+(S.surveyDone&&d.id===S.offer?1:0)}
-function gradeOf(d){var m=metersOf(d),a=(m[0]+m[1]+m[2])/3;return a>=92?"A":a>=88?"A−":a>=84?"B+":a>=80?"B":a>=75?"B−":a>=70?"C+":"C"}
-/* Protection products. The client decides which ones a dealer may quote. Dealers set their own prices; ClearDrive publishes no price guide for them. */
-var PRODUCTS=[["gap","GAP","If the car is totaled or stolen, it pays the difference between what insurance pays and what you still owe."],
- ["vsc","Extended service contract","Covers listed repairs after the factory warranty ends. Often called an extended warranty."],
- ["maint","Prepaid maintenance","Pays in advance for scheduled services such as oil changes and tire rotations."],
- ["tire","Tire and wheel protection","Repairs or replaces tires and wheels damaged by potholes, nails and other road hazards."]];
-var PROTWORD={yes:"Yes, quote it",no:"No thanks",ask:"Explain it to me in person"};
-var SURVEY=["Was the price the one you were shown?","Did the paperwork match the offer?","Was your time respected?"];
-var STEPS=["intro","brief","matches","trade","payment","protect","account","dealers","confirm","record"];
-function at(k){return STEPS.indexOf(k)}
-var LABEL={brief:"Your brief",matches:"Your three",trade:"Your trade",payment:"Your payment",protect:"Your protection",account:"Private address",dealers:"Dealers",confirm:"Your visit",record:"Deal record"};
-var SHOTS=[["front","Front corner"],["rear","Rear corner"],["interior","Interior"],["odo","Odometer"]];
-var reduced=matchMedia("(prefers-reduced-motion:reduce)").matches;
-
-function fresh(){return{step:0,mode:"guide",pay:"finance",leaseBudget:480,cashBudget:35000,das:3000,lterm:36,miles:12000,body:"suv",size:"compact",budget:650,makes:["Toyota","Honda"],feats:["blind","awd"],know:{make:"Honda",model:"Civic"},pick:null,
- name:"Jordan Ellis",alias:null,trade:{has:true,year:2018,make:"Honda",model:"Accord",miles:82000,cond:"good",payoff:9000},media:{},
- down:3000,term:60,tier:"good",prot:{gap:"yes",vsc:"ask",maint:"no",tire:"no"},role:"client",panel:"home",dtab:"desk",lender:null,roi:{leads:150,cpl:25,close:8,req:14,rclose:35,fee:500,gross:3500},quote:null,draft:null,paper:null,check:null,surveyDone:false,thread:[],dlead:"live",way:"drive",asked:false,arrived:0,newest:null,sort:"first",offer:null,slot:null,confirmed:false,survey:{}}}
-var S=fresh();
-
-/* ---------- helpers ---------- */
-var $=function(id){return document.getElementById(id)};
-function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
-function usd(n){return n==null||!isFinite(n)?"Not known yet":(n<0?"−$":"$")+Math.abs(Math.round(n)).toLocaleString("en-US")}
-function pmt(P,apr,n){if(P<=0)return 0;var r=apr/1200;return r===0?P/n:P*r/(1-Math.pow(1+r,-n))}
-function pv(p,apr,n){var r=apr/1200;return p*(1-Math.pow(1+r,-n))/r}
-function otdOf(price,fee,add){return price+fee+add+Math.round(price*.06)+200}
-var PAYWORD={finance:"financing",lease:"leasing",cash:"paying cash"};
-/* GAP only means something when money is owed on the car, so a cash buyer is not asked about it. */
-function prodList(){return PRODUCTS.filter(function(p){return!(p[0]==="gap"&&S.pay==="cash")})}
-function protOf(k){return S.prot[k]||"ask"}
-function quotable(){return prodList().filter(function(p){return protOf(p[0])==="yes"})}
-function prodSum(pr){var t=0;quotable().forEach(function(p){t+=+(pr&&pr[p[0]])||0});return t}
-/* The written offer can only carry products the client asked to have quoted. Anything else is dropped here, whatever the desk typed. */
-function cleanProd(pr){var out={};quotable().forEach(function(p){out[p[0]]=Math.max(0,+(pr&&pr[p[0]])||0)});return out}
-function protLine(){return prodList().map(function(p){return p[1]+": "+PROTWORD[protOf(p[0])].toLowerCase()}).join(" · ")}
-function limit(){return S.pay==="cash"?S.cashBudget:S.pay==="lease"?S.leaseBudget:S.budget}
-function setLimit(v){if(S.pay==="cash")S.cashBudget=v;else if(S.pay==="lease")S.leaseBudget=v;else S.budget=v}
-function limitText(){return usd(limit())+(S.pay==="cash"?" out the door":" a month")}
-function leaseMo(price,fee,add,equity,apr){var n=S.lterm,res=price*({24:.68,36:.62,39:.60}[n]+({10000:.01,12000:0,15000:-.02}[S.miles]||0));
- var cap=price+fee+add-Math.max(0,S.das-1000)-(equity||0),mf=apr/2400;return Math.max(0,((cap-res)/n+(cap+res)*mf)*1.06)}
-function priceBand(){var L=limit(),hi,lo;
- if(S.pay==="cash"){hi=(L-1000)/1.06;lo=hi*.85}
- else if(S.pay==="lease"){var f0=leaseMo(20000,995,0,0,6.5),f1=leaseMo(40000,995,0,0,6.5),k=(f1-f0)/20000;hi=k>0?20000+(L-f0)/k:0;lo=hi*.85}
- else{hi=(pv(L,7.5,72)+S.down)/1.09;lo=(pv(L,7.5,60)+S.down)/1.09}
- return[Math.max(0,Math.round(lo/100)*100),Math.max(0,Math.round(hi/100)*100)]}
-function needFor(m){var v=S.pay==="cash"?otdOf(m.msrp,800,0):S.pay==="lease"?leaseMo(m.msrp,995,0,0,6.5):pmt(otdOf(m.msrp,800,0)-S.down,7.5,72);return Math.ceil(v/10)*10}
-function bandText(){var b=priceBand();
- if(S.mode==="know"){var me=MODELS.filter(function(m){return m.make===S.know.make&&m.model===S.know.model})[0];if(!me)return"";
-  var need=needFor(me),unit=S.pay==="cash"?" out the door":" a month";
-  return need<=limit()?"That works. A "+me.make+" "+me.model+" runs about "+usd(need)+unit+" on sample figures, inside your "+usd(limit())+".":
-   "To be straight with you: a "+me.make+" "+me.model+" realistically needs about "+usd(need)+unit+". Your "+usd(limit())+" reaches a vehicle around "+usd(b[1])+". You can still choose it, and we will show two that fit."}
- var all=MODELS.filter(function(m){return m.body===S.body&&(!bodyOf(S.body).sizes||!S.size||m.size===S.size)}),fit=all.filter(function(m){return m.msrp<=b[1]*1.03}).length;
- return"Realistically, a "+usd(b[0])+" to "+usd(b[1])+" vehicle. "+fit+" of the "+all.length+" in this style fit"+(fit<3&&all.length>fit?", so expect a shorter list.":".")}
-function bodyOf(k){return BODIES.filter(function(x){return x.k===k})[0]}
-function wheel(cx){var sp="";for(var a=0;a<5;a++)sp+='<line x1="'+cx+'" y1="80" x2="'+cx+'" y2="69.5" transform="rotate('+(a*72+18)+" "+cx+' 80)"/>';
- return'<g class="sil-wheel"><circle class="tyre" cx="'+cx+'" cy="80" r="17"/><circle class="rim" cx="'+cx+'" cy="80" r="11.5"/>'+sp+'<circle class="hub" cx="'+cx+'" cy="80" r="2.6"/></g>'}
-function car(b,cls){var o=bodyOf(b);
- return'<svg class="sil '+(cls||"")+'" viewBox="0 0 320 108" aria-hidden="true"><ellipse class="sil-shadow" cx="160" cy="98" rx="150" ry="5"/>'+
- '<path class="sil-body" d="'+o.d+ARCH(o.rx)+'L'+o.x0+' 82 Z"/><path class="sil-glass" d="'+o.w+'"/>'+
- o.p.map(function(x){return'<line class="sil-pillar" x1="'+x+'" y1="'+o.top+'" x2="'+(x+2)+'" y2="'+(o.k==="truck"?42:45)+'"/>'}).join("")+
- '<path class="sil-edge" d="'+o.d+'"/><path class="sil-head" d="M'+(o.x0+5)+' 64 l12 -3 l1 4 l-13 3 Z"/><path class="sil-tail" d="M'+(o.x1+1)+' 57 l-7 -1 l0 9 l8 1 Z"/>'+
- '<line class="sil-sill" x1="102" y1="78" x2="'+(o.rx-24)+'" y2="78"/>'+wheel(78)+wheel(o.rx)+'<line class="sil-ground" x1="6" y1="97.5" x2="314" y2="97.5"/></svg>'}
-function featName(k){var n=k;GROUPS.forEach(function(g){g.f.forEach(function(f){if(f[0]===k)n=f[1]})});return n}
-function has(m,f){return UNIVERSAL.indexOf(f)>=0||m.f.indexOf(f)>=0}
-function sizeName(k){var r="";SIZES.forEach(function(s){if(s[0]===k)r=s[1]});return r}
-
-function explain(m,band){
- var why=[],over=m.msrp-band[1];
- why.push(over>0?{t:"Starts at "+usd(m.msrp)+". Realistically about "+usd(needFor(m))+(S.pay==="cash"?" out the door":" a month")+", above your "+usd(limit()),miss:1}:{t:"Starts at "+usd(m.msrp)+", inside your range"});
- if(m.size)why.push({t:sizeName(m.size)+" "+(m.body==="suv"?"SUV":bodyOf(m.body).n.toLowerCase())});
- if(S.mode==="guide"&&S.makes.indexOf(m.make)>=0)why.push({t:"One of your preferred makes"});
- S.feats.forEach(function(f){why.push(has(m,f)?{t:"Has "+featName(f).toLowerCase()}:{t:"No "+featName(f).toLowerCase()+" on this model",miss:1})});
- return why}
-function matches(){
- var band=priceBand(),hi=band[1],list;
- if(S.mode==="know"){
-  var me=MODELS.filter(function(m){return m.make===S.know.make&&m.model===S.know.model})[0];if(!me)return[];
-  var fits=MODELS.filter(function(m){return m.body===me.body&&m!==me&&m.msrp<=hi*1.03});
-  var alts=(fits.length>=2?fits:MODELS.filter(function(m){return m.body===me.body&&m!==me})).sort(function(a,b){
-   return(Math.abs(a.msrp-me.msrp)+(a.size===me.size?0:4000))-(Math.abs(b.msrp-me.msrp)+(b.size===me.size?0:4000))}).slice(0,2);
-  list=[me].concat(alts);list.forEach(function(m,i){m._tag=i?"Also worth a look":"Your choice"});
- }else{
-  list=MODELS.filter(function(m){return m.body===S.body&&(!bodyOf(S.body).sizes||!S.size||m.size===S.size)&&m.msrp<=hi*1.03});
-  list.forEach(function(m){var miss=S.feats.filter(function(f){return!has(m,f)}).length;
-   m._s=(S.makes.indexOf(m.make)>=0?30:0)+(S.feats.length-miss)*15-miss*25+(m.msrp>=band[0]*.85?20:8)});
-  list.sort(function(a,b){return b._s-a._s||a.msrp-b.msrp});list=list.slice(0,3);
-  list.forEach(function(m,i){m._tag=["First","Second","Third"][i]+" match"});
- }
- list.forEach(function(m){m._why=explain(m,band)});return list}
-/* Lenders are listed by rate and by nothing else. A lender subscribes to appear; it cannot buy a place. */
-var LENDERS=[["tcu","Tidewater Credit Union",.1,"Anyone who lives or works in the county can join"],["mfc","Meridian Federal Credit Union",.35,"Join with a $5 share deposit"],["hsb","Harbor Savings Bank",.8,"No membership needed"]];
-function lenderRate(l){return Math.round((TIERS[S.tier].lo+l[2])*100)/100}
-function lenderOf(){return S.pay==="finance"?LENDERS.filter(function(l){return l[0]===S.lender})[0]:null}
-function lenderBlock(){var P=otdOf(S.pick.msrp,800,0)-S.down;
- return'<div class="block" style="margin-top:30px"><h2>Bring your own rate <span style="text-transform:none;letter-spacing:0">· optional</span></h2><div class="lenders">'+LENDERS.map(function(l){
-  return'<button class="lender" data-act="lender" data-v="'+l[0]+'" aria-pressed="'+(S.lender===l[0])+'"><span><b>'+l[1]+'</b><small>'+l[3]+'</small></span><span class="num r"><b>'+lenderRate(l).toFixed(2)+'%</b><small>'+usd(pmt(P,lenderRate(l),S.term))+' / mo</small></span></button>'}).join("")+'</div>'+
- '<p class="note" style="margin-top:10px">Sample lenders, listed by rate and nothing else. A lender subscribes to be listed. It cannot buy a higher place, and it never sees your name unless you apply. Any dealer is free to beat the rate.</p></div>'}
-function ownRate(o){var l=lenderOf();if(!l||o.fin==null)return"";var mine=pmt(o.fin,lenderRate(l),S.term);
- return'<div'+(o.big-mine>1?' class="flag"':"")+'><dt>With your '+lenderRate(l).toFixed(2)+'% from '+l[1]+'</dt><dd>'+usd(mine)+' / mo</dd></div>'}
-function tradeSample(){var t=S.trade;if(!t.has)return null;var age=Math.max(0,2026-(+t.year||2026));
- var v=32000*Math.pow(.9,age)-Math.max(0,(+t.miles||0)-age*10000)*.05;
- v*={excellent:1.05,good:1,fair:.9,rough:.75}[t.cond]||1;return Math.max(1500,Math.round(v/50)*50)}
-function mediaBits(){var n=SHOTS.filter(function(s){return S.media[s[0]]}).length,b=[];
- if(n)b.push(n+(n===1?" photo":" photos"));if(S.media.video)b.push("walkaround video");if(S.media.vin)b.push("VIN plate");return b}
-function tradeLine(){var t=S.trade;if(!t.has)return"No trade";var b=mediaBits();
- return esc(t.year+" "+t.make+" "+t.model)+", "+esc(Number(t.miles||0).toLocaleString("en-US"))+" mi · "+(b.length?b.join(" · "):"photos to follow")}
-function defaultQuote(d){var m=S.pick,base=tradeSample(),tier=TIERS[S.tier],mid=(tier.lo+tier.hi)/2;
- return{price:Math.round(m.msrp*d.price/10)*10,fee:d.fee,add:d.add,prod:cleanProd(d.prod),allow:base==null?null:base+d.trade,apr:Math.round((mid+d.apr)*100)/100}}
-function priceQuote(d,q,i){
- var prod=cleanProd(q.prod),pt=prodSum(prod),otd=otdOf(q.price,q.fee,q.add)+pt,pay=S.trade.has?(+S.trade.payoff||0):0,allow=S.trade.has?q.allow:null,eq=(allow||0)-pay;
- var o={d:d,price:q.price,fee:q.fee,add:q.add,prod:prod,prodTotal:pt,otd:otd,allow:allow,payoff:pay,apr:q.apr,stock:d.id.toUpperCase().slice(0,1)+(48210+i*1377)};
- if(S.pay==="cash"){o.big=otd-eq;o.total=o.big;o.sub="due at delivery";o.totLabel="Balance you would pay"}
- else if(S.pay==="lease"){o.big=leaseMo(q.price,q.fee,q.add+pt,eq,q.apr);o.total=S.das+o.big*S.lterm;o.sub="/ mo · "+S.lterm+" mo · "+(S.miles/1000)+"k mi";o.totLabel="Total of lease payments"}
- else{o.fin=otd-eq-S.down;o.big=pmt(o.fin,q.apr,S.term);o.total=S.down+o.big*S.term;o.sub="/ mo · "+S.term+" mo · "+q.apr.toFixed(2)+"%";o.totLabel="Total you would pay"}
- o.meets=o.big<=limit();o.over=o.big-limit();return o}
-function offers(){
- var base=tradeSample();
- var list=DEALERS.map(function(d,i){var o=priceQuote(d,d.id==="our"&&S.quote?S.quote:defaultQuote(d),i);o.fromDesk=d.id==="our"&&!!S.quote;return o});
- var min=function(k){return Math.min.apply(null,list.map(function(o){return o[k]}))};
- var lt=min("total"),lm=min("big"),ha=base==null?null:Math.max.apply(null,list.map(function(o){return o.allow}));
- list.forEach(function(o){o.b=[];if(o.total===lt)o.b.push("Lowest total cost");if(S.pay!=="cash"&&o.big===lm)o.b.push("Lowest monthly");if(ha!=null&&o.allow===ha)o.b.push("Highest trade figure")});
- var key={first:function(o){return o.d.reply},closest:function(o){return o.d.dist},reviewed:function(o){var m=metersOf(o.d);return-m[0]-m[1]-m[2]},total:function(o){return o.total}}[S.sort];
- return list.sort(function(a,b){return key(a)-key(b)})}
-function chosen(){return offers().filter(function(x){return x.d.id===S.offer})[0]}
-function askText(m){var car=m.make+" "+m.model+" "+m.trim;
- return S.pay==="cash"?"A "+car+", paying cash, at most "+usd(limit())+" out the door.":
-  S.pay==="lease"?"A lease on a "+car+", at most "+usd(limit())+" a month, "+usd(S.das)+" due at signing, "+S.lterm+" months at "+S.miles.toLocaleString("en-US")+" miles a year.":
-  "A "+car+", at most "+usd(limit())+" a month, with "+usd(S.down)+" down over "+S.term+" months."}
-function typeRows(o){return S.pay==="cash"?'<div><dt>Loan payoff</dt><dd>'+usd(o.payoff)+'</dd></div>':S.pay==="lease"?'<div><dt>Due at signing</dt><dd>'+usd(S.das)+'</dd></div><div><dt>Term and mileage</dt><dd>'+S.lterm+' months · '+S.miles.toLocaleString("en-US")+' a year</dd></div>':
-  '<div><dt>Cash down</dt><dd>'+usd(S.down)+'</dd></div><div><dt>Rate and term</dt><dd>'+o.apr.toFixed(2)+'% · '+S.term+' months</dd></div>'}
-function arrivedIds(){var ids=DEALERS.slice().sort(function(a,b){return a.reply-b.reply}).slice(0,S.arrived).map(function(d){return d.id});if(S.quote&&ids.indexOf("our")<0)ids.push("our");return ids}
-function slots(){var out=[],d=new Date(),times=["10:30 am","1:00 pm","5:30 pm"],i=0;
- while(out.length<3){d.setDate(d.getDate()+1);if(d.getDay()===0)continue;
-  out.push({k:"s"+out.length,day:d.toLocaleDateString("en-US",{weekday:"long",month:"short",day:"numeric"}),t:times[i++]})}return out}
-function makeAlias(){var p=S.name.trim().toLowerCase().replace(/[^a-z\s]/g,"").split(/\s+/).filter(Boolean);
- var stem=p.length>1?p[0][0]+"."+p[p.length-1]:(p[0]||"client");
- return stem+"."+Math.random().toString(36).slice(2,5)+"@cleardrive.mail"}
-function resetDealers(){S.offer=null;S.asked=false;S.arrived=0;S.slot=null;S.confirmed=false;S.survey={};S.surveyDone=false;S.quote=null;S.draft=null;S.paper=null;S.check=null;S.thread=[];S.panel="home";S.askedAt=null;S.quoteAt=null}
-
-/* ---------- views ---------- */
-var V={};
-function head(eye,h,l){return'<div class="eyebrow" style="--i:0">'+eye+'</div><h1 style="--i:1">'+h+'</h1><p class="lede" style="--i:2">'+l+'</p>'}
-function seg(label,act,opts,cur){return'<div class="seg" role="group" aria-label="'+label+'">'+opts.map(function(o){
- return'<button data-act="'+act+'" data-v="'+o[0]+'" aria-pressed="'+(String(cur)===String(o[0]))+'">'+o[1]+'</button>'}).join("")+'</div>'}
-function chips(act,opts,on){return'<div class="chips">'+opts.map(function(o){
- return'<button class="chip" data-act="'+act+'" data-v="'+o[0]+'" aria-pressed="'+on(o[0])+'">'+o[1]+'</button>'}).join("")+'</div>'}
-function budgetBlock(){var r={finance:[300,1200,10],lease:[200,1000,10],cash:[15000,90000,500]}[S.pay];
- return'<h2>'+(S.pay==="cash"?"The most you want to spend, all in":"Monthly payment you are comfortable with")+'</h2><div class="dial"><span class="big num" id="budv">'+usd(limit())+'</span><small>'+(S.pay==="cash"?"out the door, at most":"per month, at most")+'</small></div>'+
- '<input type="range" id="budget" min="'+r[0]+'" max="'+r[1]+'" step="'+r[2]+'" value="'+limit()+'" aria-label="Budget">'+
- '<p class="real" id="bandnote">'+bandText()+'</p>'}
-function payBlock(i){return'<div class="cols block" style="--i:'+i+'"><div><h2>How will you pay</h2>'+seg("How will you pay","pay",[["finance","Finance"],["lease","Lease"],["cash","Cash"]],S.pay)+
- '<p class="note" style="margin-top:12px">'+{finance:"A loan you pay down until the car is yours.",lease:"Lower payments, a mileage limit, and you hand it back or buy it at the end.",cash:"One figure, no lender. The out-the-door number is what counts."}[S.pay]+'</p></div><div>'+budgetBlock()+'</div></div>'}
-V.intro=function(){
- var n=0,w=function(t,c){return t.split("").map(function(ch){return'<span class="'+(c||"")+'" style="--n:'+(n++)+'">'+ch+"</span>"}).join("")};
- return'<div class="hero"><div class="herotext"><div class="word" role="heading" aria-level="1" aria-label="ClearDrive">'+w("Clear")+w("Drive","it")+'</div>'+
- '<p>Find the right car. Meet the dealers who earn it.</p>'+
- '<div class="go"><button class="btn pri" data-act="begin">Begin</button><button class="btn" data-act="tour">Watch the guided tour</button>'+(S.resumeAt>0?'<button class="btn" data-act="resume">Continue where you left off</button>':"")+'</div>'+
- '<div class="go2"><span class="note">No account needed to start. About three minutes.</span><button class="link" data-act="asdealer">I run a dealership. Show me my side.</button></div>'+
- '<ul class="trust"><li><b>No login</b> to start, and no phone number to give.</li><li>Dealers <b>answer to you</b>, never the other way round.</li><li>The contract is <b>checked line by line</b> against the written offer.</li></ul></div>'+
- '<div class="herocar" aria-hidden="true">'+car("suv","big")+car("suv","big mirror")+'<span class="floor"></span></div></div>'};
-
-V.brief=function(){
- var top='<div class="block" style="--i:3">'+seg("How to start","mode",[["guide","Help me choose"],["know","I know what I want"]],S.mode)+'</div>';
- if(S.mode==="know"){
-  var makes=[],models=[];MODELS.forEach(function(m){if(makes.indexOf(m.make)<0)makes.push(m.make)});makes.sort();
-  MODELS.forEach(function(m){if(m.make===S.know.make)models.push(m.model)});
-  return head("Your brief","You know the car. <em>We find the dealer.</em>","Name it and we will still show two close alternatives, so you can see what else the same money buys.")+top+
-  '<div class="form block" style="--i:4;max-width:520px"><div class="f"><label for="k-make">Make</label><select id="k-make">'+makes.map(function(k){return'<option'+(k===S.know.make?" selected":"")+'>'+k+'</option>'}).join("")+'</select></div>'+
-  '<div class="f"><label for="k-model">Model</label><select id="k-model">'+models.map(function(k){return'<option'+(k===S.know.model?" selected":"")+'>'+k+'</option>'}).join("")+'</select></div></div>'+payBlock(5)}
- var makes2=[];MODELS.forEach(function(m){if(m.body===S.body&&makes2.indexOf(m.make)<0)makes2.push(m.make)});
- return head("Your brief","Start with what <em>you</em> need.","Nothing here is sent to anyone. A dealer sees your brief only when you ask that dealer for something.")+top+payBlock(4)+
- '<div class="block" style="--i:5"><h2>Body style</h2><div class="tiles">'+BODIES.map(function(b){
-  return'<button class="tile" data-act="body" data-v="'+b.k+'" aria-pressed="'+(S.body===b.k)+'">'+car(b.k)+'<span>'+b.n+'</span></button>'}).join("")+'</div></div>'+
- (bodyOf(S.body).sizes?'<div class="block" style="--i:6"><h2>Size <span style="text-transform:none;letter-spacing:0">· leave open for any</span></h2>'+chips("size",SIZES,function(v){return S.size===v})+'</div>':"")+
- '<div class="cols" style="--i:7"><div>'+GROUPS.map(function(g){return'<div class="block"><h2>'+g.n+' you need</h2>'+chips("feat",g.f,function(v){return S.feats.indexOf(v)>=0})+'</div>'}).join("")+'</div>'+
- '<div><h2>Makes you like <span style="text-transform:none;letter-spacing:0">· optional</span></h2>'+chips("make",makes2.map(function(k){return[k,k]}),function(v){return S.makes.indexOf(v)>=0})+'</div></div>'};
-
-V.matches=function(){
- var list=matches(),band=priceBand();
- if(S.pick&&list.indexOf(S.pick)<0)S.pick=null;
- var body=list.length?'<div class="cards" style="--i:3">'+list.map(function(m,i){
-  return'<button class="card pick'+(S.pick===m?" on":"")+'" data-act="pick" data-v="'+MODELS.indexOf(m)+'" aria-pressed="'+(S.pick===m)+'">'+
-  '<span class="rank">'+m._tag+'</span><span class="stage">'+car(m.body,"car p"+i)+'</span><h3>'+m.make+" "+m.model+'</h3>'+
-  '<span class="from num">Sample starting price '+usd(m.msrp)+'</span><ul class="why">'+m._why.map(function(w){return'<li'+(w.miss?' class="miss"':"")+'>'+w.t+'</li>'}).join("")+'</ul>'+
-  '<span class="sel">'+(S.pick===m?"Selected":"Choose this one")+'</span></button>'}).join("")+'</div>':
-  '<p class="lede" style="--i:3">Nothing in the sample set fits that brief under '+usd(band[1])+'. Go back and raise the monthly figure, open up the size, or try another body style.</p>';
- var few=S.mode==="guide"&&list.length>0&&list.length<3?'<p class="note" style="--i:4">Only '+list.length+' fit. We would rather show fewer than pad the list.</p>':"";
- return(S.mode==="know"?head("Your three","Your choice, and <em>two to weigh it against</em>.","The alternatives are the closest in size and price. Keep your first choice or change your mind. Either is fine."):
-  head("Your three","The "+(list.length===3?"three":"models")+" that fit, <em>in order</em>.","Ordered by how well each meets your brief inside "+usd(band[0])+" to "+usd(band[1])+". No manufacturer or dealer can pay to appear here."))+body+few+
- '<p class="note" style="--i:5">Starting prices are sample figures for this demonstration, not live market data.</p>'};
-
-function shot(k,label,sub,accept,key){var v=S.media[k],img=typeof v==="string";
- return'<label data-k="'+k+'" class="shot'+(v?" has":"")+(img?" img":"")+(key?" key":"")+'"'+(img?' style="background-image:url(\''+v+'\')"':"")+'>'+
- '<input class="vh" type="file" id="m-'+k+'" data-m="'+k+'" accept="'+accept+'" capture="environment"><b>'+label+'</b><small>'+(v?"Added · tap to replace":sub)+'</small></label>'}
-V.trade=function(){
- var t=S.trade,yrs="";for(var y=2026;y>=2006;y--)yrs+='<option'+(+t.year===y?" selected":"")+'>'+y+'</option>';
- var conds=[["excellent","Excellent"],["good","Good"],["fair","Fair"],["rough","Needs work"]];
- return head("Your trade","The car you drive <em>now</em>.","We do not guess what it is worth. Dealers put a number in writing, and they commit to a firmer one when they can see the car.")+
- '<div class="block" style="--i:3">'+seg("Trade-in","hastrade",[[1,"I have a trade-in"],[0,"No trade-in"]],t.has?1:0)+'</div>'+
- (t.has?'<div class="form block" style="--i:4">'+
-  '<div class="f"><label for="t-year">Year</label><select id="t-year" data-t="year">'+yrs+'</select></div>'+
-  '<div class="f"><label for="t-make">Make</label><input id="t-make" data-t="make" value="'+esc(t.make)+'"></div>'+
-  '<div class="f"><label for="t-model">Model</label><input id="t-model" data-t="model" value="'+esc(t.model)+'"></div>'+
-  '<div class="f"><label for="t-miles">Mileage</label><input id="t-miles" data-t="miles" inputmode="numeric" value="'+esc(t.miles)+'"></div>'+
-  '<div class="f"><label for="t-payoff">Loan payoff, if any</label><input id="t-payoff" data-t="payoff" inputmode="numeric" value="'+esc(t.payoff)+'"></div></div>'+
-  '<div class="block" style="--i:5"><h2>Condition</h2>'+chips("cond",conds,function(v){return t.cond===v})+'</div>'+
-  '<div class="block" style="--i:6"><h2>Photos, a walkaround video and the VIN plate</h2><div class="shots">'+
-  SHOTS.map(function(s){return shot(s[0],s[1],"Tap to add","image/*")}).join("")+shot("video","Walkaround video","About 30 seconds","video/*")+shot("vin","VIN plate","Driver door jamb","image/*",1)+'</div>'+
-  '<div class="inline"><button class="link" data-act="samples">Use sample photos for this demo</button><button class="link" data-act="skip">Skip for now, add them later</button></div>'+
-  '<p class="note" style="margin-top:14px">These stay with you. They go to a dealer only as part of your request, once you decide to ask that dealer for pricing or a visit. In this demonstration they never leave this screen.</p></div>'
- :'<p class="lede" style="--i:4">Understood. Requests will go out without a trade.</p>')};
-
-V.payment=function(){
- var tier='<div><h2>Credit, as you would describe it</h2>'+seg("Credit","tier",Object.keys(TIERS).map(function(k){return[k,TIERS[k].n]}),S.tier)+'<p class="note" style="margin-top:10px">No credit check happens here.</p></div>',left;
- if(S.pay==="cash")left='<div class="block">'+budgetBlock()+'</div><p class="note">Paying cash means no rate and no term. Watch the fees and any add-ons, because they are the only places the figure can move.</p>';
- else if(S.pay==="lease")left='<div class="block"><h2>Due at signing</h2><div class="dial"><span class="big num" id="downv">'+usd(S.das)+'</span></div><input type="range" id="down" min="0" max="8000" step="250" value="'+S.das+'" aria-label="Due at signing"></div>'+
-  '<div class="block"><h2>Term</h2>'+seg("Term","lterm",[[24,"24 months"],[36,"36 months"],[39,"39 months"]],S.lterm)+'</div><div class="block"><h2>Miles a year</h2>'+seg("Miles","miles",[[10000,"10,000"],[12000,"12,000"],[15000,"15,000"]],S.miles)+'</div>'+tier;
- else left='<div class="block"><h2>Cash down</h2><div class="dial"><span class="big num" id="downv">'+usd(S.down)+'</span></div><input type="range" id="down" min="0" max="15000" step="250" value="'+S.down+'" aria-label="Cash down"></div>'+
-  '<div class="block"><h2>Term</h2>'+seg("Term","term",[[48,"48 months"],[60,"60 months"],[72,"72 months"]],S.term)+'</div>'+tier+lenderBlock();
- return head("Your "+(S.pay==="cash"?"figure":"payment"),"A range, <em>low end first</em>.",S.pay==="cash"?"What this car should cost you out the door, on sample figures. A dealer's written number replaces the estimate.":"An honest estimate is a range until a lender answers. These rates are sample figures, not an offer of credit.")+
- '<div class="pay" style="--i:3"><div>'+left+'</div><div class="figure" id="figure">'+figureHTML()+'</div></div>'};
-function figureHTML(){
- var m=S.pick,t=TIERS[S.tier],otd=otdOf(m.msrp,800,0),lo,hi,rows,unit=S.pay==="cash"?"out the door":"per month";
- var trade='<div class="unk"><dt>Trade equity</dt><dd>'+(S.trade.has?"Not known yet":"No trade")+'</dd></div>';
- if(S.pay==="cash"){lo=otdOf(Math.round(m.msrp*.97),800,0);hi=otd;rows='<div><dt>Sample price</dt><dd>'+usd(m.msrp)+'</dd></div><div><dt>Tax, title and fees, estimated</dt><dd>'+usd(otd-m.msrp)+'</dd></div>'+trade}
- else if(S.pay==="lease"){lo=leaseMo(m.msrp,995,0,0,t.lo);hi=leaseMo(m.msrp,995,0,0,t.hi);rows='<div><dt>Sample price</dt><dd>'+usd(m.msrp)+'</dd></div><div><dt>Due at signing</dt><dd>'+usd(S.das)+'</dd></div><div><dt>Term and mileage</dt><dd>'+S.lterm+' months · '+S.miles.toLocaleString("en-US")+' a year</dd></div>'+trade+'<div><dt>Sample rate range</dt><dd>'+t.lo.toFixed(1)+'% – '+t.hi.toFixed(1)+'% equivalent</dd></div>'}
- else{var P=otd-S.down;lo=pmt(P,t.lo,S.term);hi=pmt(P,t.hi,S.term);rows='<div><dt>Sample price</dt><dd>'+usd(m.msrp)+'</dd></div><div><dt>Tax, title and fees, estimated</dt><dd>'+usd(otd-m.msrp)+'</dd></div><div><dt>Cash down</dt><dd>'+usd(-S.down)+'</dd></div>'+trade+'<div class="tot"><dt>To finance, before any trade</dt><dd>'+usd(P)+'</dd></div><div><dt>Sample rate range</dt><dd>'+t.lo.toFixed(1)+'% – '+t.hi.toFixed(1)+'% APR</dd></div>'}
- var over=hi-limit(),fix=S.pay==="cash"?"A trade or a lower trim closes it.":S.pay==="lease"?"More at signing or fewer miles closes it.":"More down or a longer term closes it.";
- return'<h2>'+m.make+" "+m.model+' · '+PAYWORD[S.pay]+'</h2><div class="range num">'+usd(lo)+' – '+usd(hi)+' <small>'+unit+'</small></div>'+
- '<div class="verdict'+(over>0?" over":"")+'">'+(over>0?(lo>limit()?"Above":"The high end is above")+" your "+usd(limit())+" limit by "+usd(over)+". "+fix:"Inside your "+usd(limit())+" limit.")+'</div>'+
- '<dl class="rows">'+rows+(lenderOf()?'<div class="tot"><dt>With '+lenderOf()[1]+' at '+lenderRate(lenderOf()).toFixed(2)+'%</dt><dd>'+usd(pmt(otd-S.down,lenderRate(lenderOf()),S.term))+' / mo</dd></div>':"")+'</dl>'+(S.trade.has?'<p class="note" style="margin-top:14px">Your trade will move this number. We leave it out until a dealer commits to a figure in writing.</p>':"")}
-
-function prodRows(o,cls){return quotable().map(function(p){return'<div'+(cls?' class="'+cls+'"':"")+'><dt>'+p[1]+', as you asked</dt><dd>'+usd(o.prod[p[0]])+'</dd></div>'}).join("")}
-V.protect=function(){
- return head("Your protection","Decide on the extras <em>before anyone sells them</em>.","These are the products offered in the finance office. Say now which ones a dealer may quote. A product you decline cannot be put on a written offer, and the paperwork check flags it if it turns up on the contract.")+
- '<div class="protlist" style="--i:3">'+prodList().map(function(p){return'<div class="prot"><div><h3>'+p[1]+'</h3><p class="note">'+p[2]+'</p></div>'+
-  seg(p[1],"prot",[[p[0]+":yes",PROTWORD.yes],[p[0]+":no",PROTWORD.no],[p[0]+":ask",PROTWORD.ask]],p[0]+":"+protOf(p[0]))+'</div>'}).join("")+'</div>'+
- (S.pay==="cash"?'<p class="note" style="--i:4">GAP is left out because you are paying cash. It only matters when money is owed on the car.</p>':"")+
- '<p class="note" style="--i:5">Each dealer sets its own price for anything you ask to have quoted, and lists it on its own line. ClearDrive does not sell these products and earns nothing from them. You can change your mind at any time, including in person.</p>'};
-
-function aliasHTML(a){var p=a.split("@");return esc(p[0])+'<span class="dom">@'+esc(p[1]||"")+'</span>'}
-V.account=function(){
- return head("Private address","Ready for dealers? They reach this address. <em>Not yours.</em>","This is the first moment an account exists. ClearDrive makes an address just for this purchase. Close it when you are done and the messages stop.")+
- '<div class="cols" style="--i:3"><div><div class="form block"><div class="f" style="grid-column:1/-1"><label for="name">Your name</label><input id="name" autocomplete="name" value="'+esc(S.name)+'"></div></div>'+
- '<button class="btn'+(S.alias?"":" pri")+'" data-act="alias">'+(S.alias?"Make a different one":"Create my private address")+'</button>'+
- '<ul class="shield" style="margin-top:26px"><li><b>Your phone number</b> is never shared.</li><li><b>Your own email</b> stays with you until you hand it over in person.</li><li><b>Every message</b> lands in one ClearDrive inbox, in order.</li></ul></div>'+
- '<div class="alias"><h2>Your ClearDrive address</h2><div class="addr" id="addr">'+(S.alias?aliasHTML(S.alias):'<span style="color:var(--mute)">Not created yet</span>')+'</div>'+
- '<p class="note">In this demonstration no mailbox is created and nothing is sent.</p></div></div>'};
-
-function meters(d){return'<div class="meters">'+["Price honoured in store","Paperwork matched the offer","Time respected"].map(function(n,i){
- var mv=metersOf(d)[i];return'<div class="meter"><span>'+n+'</span><span class="num" style="text-align:right">'+mv+'%</span><i><b style="--w:'+mv+'%"></b></i></div>'}).join("")+'</div>'}
-V.dealers=function(){
- var price=S.way==="price",list=offers(),got=arrivedIds(),m=S.pick;
- if(S.sort==="total"&&!(price&&S.arrived))S.sort="first";
- var sorts=[["first","Answers fastest"],["closest","Closest"],["reviewed","Best reviewed"]];if(price&&S.arrived)sorts.push(["total","Lowest total cost"]);
- var ask=price?'<div class="ask" style="--i:4"><div><h2>What you are asking for</h2><p>'+askText(m)+'</p>'+
-   '<div class="facts" style="margin-top:10px"><span>Trade: <b>'+tradeLine()+'</b></span><span>From: <b>'+esc(S.alias)+'</b></span></div><div class="facts" id="protask" style="margin-top:6px"><span>Protection: <b>'+protLine()+'</b></span></div></div>'+
-   (S.asked?'<span class="note">'+(S.arrived<3?"Sent. Replies appear as they come in.":"All three answered.")+' Sample replies.</span>':'<button class="btn pri" data-act="ask">Send to all three</button>')+'</div>'
-  :'<div class="ask" style="--i:4"><div><h2>What you are asking for</h2><p>A test drive of the '+m.make+" "+m.model+'. No numbers, no pressure. Choose where.</p></div></div>';
- return head("Dealers","Now the dealers <em>answer to you</em>.","Start with a drive: pick a store, pick a time, no numbers and no pressure. Or ask for pricing and each dealer says whether they have this car at your figure. Subscribing puts a dealer in this room. It never moves one ahead of another.")+
- '<div class="bar" style="--i:3">'+seg("What to ask for","way",[["drive","Book a test drive"],["price","Ask for pricing"]],S.way)+'<span class="sp" style="flex:1"></span><h2 style="margin:0">Show first</h2>'+seg("Order dealers by","sort",sorts,S.sort)+'</div>'+ask+
- '<div class="cards" style="--i:5">'+list.map(function(o){var d=o.d,on=S.offer===d.id,here=got.indexOf(d.id)>=0,meets=o.meets,word=S.pay==="cash"?"budget":"payment";
-  var top='<div class="dealer"><div class="grade" aria-label="Grade '+gradeOf(d)+'">'+gradeOf(d)+'</div><div><h3>'+d.name+'</h3><small>'+d.dist.toFixed(1)+' mi · '+reportsOf(d)+' client surveys · sample</small></div></div>'+
-   '<div class="facts"><span>Usually answers in <b>'+d.reply+' min</b></span></div>';
-  if(!price)return'<div class="card'+(on?" on":"")+'">'+top+meters(d)+'<button class="btn pickbtn'+(on?" pri":"")+'" data-act="offer" data-v="'+d.id+'" aria-pressed="'+on+'">'+(on?"Selected":"Drive it at "+d.name)+'</button></div>';
-  if(!S.asked)return'<div class="card">'+top+meters(d)+'</div>';
-  if(!here)return'<div class="card">'+top+'<div class="wait">Waiting for a reply</div></div>';
-  return'<div class="card'+(on?" on":"")+(S.newest===d.id?" arrive":"")+'">'+top+
-  (o.fromDesk?'<span class="badge g" style="align-self:flex-start">Sent from the dealer desk</span>':"")+'<div class="status'+(meets?"":" over")+'">'+d.stock+' · '+(meets?"meets your "+usd(limit())+" "+word:usd(o.over)+" over your "+word)+'</div>'+
-  '<div class="badges">'+o.b.map(function(b){return'<span class="badge'+(b==="Highest trade figure"?" g":"")+'">'+b+'</span>'}).join("")+'</div>'+
-  '<div class="monthly num">'+usd(o.big)+' <small>'+o.sub+'</small></div>'+
-  '<dl class="rows" style="margin:0"><div><dt>Out the door</dt><dd>'+usd(o.otd)+'</dd></div><div><dt>Trade figure</dt><dd>'+(o.allow==null?"No trade":usd(o.allow))+'</dd></div>'+
-  (o.prodTotal?'<div><dt>Protection you asked for</dt><dd>'+usd(o.prodTotal)+'</dd></div>':"")+(o.add?'<div class="flag"><dt>Add-on you did not ask for</dt><dd>'+usd(o.add)+'</dd></div>':"")+
-  ownRate(o)+'<div class="tot"><dt>'+o.totLabel+'</dt><dd>'+usd(o.total)+'</dd></div></dl>'+
-  '<details><summary>Itemized terms and survey results</summary><dl class="rows" style="margin-top:6px"><div><dt>'+m.trim+' · stock '+o.stock+'</dt><dd></dd></div><div><dt>Selling price</dt><dd>'+usd(o.price)+'</dd></div><div><dt>Dealer fee</dt><dd>'+usd(o.fee)+'</dd></div>'+
-  prodRows(o)+(o.add?'<div class="flag"><dt>Dealer add-on, not requested</dt><dd>'+usd(o.add)+'</dd></div>':"")+
-  '<div><dt>Tax and registration, sample</dt><dd>'+usd(o.otd-o.price-o.fee-o.add-o.prodTotal)+'</dd></div>'+(o.allow==null?"":'<div><dt>Trade figure</dt><dd>'+usd(-o.allow)+'</dd></div><div><dt>Loan payoff</dt><dd>'+usd(o.payoff)+'</dd></div>')+
-  typeRows(o)+(S.pay==="finance"?'<div class="tot"><dt>Amount financed</dt><dd>'+usd(o.fin)+'</dd></div>':"")+'</dl><div style="margin-top:14px">'+meters(d)+'</div></details>'+
-  '<button class="btn pickbtn'+(on?" pri":"")+'" data-act="offer" data-v="'+d.id+'" aria-pressed="'+on+'">'+(on?"Selected":"Choose "+d.name)+'</button></div>'}).join("")+'</div>'+
- '<p class="note" style="--i:6;margin-top:18px">Grades come only from surveys clients complete after a visit, and every client can read them. All dealers, grades and figures on this screen are samples.</p>'};
-
-V.confirm=function(){
- var price=S.way==="price",o=offers().filter(function(x){return x.d.id===S.offer})[0],sl=slots(),pick=sl.filter(function(s){return s.k===S.slot})[0],m=S.pick;
- var terms='<dl class="rows" style="margin-top:6px"><div><dt>Vehicle</dt><dd>'+m.make+" "+m.model+" "+m.trim+'</dd></div>'+(price?'<div><dt>Stock</dt><dd>'+o.stock+'</dd></div><div><dt>Out the door</dt><dd>'+usd(o.otd)+'</dd></div>'+
-  '<div><dt>Trade figure</dt><dd>'+(o.allow==null?"No trade":usd(o.allow))+'</dd></div>'+prodRows(o)+typeRows(o)+'<div class="tot"><dt>'+(S.pay==="cash"?"Balance due at delivery":S.pay==="lease"?"Monthly lease payment":"Monthly payment")+'</dt><dd>'+usd(o.big)+'</dd></div>':
-  '<div><dt>Visit</dt><dd>Test drive</dd></div><div><dt>Distance</dt><dd>'+o.d.dist.toFixed(1)+' mi</dd></div><div><dt>Your limit</dt><dd>'+limitText()+', '+PAYWORD[S.pay]+'</dd></div><div class="unk"><dt>Pricing</dt><dd>Not requested yet</dd></div>')+'<div><dt>Protection choices</dt><dd>'+protLine()+'</dd></div></dl>';
- return head("Your visit",price?"Walk in with the deal <em>already written</em>.":"Drive it first. <em>Decide later.</em>","Choosing a time sends "+o.d.name+" your brief"+(price?" and these terms":"")+" through your private address"+(S.trade.has&&mediaBits().length?", with your trade photos":"")+". Nothing else about you goes with it.")+
- '<div class="cols" style="--i:3"><div class="figure"><div class="dealer"><div class="grade">'+gradeOf(o.d)+'</div><div><h3 style="font-family:var(--serif);font-weight:400;font-size:26px;margin:0">'+o.d.name+'</h3><small style="color:var(--mute)">'+(price?"Terms as offered":"Test drive")+'</small></div></div>'+terms+'</div>'+
- '<div><h2>Choose a time</h2><div class="slots">'+sl.map(function(s){return'<button class="slot" data-act="slot" data-v="'+s.k+'" aria-pressed="'+(S.slot===s.k)+'"><b>'+s.day+'</b><small>'+s.t+'</small></button>'}).join("")+'</div>'+
- '<div class="pair"><button class="btn pri" data-act="confirm"'+(S.slot?"":" disabled")+'>Confirm visit</button><button class="btn" data-act="notyet">Not yet</button></div>'+
- '<p class="note" style="margin-top:14px">Not yet keeps everything in your record and tells the dealer nothing.</p></div></div>'};
-
-/* ---------- render + flow ---------- */
-function gate(){var k=STEPS[S.step];
- if(k==="brief"&&S.mode==="know"&&!matches().length)return"Choose a make and model to continue.";
- if(k==="matches"&&!S.pick)return"Choose one of the three to continue.";
- if(k==="account"&&!S.alias)return"Create the address to continue.";
- if(k==="dealers"&&!S.offer)return S.way==="price"&&!S.asked?"Send the request to see their numbers.":S.way==="drive"?"Choose where to drive it.":"Choose a dealer to continue.";
- return""}
-function render(animate){
- var k=STEPS[S.step],v=$("view"),dealer=S.role==="dealer"&&k!=="intro",last=STEPS.length-2;
- document.body.className=(k==="intro"?"intro":"working")+((k==="confirm"||k==="record"||dealer)?" done":"")+(dealer?" deskmode":"")+(T.on?" touring":"");
- v.className="view"+(animate===false?" still":"");
- v.innerHTML=dealer?dealerView():V[k]();
- $("where").textContent=k==="intro"||dealer?"":k==="record"?"Deal record":LABEL[k]+" · "+S.step+" of "+last;
- $("railfill").style.width=(Math.min(S.step,last)/last*100)+"%";
- [].forEach.call(document.querySelectorAll("#role button"),function(b){b.setAttribute("aria-pressed",String(b.dataset.v===S.role))});
- var g=gate();$("next").disabled=!!g;$("hint").textContent=g;
- [].forEach.call(v.querySelectorAll("input[type=range]"),fill);
- if(animate!==false)window.scrollTo(0,0);
- save();
-}
-function fill(r){r.style.setProperty("--p",((r.value-r.min)/(r.max-r.min)*100)+"%")}
-function go(n){S.step=Math.max(0,Math.min(STEPS.length-1,n));render()}
-function clampStep(n){if(!S.pick)n=Math.min(n,at("matches"));if(!S.alias)n=Math.min(n,at("account"));if(!S.offer)n=Math.min(n,at("dealers"));if(!S.slot||!S.confirmed)n=Math.min(n,at("confirm"));return n}
-function serialize(){var s=JSON.parse(JSON.stringify(S,function(k,v){return k==="pick"?undefined:(typeof v==="string"&&v.slice(0,5)==="data:")?true:v}));s.pickIdx=S.pick?MODELS.indexOf(S.pick):null;return s}
-function save(){try{localStorage.setItem("cd-showcase",JSON.stringify(serialize()))}catch(e){}}
-function toggle(arr,v){var i=arr.indexOf(v);if(i>=0)arr.splice(i,1);else arr.push(v)}
-
-var ACT={
- begin:function(){S.role="client";go(1);return true},resume:function(){go(clampStep(S.resumeAt||1));return true},restart:function(){S=fresh();go(0);return true},
- role:function(v){S.role=v;render();return true},
- mode:function(v){S.mode=v;S.pick=null;resetDealers()},pay:function(v){S.pay=v;if(STEPS[S.step]==="brief")S.pick=null;resetDealers()},
- lterm:function(v){S.lterm=+v;resetDealers()},miles:function(v){S.miles=+v;resetDealers()},
- body:function(v){S.body=v;S.makes=[];S.pick=null},size:function(v){S.size=S.size===v?"":v;S.pick=null},
- make:function(v){toggle(S.makes,v);S.pick=null},feat:function(v){toggle(S.feats,v);S.pick=null},
- pick:function(v){S.pick=MODELS[+v];resetDealers()},
- alias:function(){S.alias=makeAlias();render(false);typeAlias();return true},
- hastrade:function(v){S.trade.has=v==="1";resetDealers()},cond:function(v){S.trade.cond=v;resetDealers()},
- samples:function(){SHOTS.forEach(function(s){S.media[s[0]]=S.media[s[0]]||true});S.media.video=S.media.video||true;S.media.vin=S.media.vin||true},
- skip:function(){go(S.step+1);return true},
- lender:function(v){S.lender=S.lender===v?null:v},term:function(v){S.term=+v;resetDealers()},tier:function(v){S.tier=v;resetDealers()},sort:function(v){S.sort=v},
- way:function(v){S.way=v;S.offer=null;S.slot=null},
- ask:function(){var tok=S;S.asked=true;S.arrived=0;S.offer=null;
-  if(reduced){S.arrived=3;return}
-  [900,2200,3700].forEach(function(ms,i){setTimeout(function(){if(S!==tok||!S.asked)return;S.arrived=i+1;S.newest=arrivedIds()[i];
-   if(STEPS[S.step]==="dealers"){var open=openState();render(false);openState(open)}S.newest=null},ms)})},
- offer:function(v){S.offer=v;S.slot=null},slot:function(v){S.slot=v},
- confirm:function(){if(!S.slot)return true;S.confirmed=true;S.panel="home";go(STEPS.indexOf("record"));return true},
- notyet:function(){go(at("dealers"));return true},
- prot:function(v){var p=v.split(":");S.prot[p[0]]=p[1];resetDealers()},
- survey:function(v){var p=v.split(":");S.survey[p[0]]=p[1]}
-};
-function openState(set){var d=document.querySelectorAll("details");
- if(set){[].forEach.call(d,function(x,i){x.open=!!set[i]});return}
- return[].map.call(d,function(x){return x.open})}
-function typeAlias(){var el=$("addr"),full=S.alias,i=0;if(reduced)return;
- el.innerHTML='<span class="caret"></span>';
- (function tick(){if(S.alias!==full||!el.isConnected)return;i++;el.innerHTML=aliasHTML(full.slice(0,i))+(i<full.length?'<span class="caret"></span>':"");if(i<full.length)setTimeout(tick,38)})()}
-
-document.addEventListener("click",function(e){
- var b=e.target.closest("[data-act]");if(!b||b.disabled)return;
- var open=openState();
- if(ACT[b.dataset.act](b.dataset.v)!==true){render(false);if(b.dataset.act!=="sort")openState(open)}
-});
-document.addEventListener("input",function(e){var t=e.target;
- if(t.id==="budget"){setLimit(+t.value);resetDealers();fill(t);$("budv").textContent=usd(limit());if(STEPS[S.step]==="brief"){S.pick=null;$("bandnote").textContent=bandText()}else $("figure").innerHTML=figureHTML()}
- else if(t.id==="down"){if(S.pay==="lease")S.das=+t.value;else S.down=+t.value;resetDealers();fill(t);$("downv").textContent=usd(+t.value);$("figure").innerHTML=figureHTML()}
- else if(t.id==="name"){S.name=t.value}
- else if(t.dataset.t){var k=t.dataset.t;S.trade[k]=(k==="miles"||k==="payoff")?t.value.replace(/[^\d]/g,""):t.value;resetDealers()}
-});
-document.addEventListener("change",function(e){var t=e.target;
- if(t.id==="k-make"){S.know.make=t.value;S.know.model=MODELS.filter(function(m){return m.make===t.value})[0].model;S.pick=null;render(false)}
- else if(t.id==="k-model"){S.know.model=t.value;S.pick=null;render(false)}
- else if(t.dataset.m&&t.files&&t.files[0]){var f=t.files[0],k=t.dataset.m;S.media[k]=true;
-  if(/^image\//.test(f.type)&&f.size<8e6){var r=new FileReader();r.onload=function(){S.media[k]=r.result;if(STEPS[S.step]==="trade")render(false)};r.readAsDataURL(f)}
-  render(false)}
-});
-$("next").addEventListener("click",function(){if(!gate())go(S.step+1)});
-$("back").addEventListener("click",function(){go(S.step-1)});
-$("restart").addEventListener("click",function(){ACT.restart()});
-$("home").addEventListener("click",function(){S.resumeAt=S.step||S.resumeAt||0;S.step=0;render()});
-
-/* ---------- ambient light: a slow aurora, a horizon line, one headlight sweeping along it ---------- */
-(function(){
- var c=$("sky"),x=c.getContext("2d"),W,H,t0=performance.now(),last=0;
- function size(){var r=Math.min(1.5,devicePixelRatio||1);W=c.width=innerWidth*r;H=c.height=innerHeight*r}
- function glow(cx,cy,r,col,a){var g=x.createRadialGradient(cx,cy,0,cx,cy,r);g.addColorStop(0,"rgba("+col+","+a+")");g.addColorStop(.55,"rgba("+col+","+(a*.35)+")");g.addColorStop(1,"rgba("+col+",0)");x.fillStyle=g;x.fillRect(cx-r,cy-r,r*2,r*2)}
- function frame(now){
-  if(!reduced&&now-last<33){requestAnimationFrame(frame);return}last=now;
-  var t=(now-t0)/1000,R=Math.max(W,H),hy=H*.82;
-  x.clearRect(0,0,W,H);
-  glow(W*(.78+.05*Math.sin(t*.13)),H*(.96+.03*Math.cos(t*.09)),R*.75,"30,143,134",.26);
-  glow(W*(.12+.06*Math.cos(t*.07)),H*(.02+.04*Math.sin(t*.11)),R*.6,"42,71,100",.5);
-  glow(W*(.55+.08*Math.sin(t*.05)),H*(.42+.05*Math.cos(t*.08)),R*.42,"220,201,160",.06);
-  var hg=x.createLinearGradient(0,hy-H*.16,0,hy);hg.addColorStop(0,"rgba(99,210,198,0)");hg.addColorStop(1,"rgba(99,210,198,.05)");x.fillStyle=hg;x.fillRect(0,hy-H*.16,W,H*.16);
-  var lg=x.createLinearGradient(0,0,W,0);lg.addColorStop(0,"rgba(99,210,198,0)");lg.addColorStop(.5,"rgba(99,210,198,.16)");lg.addColorStop(1,"rgba(99,210,198,0)");x.fillStyle=lg;x.fillRect(0,hy,W,Math.max(1,W/1400));
-  glow(W*(((t*.045)%1.4)-.2),hy,R*.16,"236,242,247",.16);
-  var v=x.createRadialGradient(W*.5,H*.5,R*.25,W*.5,H*.5,R*.85);v.addColorStop(0,"rgba(6,16,28,0)");v.addColorStop(1,"rgba(6,16,28,.75)");x.fillStyle=v;x.fillRect(0,0,W,H);
-  if(!reduced)requestAnimationFrame(frame)}
- size();requestAnimationFrame(frame);addEventListener("resize",function(){size();if(reduced)frame(performance.now())});
-})();
-
-/* ---------- deal record: the hub after a visit is booked ---------- */
-function visitSlot(){return slots().filter(function(s){return s.k===S.slot})[0]}
-function r2(n){return Math.round(n*100)/100}
-function tl(state,title,body,action){return'<li class="tl-item '+state+'"><span class="tl-dot" aria-hidden="true"></span><div class="tl-body"><h3>'+title+'</h3>'+body+(action||"")+'</div></li>'}
-function threadHTML(me){
- return'<div class="thread" id="thread">'+(S.thread.length?S.thread.map(function(m){return'<div class="msg '+(m.from===me?"me":"them")+'"><small>'+(m.from==="dealer"?"Ourisman":m.from==="client"?esc(S.name.trim().split(/\s+/)[0]||"Client"):"ClearDrive")+'</small>'+esc(m.text)+'</div>'}).join(""):
-  '<p class="note">No messages yet. Everything said here is kept with the deal, in order.</p>')+'</div>'+
- '<div class="sayrow"><input id="msg" placeholder="Write a message" aria-label="Message" autocomplete="off"><button class="btn" data-act="say" data-v="'+me+'">Send</button></div>'}
-
-V.record=function(){
- if(S.panel==="check")return checkView();
- if(S.panel==="survey")return surveyView();
- var price=S.way==="price",o=chosen(),sl=visitSlot(),m=S.pick,first=esc(S.name.trim().split(/\s+/)[0]||"");
- var offer=price?'<p class="tl-big num">'+usd(o.big)+' <small>'+o.sub+'</small></p><p class="note">'+o.d.name+' · out the door '+usd(o.otd)+(o.allow==null?"":" · trade "+usd(o.allow))+' · '+o.totLabel.toLowerCase()+' '+usd(o.total)+'</p>':
-  '<p class="note">You booked a drive without asking for numbers. Ask whenever you like, before or after.</p>';
- var chk=S.check?'<p class="'+(S.check.n?"verdict over":"verdict")+'">'+(S.check.n?S.check.n+(S.check.n===1?" thing":" things")+" changed"+(S.check.cost>0?", adding about "+usd(S.check.cost)+" to what you pay.":S.check.cost<0?", in your favour by about "+usd(-S.check.cost)+".":".")+(S.check.prod?" "+S.check.prod+(S.check.prod===1?" of them is a protection product that does":" of them are protection products that do")+" not match what you chose.":""):"Everything matched what "+o.d.name+" put in writing.")+'</p>':
-  '<p class="note">When the paperwork is in front of you, enter its numbers. ClearDrive compares every line with the offer saved above and tells you what changed and what it costs.</p>';
- return'<svg class="check" viewBox="0 0 80 80" style="--i:0" aria-hidden="true"><circle cx="40" cy="40" r="36"/><path d="M26 41 L36 51 L55 30"/></svg>'+
- '<h1 style="--i:1">You are expected'+(first?", <em>"+first+"</em>":"")+'.</h1>'+
- '<p class="lede" style="--i:2">'+o.d.name+', '+sl.day+' at '+sl.t+'. This is your deal record. Everything that was promised lives here, so the visit is a drive and a signature.</p>'+
- '<ol class="tl" style="--i:3">'+
- tl("done","Your brief",'<p class="note">'+askText(m)+'</p>')+
- tl("done","Protection choices",'<p class="note">'+protLine()+'. Only what you asked to have quoted can be on a written offer.</p>')+
- tl("done","Private address",'<p class="note">Dealers write to <b style="color:var(--text)">'+esc(S.alias)+'</b>. Your own email and phone stay with you.</p>')+
- tl(price?"done":"later",price?"Written offer, saved":"Pricing",offer,price?"":'<button class="btn" data-act="askprice">Ask '+o.d.name+' for pricing</button>')+
- tl("done","Visit booked",'<p class="note">'+sl.day+', '+sl.t+' · '+o.d.dist.toFixed(1)+' mi away. '+o.d.name+' has your brief'+(S.trade.has&&mediaBits().length?", your trade photos":"")+' and these terms.</p>','<button class="link" data-act="role" data-v="dealer">See what '+o.d.name+' sees</button>')+
- tl(S.check?"done":"next","At the dealership: check the paperwork",chk,price?'<button class="btn'+(S.check?"":" pri")+'" data-act="panel" data-v="check">'+(S.check?"Check again":"Check the paperwork")+'</button>':"")+
- tl(S.surveyDone?"done":"later","After the visit: three questions",S.surveyDone?'<p class="verdict">Published on '+o.d.name+'\'s page. Grade now '+gradeOf(o.d)+' from '+reportsOf(o.d)+' surveys.</p>':'<p class="note">Your answers are public and they are the only thing that sets a dealer\'s grade.</p>','<button class="btn" data-act="panel" data-v="survey">'+(S.surveyDone?"See the dealer page":"Answer now")+'</button>')+
- tl("later","Messages",threadHTML("client"))+
- '</ol><div class="pair" style="--i:4;max-width:420px"><button class="btn" data-act="restart">Run it again</button></div>'};
-
-/* ---------- paperwork check: audit the difference, not the document ---------- */
-var ASK={price:"Ask why the selling price differs from the written offer.",fee:"Ask which fee this is, and whether the state requires it.",add:"Add-ons are optional. Ask for each one to be listed and priced, and decline what you do not want.",
- tax:"Tax follows the price. Ask which rate was used.",allow:"Ask what changed about your trade since the written figure.",payoff:"Check this against your lender's payoff letter.",
- apr:"Ask which lender approved this rate, and whether a lower one was offered.",term:"A longer term lowers the payment and raises the total. Decide on the total.",down:"Confirm the cash down matches what you agreed to bring.",das:"Ask for the due-at-signing amount to be itemized.",
- mo:"Ask to see the amount financed and everything inside it.",bal:"Ask for the balance to be itemized line by line."};
-function paperFields(){
- var f=[["price","Selling price"],["fee","Dealer fee"]];prodList().forEach(function(p){f.push(["p_"+p[0],p[1]])});f.push(["add","Other add-ons"],["tax","Tax and registration"]);
- if(S.trade.has)f.push(["allow","Trade allowance"],["payoff","Loan payoff"]);
- if(S.pay==="finance")f.push(["down","Cash down"],["apr","APR, percent"],["term","Term, months"],["mo","Monthly payment on the contract"]);
- else if(S.pay==="lease")f.push(["das","Due at signing"],["mo","Monthly payment on the contract"]);
- else f.push(["bal","Balance due"]);
- return f}
-function psum(X){var t=0;prodList().forEach(function(p){t+=+X["p_"+p[0]]||0});return t}
-function promised(){var o=chosen(),P={};prodList().forEach(function(p){P["p_"+p[0]]=o.prod[p[0]]||0});
- return Object.assign(P,{price:o.price,fee:o.fee,add:o.add,tax:o.otd-o.price-o.fee-o.add-o.prodTotal,allow:o.allow||0,payoff:o.payoff||0,down:S.down,das:S.das,apr:o.apr,term:S.term,mo:r2(o.big),bal:Math.round(o.big)})}
-function paperExpected(X){var fin=X.price+X.fee+X.add+psum(X)+X.tax-X.allow+X.payoff;
- if(S.pay==="cash")return fin;
- if(S.pay==="lease"){var keep=S.das;S.das=X.das;var v=leaseMo(X.price,X.fee,X.add+psum(X),X.allow-X.payoff,X.apr);S.das=keep;return v}
- return pmt(fin-X.down,X.apr,X.term)}
-function samplePaper(){var P=promised(),X=Object.assign({},P);X.fee+=200;
- var L=prodList(),extra=L.filter(function(p){return protOf(p[0])==="no"})[0]||L.filter(function(p){return protOf(p[0])==="ask"})[0];
- if(extra)X["p_"+extra[0]]=chosen().d.prod[extra[0]];else X["p_"+L[0][0]]+=300;
- if(S.pay==="finance"){X.apr=r2(P.apr+.5);X.term=P.term>=72?84:72;X.mo=r2(paperExpected(X))}
- else if(S.pay==="lease"){X.mo=r2(paperExpected(X)+18)}
- else X.bal=Math.round(paperExpected(X));
- return X}
-function audit(){
- var P=promised(),X=S.paper,F=[],label={};paperFields().forEach(function(f){label[f[0]]=f[1]});
- var factor=S.pay==="finance"?pmt(1,X.apr,X.term)*X.term:1;
- [["price",1],["fee",1],["add",1],["tax",1],["payoff",1],["allow",-1]].forEach(function(k){if(!(k[0]in label))return;var d=(X[k[0]]-P[k[0]])*k[1];
-  if(Math.abs(d)>=1)F.push({k:k[0],label:label[k[0]],from:usd(P[k[0]]),to:usd(X[k[0]]),cost:d*factor})});
- prodList().forEach(function(p){var k="p_"+p[0],c=protOf(p[0]),d=X[k]-P[k];if(Math.abs(d)<1)return;var low=p[0]==="gap"?"GAP":p[1].toLowerCase();
-  if(c!=="yes")F.push({k:k,prod:1,label:p[1]+" was added. "+(c==="no"?"You declined it":"You asked to have it explained first"),from:c==="no"?"Declined":"To be explained in person",to:usd(X[k]),cost:d*factor,
-   ask:c==="no"?"You said no to "+low+" before the visit. Ask for it to be taken off. It is optional, and the deal does not depend on it.":"You asked to have "+low+" explained in person. If you agreed to it there, check this is the price you were told. If not, ask for it to be taken off."});
-  else if(X[k]<1)F.push({k:k,prod:1,label:p[1]+" is missing",from:usd(P[k])+" quoted",to:"Not on the contract",cost:d*factor,ask:"You asked for "+low+" and it was quoted. If you still want it, ask for it to be added at the quoted price before you sign."});
-  else F.push({k:k,prod:1,label:p[1]+" is priced differently",from:usd(P[k])+" quoted",to:usd(X[k]),cost:d*factor,ask:"Ask why the price of "+low+" differs from the written offer."})});
- if(S.pay==="finance"){var finP=P.price+P.fee+P.add+psum(P)+P.tax-P.allow+P.payoff-P.down;
-  if(Math.abs(X.apr-P.apr)>=.01)F.push({k:"apr",label:"APR",from:P.apr.toFixed(2)+"%",to:X.apr.toFixed(2)+"%",cost:(pmt(finP,X.apr,P.term)-pmt(finP,P.apr,P.term))*P.term});
-  if(X.term!==P.term)F.push({k:"term",label:"Term",from:P.term+" months",to:X.term+" months",cost:pmt(finP,P.apr,X.term)*X.term-pmt(finP,P.apr,P.term)*P.term});
-  if(X.down!==P.down)F.push({k:"down",label:"Cash down",from:usd(P.down),to:usd(X.down),cost:0})}
- if(S.pay==="lease"&&X.das!==P.das)F.push({k:"das",label:"Due at signing",from:usd(P.das),to:usd(X.das),cost:X.das-P.das});
- var exp=paperExpected(X),key=S.pay==="cash"?"bal":"mo",gap=X[key]-exp,n=S.pay==="cash"?1:S.pay==="lease"?S.lterm:X.term;
- if(Math.abs(gap)>(S.pay==="cash"?5:2))F.push({k:key,label:S.pay==="cash"?"The balance does not add up":"The payment does not match these numbers",from:usd(exp)+" expected",to:usd(X[key])+" written",cost:gap*n});
- F.sort(function(a,b){return b.cost-a.cost});
- var pt=S.pay==="cash"?P.bal:S.pay==="lease"?P.das+P.mo*S.lterm:P.down+P.mo*P.term,xt=S.pay==="cash"?X.bal:S.pay==="lease"?X.das+X.mo*S.lterm:X.down+X.mo*X.term;
- return{F:F,promisedTotal:pt,paperTotal:xt,cost:xt-pt}}
-/* Every protection product, line by line: what the client chose, what was quoted, what the contract says. */
-function prodCheckHTML(){var P=promised(),X=S.paper;
- return'<div class="prodcheck" id="prodcheck"><h2>Protection products</h2><dl class="rows">'+prodList().map(function(p){var k="p_"+p[0],c=protOf(p[0]),on=X[k]>=1,ok=Math.abs(X[k]-P[k])<1;
-  return'<div'+(ok?"":' class="flag"')+'><dt>'+p[1]+' · '+(c==="yes"?"quoted "+usd(P[k]):c==="no"?"declined":"explain in person")+'</dt><dd>'+(on?usd(X[k])+" on the contract":"Not on the contract")+(ok?" · matches":"")+'</dd></div>'}).join("")+'</dl></div>'}
-function auditHTML(){var a=audit(),o=chosen(),n=a.F.length;
- return'<div class="verdictbox '+(n?"bad":"good")+'"><h2>'+(n?"What changed":"Result")+'</h2><p class="vline">'+(n?n+(n===1?" line differs":" lines differ")+" from the written offer.":"Everything matches what "+o.d.name+" put in writing.")+'</p>'+
- (n?'<p class="vcost num">'+(a.cost>=0?"About "+usd(a.cost)+" more":"About "+usd(-a.cost)+" less")+' <small>than promised, over the whole deal</small></p>':'<p class="note">Sign with confidence. This result is saved to your record and counts towards the dealer\'s "paperwork matched" score.</p>')+'</div>'+
- a.F.map(function(f){return'<div class="finding"><div class="fhead"><b>'+f.label+'</b><span class="num '+(f.cost>0?"up":f.cost<0?"down":"")+'">'+(Math.abs(f.cost)<1?"No cost change":(f.cost>0?"+":"−")+usd(Math.abs(f.cost)).replace("−",""))+'</span></div>'+
-  '<div class="fdiff num"><span>'+f.from+'</span><i aria-hidden="true">→</i><span>'+f.to+'</span></div><p class="note">'+(f.cost<0&&!f.prod?"This moved in your favour. ":"")+(f.ask||ASK[f.k])+'</p></div>'}).join("")+prodCheckHTML()+
- '<dl class="rows" style="margin-top:14px"><div><dt>Promised, all in</dt><dd>'+usd(a.promisedTotal)+'</dd></div><div class="tot"><dt>On the paperwork, all in</dt><dd>'+usd(a.paperTotal)+'</dd></div></dl>'}
-function checkView(){
- S.paper=Object.assign(promised(),S.paper||{});var o=chosen();
- return head("Paperwork check","Does the paper say <em>what they promised?</em>","Type the numbers from the buyer's order or contract. They start filled in with the offer "+o.d.name+" put in writing, so you only change what is different.")+
- '<div class="pay" style="--i:3"><div><div class="form two-up">'+paperFields().map(function(f){
-  return'<div class="f"><label for="pp-'+f[0]+'">'+f[1]+'</label><input id="pp-'+f[0]+'" data-p="'+f[0]+'" inputmode="decimal" value="'+S.paper[f[0]]+'"></div>'}).join("")+'</div>'+
- '<div class="inline"><button class="link" data-act="papersample">Load a sample with changes</button><button class="link" data-act="paperreset">Reset to the written offer</button></div>'+
- '<p class="note" style="margin-top:14px">A camera scan of the contract is planned. In this demonstration the numbers are typed, and the comparison is real arithmetic.</p></div>'+
- '<div id="audit">'+auditHTML()+'</div></div>'+
- '<div class="pair" style="--i:4;max-width:520px"><button class="btn pri" data-act="papersave">Save to my record</button><button class="btn" data-act="panel" data-v="home">Back</button></div>'}
-
-/* ---------- survey and the dealer's public page ---------- */
-function dealerPage(d){return'<div class="figure"><div class="dealer"><div class="grade">'+gradeOf(d)+'</div><div><h3 style="font-family:var(--serif);font-weight:400;font-size:26px;margin:0">'+d.name+'</h3><small style="color:var(--mute)">'+reportsOf(d)+' client surveys · sample</small></div></div>'+
- '<div style="margin-top:18px">'+meters(d)+'</div><dl class="rows"><div><dt>Surveys come from</dt><dd>Clients with a booked visit only</dd></div><div><dt>Can a dealer remove one</dt><dd>No</dd></div><div><dt>Can a dealer pay to rank higher</dt><dd>No</dd></div></dl></div>'}
-function surveyView(){var o=chosen(),done=SURVEY.every(function(q,i){return S.survey[i]});
- return head("After the visit",S.surveyDone?"Published. <em>Thank you.</em>":"Three questions. <em>That is all.</em>",S.surveyDone?"The next client sees this before they choose a dealer. Watch the scores on the right: yours is in them.":"Only clients who booked through ClearDrive are asked, every one of them, and the same three things each time. That is why the grade means something.")+
- '<div class="pay" style="--i:3"><div>'+SURVEY.map(function(q,i){return'<div class="block" style="margin-bottom:22px"><h2>'+q+'</h2>'+chips("survey",[[i+":yes","Yes"],[i+":mostly","Mostly"],[i+":no","No"]],function(v){return S.survey[i]===v.split(":")[1]})+
-  (i===1&&S.check?'<p class="note" style="margin-top:8px">Your paperwork check found '+(S.check.n?S.check.n+(S.check.n===1?" difference.":" differences."):"no differences.")+'</p>':"")+'</div>'}).join("")+
- '<div class="pair" style="max-width:520px"><button class="btn pri" data-act="surveysend"'+(done&&!S.surveyDone?"":" disabled")+'>'+(S.surveyDone?"Published":"Publish my answers")+'</button><button class="btn" data-act="panel" data-v="home">Back</button></div></div>'+
- dealerPage(o.d)+'</div>'}
-
-ACT.panel=function(v){S.panel=v;render();return true};
-ACT.askprice=function(){S.way="price";S.confirmed=false;S.slot=null;go(STEPS.indexOf("dealers"));return true};
-ACT.papersample=function(){S.paper=samplePaper()};
-ACT.paperreset=function(){S.paper=promised()};
-ACT.papersave=function(){var a=audit();S.check={n:a.F.length,cost:Math.round(a.cost),prod:a.F.filter(function(f){return f.prod}).length};S.panel="home";
- S.thread.push({from:"system",text:a.F.length?"Paperwork check saved: "+a.F.length+" difference"+(a.F.length===1?"":"s")+" from the written offer"+(S.check.prod?", including "+S.check.prod+" protection product"+(S.check.prod===1?"":"s")+" that did not match the client's choices.":"."):"Paperwork check saved: everything matched the written offer."});render();return true};
-ACT.surveysend=function(){S.surveyDone=true};
-ACT.say=function(v){var el=$("msg"),t=el&&el.value.trim();if(!t)return true;S.thread.push({from:v,text:t.slice(0,500)})};
-document.addEventListener("input",function(e){var t=e.target;if(!t.dataset.p||!S.paper)return;
- var n=parseFloat(String(t.value).replace(/[^0-9.]/g,""));S.paper[t.dataset.p]=isFinite(n)?n:0;$("audit").innerHTML=auditHTML()});
-document.addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.id==="msg"){e.preventDefault();var b=e.target.parentNode.querySelector("[data-act=say]");if(b)b.click()}});
-
-/* ---------- dealer desk: the same deal, seen from the store ---------- */
-var OUR=DEALERS[0];
-var SAMPLE_LEADS=[{id:"CD-0998",car:"Toyota Camry SE · finance",st:"Replied · visit Thursday"},{id:"CD-0996",car:"Honda Pilot Sport · test drive",st:"Sold · survey received"}];
-function copyQuote(q){var c=Object.assign({},q);c.prod=cleanProd(q.prod);return c}
-function leadLive(){return!!(S.pick&&S.alias&&(S.asked||S.confirmed))}
-function clockText(){if(!S.askedAt)return"";var end=S.quoteAt||Date.now(),s=Math.max(0,Math.round((end-S.askedAt)/1000)),t=Math.floor(s/60)+":"+("0"+s%60).slice(-2);
- return S.quoteAt?"Answered in "+t:"Waiting "+t}
-function leadStatus(){return S.confirmed&&S.offer==="our"?"Visit booked":S.confirmed?"Client chose another dealer":S.quote?"Replied":"New"}
-function deskOut(){
- var o=priceQuote(OUR,S.draft,0),word=S.pay==="cash"?"budget":"payment",need;
- if(S.pay==="finance")need=o.fin-pv(limit(),S.draft.apr,S.term);else if(S.pay==="lease")need=o.over*S.lterm/1.06;else need=o.over;
- return'<h2>What the client will see</h2><div class="range num">'+usd(o.big)+' <small>'+o.sub+'</small></div>'+
- '<div class="verdict'+(o.meets?"":" over")+'">'+(o.meets?"Meets the client's "+usd(limit())+" "+word+", with "+usd(-o.over)+" to spare.":usd(o.over)+" over the client's "+usd(limit())+" "+word+". About "+usd(need)+" less "+(S.pay==="cash"?"on the balance":"to finance")+" gets there.")+'</div>'+
- '<dl class="rows"><div><dt>Selling price</dt><dd>'+usd(o.price)+'</dd></div><div><dt>Dealer fee</dt><dd>'+usd(o.fee)+'</dd></div>'+(o.add?'<div class="flag"><dt>Other add-ons, not requested by the client</dt><dd>'+usd(o.add)+'</dd></div>':"")+
- quotable().map(function(p){return'<div><dt>'+p[1]+', asked for</dt><dd>'+usd(o.prod[p[0]])+'</dd></div>'}).join("")+
- '<div><dt>Tax and registration, sample</dt><dd>'+usd(o.otd-o.price-o.fee-o.add-o.prodTotal)+'</dd></div><div class="tot"><dt>Out the door</dt><dd>'+usd(o.otd)+'</dd></div>'+(o.allow==null?"":'<div><dt>Trade allowance less payoff</dt><dd>'+usd(o.allow-o.payoff)+'</dd></div>')+
- (S.pay==="finance"?'<div><dt>Cash down</dt><dd>'+usd(S.down)+'</dd></div><div><dt>Amount financed</dt><dd>'+usd(o.fin)+'</dd></div>':S.pay==="lease"?'<div><dt>Due at signing</dt><dd>'+usd(S.das)+'</dd></div>':"")+
- '<div class="tot"><dt>'+o.totLabel+'</dt><dd>'+usd(o.total)+'</dd></div></dl>'+
- '<p class="note" style="margin-top:12px">The client sees your total beside your trade figure, and every line itemized. A clean out-the-door number wins here. What you send is what the paperwork is checked against.</p>'}
-/* The client's protection choices, as the desk sees them. Only a product the client asked to have quoted gets a price box. */
-function deskProt(){
- return'<div class="deskprot" id="deskprot"><h2>Protection, as the client chose</h2>'+prodList().map(function(p){var c=protOf(p[0]);
-  return'<div class="pd is-'+c+'"><div><b>'+p[1]+'</b><small>'+(c==="yes"?"Asked for a quote. Price it on its own line.":c==="no"?"Declined. It cannot be added to this offer.":"Wants it explained in person. Not part of the written offer.")+'</small></div>'+
-  (c==="yes"?'<input id="dq-p-'+p[0]+'" data-qp="'+p[0]+'" inputmode="decimal" aria-label="'+p[1]+' price" value="'+(S.draft.prod[p[0]]||0)+'">':'<span class="pill">'+(c==="no"?"Declined":"In person")+'</span>')+'</div>'}).join("")+
- '<p class="note" style="margin-top:10px">The prices are yours to set. A product sold this way was chosen before the visit, so it does not have to be sold again in the finance office.</p></div>'}
-function adfXML(){
- var m=S.pick,t=S.trade,sl=visitSlot(),bits=mediaBits(),L=[];
- L.push('<?xml version="1.0" encoding="UTF-8"?>','<?adf version="1.0"?>','<adf>',' <prospect status="new">','  <id sequence="1" source="ClearDrive">CD-1001</id>','  <requestdate>'+new Date(S.askedAt||Date.now()).toISOString().slice(0,19)+'</requestdate>',
-  '  <vehicle interest="'+(S.way==="drive"?"test-drive":S.pay==="lease"?"lease":"buy")+'" status="new">','   <year>2026</year>','   <make>'+m.make+'</make>','   <model>'+m.model+'</model>','   <trim>'+m.trim+'</trim>',
-  '   <finance>','    <method>'+S.pay+'</method>','    <amount type="'+(S.pay==="cash"?"total":"monthly")+'" limit="maximum" currency="USD">'+limit()+'</amount>');
- if(S.pay!=="cash")L.push('    <amount type="downpayment" currency="USD">'+(S.pay==="lease"?S.das:S.down)+'</amount>');
- L.push('   </finance>','   <comments>Itemized out-the-door quote requested. '+(S.pay==="finance"?S.term+" months.":S.pay==="lease"?S.lterm+" months, "+S.miles+" miles a year.":"Cash purchase.")+' Must have: '+(S.feats.map(featName).join(", ")||"no stated requirements")+'. Protection products, chosen by the client: '+prodList().map(function(p){return p[1]+" - "+{yes:"quote it",no:"declined, do not add",ask:"explain in person, do not pre-load"}[protOf(p[0])]}).join("; ")+'.</comments>','  </vehicle>');
- if(t.has)L.push('  <vehicle interest="trade-in" status="used">','   <year>'+t.year+'</year>','   <make>'+t.make+'</make>','   <model>'+t.model+'</model>','   <odometer status="original" units="mi">'+(t.miles||0)+'</odometer>','   <condition>'+t.cond+'</condition>',
-  '   <finance><balance type="finance" currency="USD">'+(t.payoff||0)+'</balance></finance>','   <comments>'+(bits.length?"Attached in ClearDrive: "+bits.join(", ")+".":"Photos to follow.")+'</comments>','  </vehicle>');
- L.push('  <customer>','   <contact primarycontact="1">','    <name part="full">'+S.name.trim()+'</name>','    <email>'+S.alias+'</email>','   </contact>');
- if(sl)L.push('   <timeframe>','    <description>Appointment requested: '+sl.day+', '+sl.t+'</description>','   </timeframe>');
- L.push('   <comments>Reply to the email above. Phone withheld by the client. Sent only to dealers this client chose.</comments>','  </customer>','  <vendor><vendorname>'+OUR.name+'</vendorname></vendor>','  <provider><name part="full">ClearDrive</name><service>Buyer request</service></provider>',' </prospect>','</adf>');
- return L.join("\n")}
-function dealerView(){
- var live=leadLive(),price=S.way==="price";
- var inbox='<aside class="inbox"><h2>Inbox</h2>'+(live?'<button class="lead" data-act="dlead" data-v="live" aria-pressed="'+(S.dlead==="live")+'"><b>CD-1001 <span class="pill'+(leadStatus()==="New"?" hot":"")+'">'+leadStatus()+'</span></b><small>'+S.pick.make+" "+S.pick.model+" "+S.pick.trim+' · '+(price?PAYWORD[S.pay]:"test drive")+'</small></button>':
-  '<p class="note" style="padding:4px 2px 10px">No live request yet. Switch to Client and send one.</p>')+
-  SAMPLE_LEADS.map(function(l){return'<button class="lead" data-act="dlead" data-v="'+l.id+'" aria-pressed="'+(S.dlead===l.id)+'"><b>'+l.id+' <span class="pill">Sample</span></b><small>'+l.car+'<br>'+l.st+'</small></button>'}).join("")+
-  '<div class="month"><h2>A sample month</h2><dl class="rows" style="margin:0"><div><dt>Requests</dt><dd>14</dd></div><div><dt>Answered inside 15 min</dt><dd>13</dd></div><div><dt>Visits</dt><dd>9</dd></div><div><dt>Sold</dt><dd>5</dd></div><div><dt>Fee</dt><dd>Flat. Same at 1 or 100.</dd></div></dl><p class="note" style="margin-top:8px">Illustrative figures, not results.</p></div></aside>';
- var main;
- if(!live||S.dlead!=="live"){var sm=SAMPLE_LEADS.filter(function(l){return l.id===S.dlead})[0];
-  main='<div class="figure"><h2>'+(sm?sm.id+" · sample lead":"Nothing selected")+'</h2><p class="lede" style="margin:6px 0 0">'+(sm?sm.car+". "+sm.st+". Sample leads are here to show a working inbox. Open the live request to work a real one.":"Send a pricing or test-drive request from the Client view and it arrives here, in the same form it would reach your CRM.")+'</p>'+
-  '<div class="pair" style="max-width:300px"><button class="btn pri" data-act="role" data-v="client">Go to Client view</button></div></div>';
- }else{
-  if(!S.draft)S.draft=copyQuote(S.quote||defaultQuote(OUR));if(!S.draft.prod)S.draft.prod=cleanProd(OUR.prod);
-  var t=S.trade,imgs=SHOTS.concat([["vin","VIN plate"]]).filter(function(s){return typeof S.media[s[0]]==="string"}),sl=visitSlot();
-  var fields=[["price","Selling price"],["fee","Dealer fee"],["add","Other add-ons"]];if(t.has)fields.push(["allow","Trade allowance"]);if(S.pay!=="cash")fields.push(["apr",S.pay==="lease"?"Rate, APR equivalent":"APR, percent"]);
-  main='<div class="leadhead"><div><h2>Lead CD-1001 · '+leadStatus()+'</h2><p class="asking">'+(price?askText(S.pick):"A test drive of the "+S.pick.make+" "+S.pick.model+" "+S.pick.trim+".")+'</p></div><span class="clock num" id="clock">'+clockText()+'</span></div>'+
-  '<div class="facts" style="margin-bottom:22px"><span>Reply to <b>'+esc(S.alias)+'</b></span><span>Phone <b>withheld</b></span>'+(lenderOf()?'<span>Bringing <b>'+lenderRate(lenderOf()).toFixed(2)+'% from a credit union</b>. Beat it or match it</span>':"")+'<span>Sent to <b>'+(price?"3 dealers the client chose":"you only")+'</b></span>'+(S.confirmed&&S.offer==="our"&&sl?'<span>Arriving <b>'+sl.day+', '+sl.t+'</b></span>':"")+'</div>'+
-  (t.has?'<div class="block"><h2>Trade</h2><p style="margin:0 0 10px">'+tradeLine()+' · payoff '+usd(+t.payoff||0)+' · condition: '+esc(t.cond)+'</p>'+(imgs.length?'<div class="thumbs">'+imgs.map(function(s){return'<span style="background-image:url(\''+S.media[s[0]]+'\')" title="'+s[1]+'"></span>'}).join("")+'</div>':"")+'</div>':"")+
-  (price?'<div class="pay block"><div><h2>Can we do it? Build the offer</h2><div class="form two-up">'+fields.map(function(f){return'<div class="f"><label for="dq-'+f[0]+'">'+f[1]+'</label><input id="dq-'+f[0]+'" data-q="'+f[0]+'" inputmode="decimal" value="'+S.draft[f[0]]+'"></div>'}).join("")+'</div>'+deskProt()+
-   (S.confirmed?'<p class="note" style="margin-top:14px">The client booked on the offer already sent. Their saved terms do not change underneath them. A revision would go out as a new written offer.</p>':'<div class="pair"><button class="btn pri" data-act="sendquote">'+(S.quote?"Send a revised offer":"Send written offer")+'</button></div>')+(S.quote&&!S.confirmed?'<p class="note" style="margin-top:12px">Sent. The client\'s screen now shows these numbers, marked as coming from your desk.</p>':"")+'</div>'+
-   '<div class="figure" id="deskout">'+deskOut()+'</div></div>':'<p class="lede">The client asked for a drive, not numbers. Have the car ready and let them ask for pricing when they want it.</p>')+
-  '<div class="block"><h2>Messages</h2>'+threadHTML("dealer")+'</div>'+
-  '<details class="adf"><summary>What lands in your CRM</summary><p class="note" style="margin:8px 0">A standard ADF/XML lead, the format dealer CRMs already accept by email. Generated live from this request. Nothing is sent in this demonstration.</p><pre>'+esc(adfXML())+'</pre></details>';
- }
- var tab=S.dtab==="worth"?worthView():S.dtab==="plan"?planView():S.dtab==="group"?groupView():S.dtab==="page"?'<div class="pay"><div><p class="lede">This is the page a buyer reads before choosing a store. It is built only from the three questions every client answers after a visit. There is nothing here to buy, and nothing a store can take down.</p>'+
-   '<ul class="terms"><li>Was the price the one you were shown?</li><li>Did the paperwork match the offer?</li><li>Was your time respected?</li></ul><p class="note" style="margin-top:16px">Three things the store fully controls. A team that keeps its word earns a grade its competitors cannot purchase.</p></div>'+dealerPage(OUR)+'</div>':
-  '<div class="deskgrid">'+inbox+'<div>'+main+'</div></div>';
- return'<div class="eyebrow" style="--i:0">'+OUR.name+' · dealer view · sample</div><h1 style="--i:1">A buyer who <em>already chose you</em>.</h1>'+
- '<p class="lede" style="--i:2">Every request arrives with the car, the payment, the trade and a way to reply. No cold calls, no shared leads, no fee per sale.</p>'+
- '<div class="bar" style="--i:3">'+seg("Dealer view","dtab",[["desk","The desk"],["worth","Why it pays"],["plan","Membership"],["group","The group"],["page","Your public page"]],S.dtab)+'</div><div style="--i:4">'+tab+'</div>'}
-
-/* ---------- why it pays: what arrives, and what a sale costs ---------- */
-function versusHTML(){
- var m=S.pick||matches()[0],t=S.trade,vs=function(k,v,dim){return'<div'+(dim?' class="unk"':"")+'><dt>'+k+'</dt><dd>'+v+'</dd></div>'};
- return'<div class="versus"><div class="figure dim"><h2>A bought lead · typical</h2><dl class="rows">'+vs("Vehicle","“SUV”",1)+vs("Budget","Not stated",1)+vs("Money down, term","Not stated",1)+vs("Trade","“Yes”",1)+vs("Must-haves","Not stated",1)+vs("Protection products","Not stated",1)+
-  vs("Contact","Name, phone, email")+vs("Also sent to","Several other stores")+vs("First job","Win the race to call")+'</dl></div>'+
-  '<div class="figure lit"><h2>A ClearDrive request · CD-1001</h2><dl class="rows">'+vs("Vehicle",m.make+" "+m.model+" "+m.trim)+vs("Budget",limitText()+", "+PAYWORD[S.pay])+
-  vs(S.pay==="cash"?"Payment":S.pay==="lease"?"Due at signing, term":"Money down, term",S.pay==="cash"?"Cash, no lender":S.pay==="lease"?usd(S.das)+" · "+S.lterm+" months":usd(S.down)+" · "+S.term+" months")+
-  vs("Trade",t.has?esc(t.year+" "+t.make+" "+t.model)+" · "+(mediaBits().length?mediaBits().join(", "):"photos to follow"):"No trade")+vs("Must-haves",S.feats.map(featName).join(", ")||"None stated")+vs("Protection products",protLine())+
-  vs("Contact","Private address, replies threaded")+vs("Also sent to","Only stores the buyer picked by name")+vs("First job","Answer with a number")+'</dl></div></div>'}
-function roiOut(){
- var r=S.roi,spend=r.leads*r.cpl,sold=r.leads*r.close/100,per=sold>0?spend/sold:null,csold=r.req*r.rclose/100,cper=r.fee>0&&csold>0?r.fee/csold:null;
- return'<h2>Cost of one sale</h2><div class="duo"><div><small>Bought leads, today</small><span class="range num">'+(per==null?"—":usd(per))+'</span><small class="num">'+usd(spend)+' a month · about '+(Math.round(sold*10)/10)+' sold</small></div>'+
-  '<div><small>ClearDrive, during the pilot</small><span class="range num" style="color:var(--teal)">$0</span><small class="num">No fee for 90 days · about '+(Math.round(csold*10)/10)+' sold</small></div></div>'+
-  '<dl class="rows"><div class="tot"><dt>After the pilot, at a flat '+(r.fee>0?usd(r.fee):"fee")+' a month</dt><dd>'+(cper==null?"Type a fee to see it":usd(cper)+" a sale")+'</dd></div>'+
-  '<div><dt>Does selling more cost more</dt><dd>No. Flat fee, never per sale</dd></div><div><dt>Can a store pay for position</dt><dd>No</dd></div></dl>'+
-  '<p class="note" style="margin-top:12px">Every figure here is illustrative until you replace it with the store\'s own. The pilot exists to measure the real ones.</p>'}
-function worthView(){
- var r=S.roi,inp=function(k,l){return'<div class="f"><label for="roi-'+k+'">'+l+'</label><input id="roi-'+k+'" data-r="'+k+'" inputmode="decimal" value="'+r[k]+'"></div>'};
- return'<div class="block"><h2>What arrives</h2>'+versusHTML()+'</div>'+
- '<div class="pay"><div><h2>Your numbers, not ours</h2><div class="form two-up">'+inp("leads","Bought leads a month")+inp("cpl","Cost per lead, $")+inp("close","Share that buy, %")+inp("req","ClearDrive requests a month")+inp("rclose","Share of those that buy, %")+inp("fee","Flat monthly fee after the pilot, $")+'</div>'+
- '<p class="note" style="margin-top:14px">Starting values are placeholders. Ask your internet manager for the first three. The pilot produces the next two.</p></div><div class="figure" id="roiout">'+roiOut()+'</div></div>'}
-/* ---------- membership: what a store pays, and what money can never buy ---------- */
-var PLANS=[["Pilot","$0","for 90 days","One or two rooftops. Every feature. Either side can end it in one email."],["Founding store","$500","a month per rooftop","For the first fifty stores, locked for 12 months after the pilot."],["Standard","$1,000","a month per rooftop","The same product. No tiers of access and no add-on charges."]];
-function planOut(){var g=S.roi.gross,n=function(f){return g>0?Math.round(f*12/g*10)/10:null};
- return'<h2>What covers it</h2><div class="duo"><div><small>At $500 a month</small><span class="range num">'+(n(500)==null?"—":n(500))+'</span><small>extra cars a year</small></div><div><small>At $1,000 a month</small><span class="range num">'+(n(1000)==null?"—":n(1000))+'</span><small>extra cars a year</small></div></div>'+
- '<p class="note" style="margin-top:10px">A year of membership divided by your gross on one retail unit, front and back. Type your own figure. The starting value is a placeholder.</p>'}
-function planView(){
- return'<div class="cards block">'+PLANS.map(function(p,i){return'<div class="card'+(i===1?" on":"")+'"><span class="rank">'+p[0]+'</span><div class="monthly num">'+p[1]+' <small>'+p[2]+'</small></div><p class="note" style="margin:0">'+p[3]+'</p></div>'}).join("")+'</div>'+
- '<div class="cols block"><div><h2>What membership buys</h2><ul class="terms"><li>A place in front of every buyer in your area who asks for your brand</li><li>Requests delivered into your CRM, with the trade, the budget and a way to reply</li><li>Your public grade, built from every client you serve well</li><li>A weekly report: requests, response time, visits, surveys</li></ul></div>'+
- '<div><h2>What money never buys</h2><ul class="terms no"><li>A higher place on the buyer\'s screen. Order is the buyer\'s choice</li><li>A per-lead or per-sale charge. The fee is the same at 1 sale or 100</li><li>The removal or editing of a client survey</li><li>A buyer\'s phone number, or any buyer who did not choose you</li></ul></div></div>'+
- '<div class="pay"><div><div class="form two-up"><div class="f"><label for="roi-gross">Your gross on one retail unit, $</label><input id="roi-gross" data-r="gross" inputmode="decimal" value="'+S.roi.gross+'"></div></div>'+
- '<p class="note" style="margin-top:14px">Buyers never pay. Lenders pay the same kind of flat fee to list their real rates, sorted by rate only. Nobody on either side can pay for position, which is why a buyer can trust the order and why a good store wins here.</p></div><div class="figure" id="planout">'+planOut()+'</div></div>'}
-ACT.dtab=function(v){S.dtab=v};
-document.addEventListener("input",function(e){var t=e.target;if(!t.dataset.r)return;
- var n=parseFloat(String(t.value).replace(/[^0-9.]/g,""));S.roi[t.dataset.r]=isFinite(n)?n:0;if($("roiout"))$("roiout").innerHTML=roiOut();if($("planout"))$("planout").innerHTML=planOut();save()});
-
-ACT.dlead=function(v){S.dlead=v};
-ACT.sendquote=function(){S.quote=copyQuote(S.draft);S.quoteAt=Date.now();S.asked=true;var o=priceQuote(OUR,S.quote,0);
- S.thread.push({from:"dealer",text:"Written offer sent: "+usd(o.big)+(S.pay==="cash"?" balance due":" a month")+", "+usd(o.otd)+" out the door"+(o.prodTotal?", including "+quotable().map(function(p){return p[1]+" "+usd(o.prod[p[0]])}).join(", "):"")+"."})};
-(function(){var ask=ACT.ask,confirm=ACT.confirm;
- ACT.ask=function(){S.askedAt=Date.now();S.quoteAt=null;return ask()};
- ACT.confirm=function(){if(!S.askedAt)S.askedAt=Date.now();return confirm()}})();
-document.addEventListener("input",function(e){var t=e.target,k=t.dataset.qp;if(!k||!S.draft||protOf(k)!=="yes")return;
- var n=parseFloat(String(t.value).replace(/[^0-9.]/g,""));S.draft.prod[k]=isFinite(n)?n:0;$("deskout").innerHTML=deskOut()});
-document.addEventListener("input",function(e){var t=e.target;if(!t.dataset.q||!S.draft)return;
- var n=parseFloat(String(t.value).replace(/[^0-9.]/g,""));S.draft[t.dataset.q]=isFinite(n)?n:0;$("deskout").innerHTML=deskOut()});
-setInterval(function(){var c=$("clock");if(c&&!S.quoteAt)c.textContent=clockText()},1000);
-
-/* ---------- the group: every rooftop in one view, and no client leaves the group ---------- */
-/* Sample rooftops. The store names and every figure are illustrative, not any real store's results. */
-var ROOFTOPS=[
- {name:"Main Street store",makes:["Toyota","Honda"],answer:6,show:81,drift:2,grade:"A",attach:44,here:true},
- {name:"Parkway store",makes:["Hyundai","Kia","Mazda","Subaru"],answer:9,show:76,drift:4,grade:"A−",attach:38},
- {name:"Riverside store",makes:["Ford","Chevrolet","Chrysler","Volkswagen"],answer:21,show:64,drift:11,grade:"B",attach:29},
- {name:"Hilltop store",makes:["BMW","Lexus"],answer:12,show:72,drift:6,grade:"B+",attach:35}
-];
-/* Where a request for this make is worked: the store the client contacted if it sells the make, otherwise the sister rooftop that does.
-   This only decides which desk inside the group answers. It has no say in where the group appears on the client's screen. */
-function routeOf(make){var here=ROOFTOPS[0];if(here.makes.indexOf(make)>=0)return{kind:"here",to:here};
- var s=ROOFTOPS.filter(function(r){return!r.here&&r.makes.indexOf(make)>=0})[0];return s?{kind:"sister",to:s}:{kind:"none"}}
-function routeRow(id,car,make,sample){var r=routeOf(make),here=ROOFTOPS[0].name;
- return'<div class="route '+r.kind+'"><div class="rhead"><b>'+id+(sample?' <span class="pill">Sample</span>':' <span class="pill hot">Live</span>')+'</b><span>'+car+'</span></div>'+
- '<div class="rpath"><span>Asked '+here+'</span><i aria-hidden="true">→</i><span>'+(r.kind==="here"?"Sold here. Stays on this desk":r.kind==="sister"?"Offered to "+r.to.name+", which sells "+make:"No rooftop in the group sells "+make)+'</span></div>'+
- '<p class="note">'+(r.kind==="here"?"Nothing to route. The store the client contacted sells this make.":r.kind==="sister"?"The client asked the group for a make this store does not sell. The request is offered to the sister store instead of being lost to a competitor. The client still sees one "+OUR.name+" answer, in the same place on their screen.":"The client is told plainly that the group does not sell this make. The request is never sold or passed outside the group.")+'</p></div>'}
-function groupView(){
- var live=leadLive()?routeRow("CD-1001",S.pick.make+" "+S.pick.model+" "+S.pick.trim,S.pick.make,false):"";
- return'<p class="lede">One view across every rooftop, built from the same records the clients see: how fast each store answers, whether the client shows up, whether the contract matched the written offer, and what the client said afterwards.</p>'+
- '<div class="block"><h2>Rooftops · sample month</h2><div class="gwrap"><table class="gtable"><thead><tr><th>Rooftop</th><th>Time to answer</th><th>Visits that show</th><th>Contracts that differed from the offer</th><th>Client grade</th><th>Pre-selected protection sold</th></tr></thead><tbody>'+
- ROOFTOPS.map(function(r){return'<tr'+(r.here?' class="here"':"")+'><th>'+r.name+'<small>'+r.makes.join(" · ")+'</small></th><td class="num'+(r.answer>15?" warn":"")+'">'+r.answer+' min</td><td class="num">'+r.show+'%</td><td class="num'+(r.drift>=10?" warn":"")+'">'+r.drift+'%</td><td class="num">'+r.grade+'</td><td class="num">'+r.attach+'%</td></tr>'}).join("")+
- '</tbody></table></div><p class="note" style="margin-top:10px">Sample rooftops and illustrative figures, not results. “Pre-selected protection sold” is the share of products a client asked to have quoted that ended up on the contract. Products the client declined are not counted, because they cannot be added.</p></div>'+
- '<div class="pay"><div class="routing" id="routing"><h2>No client leaves the group</h2>'+live+routeRow("CD-0997","Kia Telluride S · finance","Kia",true)+'</div>'+
- '<div><h2>What routing can and cannot do</h2><ul class="terms"><li>The client chose the group by name. A request only ever moves between that group\'s own rooftops</li><li>The sister store answers under the same rules: a written, itemized offer, checked against the contract, followed by the same three questions</li><li>The survey and the grade follow the store that did the work</li></ul>'+
- '<ul class="terms no" style="margin-top:14px"><li>Routing never changes where the group appears on the client\'s screen. The order is still the client\'s choice: fastest answer, closest or best reviewed</li><li>A request is never sold, shared or passed outside the group</li></ul></div></div>'}
-
-/* ---------- guided tour: the whole story, hands-free or one tap at a time ---------- */
-var T={on:false,i:0,auto:false,timer:null};
-// Puts the session at a given step with everything before it filled in, the way a buyer would have left it.
-function seedTo(h,dealer){
- S.pick=S.pick||matches()[0];S.alias=S.alias||makeAlias();S.step=h;
- if(h>=at("dealers")){S.way="price";S.asked=true;S.arrived=3;S.askedAt=S.askedAt||Date.now()-137000}
- if(h>at("dealers"))S.offer=S.offer||"our";
- if(h>at("confirm")){S.slot=S.slot||"s0";S.confirmed=true}
- if(dealer)S.role="dealer"}
-// Each scene adds to the ones before it. Going to scene n replays 0..n on a fresh session, so Back always works.
-var TOUR=[
- {who:"c",t:"It starts without a login",s:"A buyer opens ClearDrive. No account, no phone number, no form that gets sold to five stores.",set:function(){S.step=0}},
- {who:"c",t:"What they can afford, said plainly",s:"They set a payment first. ClearDrive tells them what that figure realistically buys, before they fall for a car it cannot reach.",focus:"#bandnote",set:function(){S.step=1}},
- {who:"c",t:"Three models that fit",s:"Ordered by how well each meets the brief. No manufacturer and no dealer can pay to appear here.",set:function(){S.step=2;S.pick=matches()[0]}},
- {who:"c",t:"The trade, before anyone sits down",s:"Year, miles, condition, payoff, photos, a walkaround video and the VIN plate. Your appraiser sees the car before the customer arrives.",focus:".shots",set:function(){S.step=3;ACT.samples()}},
- {who:"c",t:"An honest range",s:"A payment range, low end first, and a plain statement of what is not known yet. The trade stays out until a dealer commits to a figure.",focus:"#figure",set:function(){S.step=at("payment")}},
- {who:"c",t:"The extras, decided before anyone sells them",s:"GAP, a service contract, prepaid maintenance, tire and wheel. The buyer says which ones a store may quote. A product they decline cannot be put on a written offer.",focus:".protlist",set:function(){S.step=at("protect")}},
- {who:"c",t:"Only now does an account exist",s:"Dealers reach a private ClearDrive address. The buyer's phone number is never shared, so nobody is racing to call them.",focus:".alias",set:function(){S.step=at("account");S.alias="j.ellis.k7m@cleardrive.mail"}},
- {who:"c",t:"One request, to dealers they chose",s:"The buyer asks three stores for the same car at the same payment. Watch the replies land, itemized and out the door.",focus:".cards",live:function(){ACT.ask();render(false)},
-  set:function(){S.step=at("dealers");S.way="price";S.asked=true;S.arrived=3;S.askedAt=Date.now()-137000}},
- {who:"d",t:"The same moment, from your desk",s:"The exact car, the payment limit, the money down, the trade with photos, and a clock. Everything your BDC normally spends three calls finding out.",focus:".leadhead",set:function(){S.role="dealer";S.dtab="desk";S.dlead="live"}},
- {who:"d",t:"Answer with a number",s:"Build the offer against the client's limit and see exactly what they will see. What you send is what the paperwork is later checked against.",focus:"#deskout",
-  set:function(){S.draft=defaultQuote(OUR);S.draft.price-=500;S.quote=copyQuote(S.draft);S.quoteAt=S.askedAt+252000;var o=priceQuote(OUR,S.quote,0);
-   S.thread=[{from:"dealer",text:"Written offer sent: "+usd(o.big)+" a month, "+usd(o.otd)+" out the door."}]}},
- {who:"d",t:"Itemized, with only what they asked for",s:"Each product the buyer asked about gets its own line and your own price. What they declined has no box to type in. A product chosen before the visit does not have to be sold again in the finance office.",focus:"#deskprot"},
- {who:"d",t:"It lands in the CRM you already use",s:"A standard ADF/XML lead, the format dealer CRMs already accept. No new screen for the team to ignore.",focus:".adf",after:function(){var a=document.querySelector(".adf");if(a)a.open=true}},
- {who:"d",t:"Why it pays",s:"A bought lead is a name and a phone number sold to several stores. This is a buyer who picked you, with the deal already framed. Put your own numbers in.",focus:".versus",set:function(){S.dtab="worth"}},
- {who:"d",t:"Every rooftop, in one view",s:"For a group: how fast each store answers, whether the client shows up, whether the contract matched the written offer, the client grade, and how much pre-selected protection was sold. Sample figures.",focus:".gwrap",set:function(){S.dtab="group"}},
- {who:"d",t:"No client leaves the group",s:"A buyer asks one store for a make it does not sell. The request is offered to the sister rooftop that sells it, not lost to a competitor. It never changes where the group appears on the buyer's screen.",focus:"#routing"},
- {who:"c",t:"They walk in with the deal written",s:"The buyer chose your store and booked a time. The visit is a drive and a signature, not four hours at a desk.",focus:".tl",
-  set:function(){S.role="client";S.offer="our";S.slot="s1";S.confirmed=true;S.step=STEPS.indexOf("record");S.panel="home"}},
- {who:"c",t:"The paperwork is checked against your offer",s:"At signing, the buyer compares the contract with what you put in writing. A store that keeps its word gets that on the record. If a number moves, each change is priced.",focus:"#audit",set:function(){S.panel="check";S.paper=promised()}},
- {who:"c",t:"Protection is checked line by line",s:"Every product is compared with what the buyer chose and what you quoted. One they did not select would be flagged here and priced. A store that sells only what was asked for has nothing to explain.",focus:"#prodcheck"},
- {who:"c",t:"Three questions set the grade",s:"Every buyer, every visit, the same three questions, all about things your team controls. Nobody can delete an answer and nobody can pay to rank higher.",focus:".figure",
-  set:function(){S.check={n:0,cost:0};S.panel="survey";S.survey={0:"yes",1:"yes",2:"yes"};S.surveyDone=true}},
- {who:"d",t:"The ask",s:"Ninety days, one store, one person on your team, and no money. If the requests are not better than what you buy today, you stop and you have lost nothing.",set:function(){S.panel="close"}}
-];
-function closeView(){
- return'<div class="eyebrow" style="--i:0">The founding dealer pilot</div><h1 style="--i:1">Ninety days. One store. <em>No fee.</em></h1>'+
- '<p class="lede" style="--i:2">This is a demonstration of the experience. The pilot is where the working version gets built, with your team, around the CRM you already use.</p>'+
- '<div class="cols" style="--i:3"><div class="figure"><h2>The store commits to</h2><ul class="terms"><li>One or two rooftops and one named point person</li><li>Answering every request within 15 minutes in business hours</li><li>Honouring any number put in writing, or saying clearly why it changed</li><li>Itemized, out-the-door quotes with add-ons listed as optional</li><li>Accepting that client surveys are published</li></ul></div>'+
- '<div class="figure"><h2>ClearDrive commits to</h2><ul class="terms"><li>No fee for 90 days, then a flat founding rate locked for 12 months</li><li>No per-sale fee, ever. No paid placement, ever</li><li>Requests go only to dealers the buyer chose</li><li>Delivery into your existing CRM</li><li>A plain weekly report, and either side can end it any day</li></ul></div></div>'+
- '<div class="pair" style="--i:4;max-width:640px"><button class="btn pri" data-act="tryit">Try it yourself</button><button class="btn" data-act="asdealer">Open the dealer desk</button><button class="btn" data-act="tour">Play the tour again</button></div>'}
-(function(){var rec=V.record;V.record=function(){return S.panel==="close"?closeView():rec()}})();
-
-function tourBuild(n){S=fresh();for(var i=0;i<=n;i++)if(TOUR[i].set)TOUR[i].set()}
-function tourPaint(){var el=$("tour"),sc=TOUR[T.i];el.hidden=!T.on;if(!T.on)return;
- $("twho").textContent=sc.who==="d"?"Your desk":"The buyer's phone";$("twho").className="twho "+sc.who;
- $("tt").textContent=sc.t;$("ts").textContent=sc.s;$("tn").textContent=(T.i+1)+" / "+TOUR.length;
- $("tprev").disabled=T.i===0;$("tnext").disabled=T.i===TOUR.length-1;$("tauto").setAttribute("aria-pressed",String(T.auto));$("tauto").textContent=T.auto?"Pause":"Auto-play";
- $("tfill").style.width=((T.i+1)/TOUR.length*100)+"%"}
-function tourShow(n,forward){
- clearTimeout(T.timer);T.i=Math.max(0,Math.min(TOUR.length-1,n));var sc=TOUR[T.i];
- tourBuild(T.i);render();tourPaint();
- if(sc.live&&forward&&!reduced)sc.live();
- if(sc.after)sc.after();
- setTimeout(function(){if(!T.on||TOUR[T.i]!==sc)return;var f=sc.focus&&document.querySelector(sc.focus);
-  [].forEach.call(document.querySelectorAll(".spot"),function(x){x.classList.remove("spot")});
-  if(f){f.classList.add("spot");var r=f.getBoundingClientRect(),top=84,room=innerHeight-$("tour").offsetHeight-top-24;
-   window.scrollTo({top:Math.max(0,scrollY+r.top-top-(r.height<room?(room-r.height)/2:0)),behavior:reduced?"auto":"smooth"})}},sc.live&&forward?300:650);
- if(T.auto&&T.i<TOUR.length-1)T.timer=setTimeout(function(){tourShow(T.i+1,true)},(sc.live?8500:5200)+sc.s.length*48);
- else if(T.auto){T.auto=false;tourPaint()}}
-function tourExit(){clearTimeout(T.timer);T.on=false;T.auto=false;tourPaint();render(false)}
-ACT.tour=function(){T.on=true;T.auto=false;tourShow(0,true);return true};
-ACT.tryit=function(){if(T.on){T.on=false;T.auto=false;clearTimeout(T.timer);tourPaint()}S=fresh();go(1);return true};
-ACT.asdealer=function(){if(T.on){T.on=false;T.auto=false;clearTimeout(T.timer);tourPaint()}S=fresh();seedTo(STEPS.indexOf("dealers"),true);render();return true};
-(function(){var restart=ACT.restart;ACT.restart=function(){if(T.on){clearTimeout(T.timer);T.on=false;T.auto=false;tourPaint()}return restart()}})();
-$("tprev").addEventListener("click",function(){T.auto=false;tourShow(T.i-1,false)});
-$("tnext").addEventListener("click",function(){T.auto=false;tourShow(T.i+1,true)});
-$("tauto").addEventListener("click",function(){T.auto=!T.auto;if(T.auto)tourShow(T.i===TOUR.length-1?0:T.i,true);else{clearTimeout(T.timer);tourPaint()}});
-$("texit").addEventListener("click",tourExit);
-document.addEventListener("keydown",function(e){if(!T.on||/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName))return;
- if(e.key==="ArrowRight"||e.key==="PageDown"){e.preventDefault();$("tnext").click()}
- else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();$("tprev").click()}
- else if(e.key===" "){e.preventDefault();$("tauto").click()}
- else if(e.key==="Escape")tourExit()});
-
-/* ---------- boot: restore a saved session, keep place across a republish ---------- */
-var hot=window.claude&&window.claude.hot;
-function restore(s){try{if(s.pickIdx!=null)s.pick=MODELS[s.pickIdx];S=Object.assign(fresh(),s);S.roi=Object.assign(fresh().roi,s.roi||{})}catch(e){S=fresh()}}
-function start(d){
- if(d&&d.S)restore(d.S);
- else{var saved=null;try{saved=JSON.parse(localStorage.getItem("cd-showcase"))}catch(e){}
-  if(saved){restore(saved);if(S.panel==="close")S.panel="home";S.resumeAt=clampStep(S.step||S.resumeAt||0);S.step=0;S.role="client"}}
- var h=STEPS.indexOf(location.hash.replace(/^#|\/dealer$/g,""));
- if(h>0)seedTo(h,/\/dealer$/.test(location.hash));
- render();tourPaint();
- if(location.hash==="#tour")ACT.tour()}
-if(hot&&hot.snapshot)hot.snapshot(function(){return{S:serialize()}});
-if(hot&&hot.ready)hot.ready(start);else start(hot&&hot.data);
-})();
-</script>
-<script>if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol))addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})</script>
-</body>
-</html>
+<script src="js/data.js?v=684f1c"></script><script src="js/core.js?v=684f1c"></script><script src="js/index.js?v=684f1c"></script><script>CD.chrome("home");</script></body></html>

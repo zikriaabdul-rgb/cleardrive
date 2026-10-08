@@ -1,0 +1,23 @@
+/* trust center */
+.trust{padding-block:clamp(32px,5vw,64px) clamp(64px,8vw,120px)}
+.trust-head h1{max-width:18ch}
+.trust-grid{display:grid;grid-template-columns:220px minmax(0,1fr);min-width:0;gap:clamp(24px,4vw,56px);margin-top:clamp(32px,5vw,56px);align-items:start}
+.trust-index{position:sticky;top:calc(var(--top) + 20px);display:grid;gap:2px}
+.trust-index .label{margin-bottom:8px}
+.trust-index a{color:var(--mute);font-size:14.5px;padding:7px 10px;border-left:2px solid transparent;border-radius:0 8px 8px 0;transition:color .25s,border-color .25s,background .25s}
+.trust-index a:hover{color:var(--text);text-decoration:none;background:rgba(190,215,235,.06)}
+.trust-index a.on{color:var(--text);border-left-color:var(--teal)}
+@media (max-width:860px){.trust-grid{grid-template-columns:minmax(0,1fr)}.trust-index{position:static;display:flex;flex-wrap:wrap;gap:6px;padding-bottom:16px;border-bottom:1px solid var(--line)}.trust-index .label{flex-basis:100%}.trust-index a{border:1px solid var(--line2);border-radius:var(--r-pill);padding:6px 12px;font-size:13px}.trust-index a.on{border-color:var(--teal)}}
+.trust-body{min-width:0}
+.tsec{padding-block:clamp(28px,4vw,48px);border-top:1px solid var(--line);scroll-margin-top:calc(var(--top) + 12px)}
+.tsec:first-child{border-top:0;padding-top:0}
+.tsec h2{max-width:24ch}
+.rules-list{margin:0;display:grid;gap:0}
+.rules-list>div{padding:18px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:8px 28px}
+.rules-list>div:last-child{border-bottom:1px solid var(--line)}
+.rules-list dt{font-family:var(--serif);font-size:22px;line-height:1.15;color:var(--text)}
+.rules-list dd{margin:0;color:var(--soft);font-size:15px;line-height:1.55}
+.rules-list code{font-family:ui-monospace,Consolas,monospace;font-size:13px;color:var(--teal);background:rgba(99,210,198,.1);padding:1px 6px;border-radius:5px}
+@media (max-width:640px){.rules-list>div{grid-template-columns:1fr}}
+.contact-card .alias{font-size:clamp(20px,3vw,28px)}
+#credits-table td:last-child a{white-space:nowrap}
