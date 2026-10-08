@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (lineup && grid) {
     var want = ["kia-telluride", "toyota-rav4", "honda-cr-v", "ford-f-150", "hyundai-tucson", "jeep-grand-cherokee", "subaru-outback", "volkswagen-atlas", "lexus-rx", "chevrolet-silverado-1500", "mazda-cx-5", "nissan-rogue"];
     var picks = want.map(CD.modelById).filter(function (m) { return m && CD.carSrc(m); });
-    if (picks.length < 6) picks = picks.concat(CD.models.filter(function (m) { return m.popular && CD.carSrc(m) && picks.indexOf(m) < 0; })).slice(0, 12);
+    if (picks.length < 12) picks = picks.concat(CD.models.filter(function (m) { return m.popular && CD.carSrc(m) && picks.indexOf(m) < 0; })).slice(0, 12);
     picks = picks.slice(0, 12);
     if (picks.length >= 4) {
       lineup.hidden = false;

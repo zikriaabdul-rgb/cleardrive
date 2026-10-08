@@ -37,7 +37,7 @@ function seed() {
   d.brief.trade = { has: true, year: 2018, make: "Honda", model: "Accord", miles: 82000, cond: "good", payoff: 9000, photos: ["front", "rear", "interior", "odo"], vin6: "A04217" };
   d.pick = CD.modelById("kia-telluride") ? "kia-telluride" : (CD.models.filter(function (m) { return m.body === "suv"; })[0] || CD.models[0] || {}).id || null;
   d.way = "price"; d.alias = makeAlias(d.brief.name); d.consent = true;
-  d.rooftops = ["kia-fairfax", "chantilly-kia", "kia-alexandria"].filter(function (id) { return !!CD.rooftopById(id); });
+  d.rooftops = ["kia-fairfax", "kia-catonsville"].filter(function (id) { return !!CD.rooftopById(id); });
   if (!d.rooftops.length) d.rooftops = CD.rooftops.slice(0, 3).map(function (r) { return r.id; });
   d.askedAt = Date.now() - 8 * 60 * 1000; d.status = "asked"; d.step = "offers"; d.mode = "guide";
   d.sim = simulate(d);
@@ -205,7 +205,7 @@ function sel(id, path, val, label, opts) { return '<div class="field"><label for
 
 V.intro = function () {
   var m = CD.modelById("kia-telluride") || CD.models.filter(function (x) { return x.body === "suv" && CD.carSrc(x); })[0] || CD.models[0];
-  return '<section class="intro-hero" style="--i:0"><div><p class="eyebrow">Buyer workspace · Demonstration with sample data</p><h1>Put your needs first. <i>Compare written deal terms.</i></h1><p class="lede">Choose the car from every brand Ourisman sells. Get itemized written offers from the rooftops near you, ranked by your terms. Check the contract against the offer before you sign. Nothing to pay.</p>' +
+  return '<section class="intro-hero" style="--i:0"><div><p class="eyebrow">Buyer workspace · Demonstration with sample data</p><h1>Put your needs first. <i>Compare written deal terms.</i></h1><p class="lede">Choose the car from every brand the pilot rooftops sell. Get itemized written offers from the rooftops near you, ranked by your terms. Check the contract against the offer before you sign. Nothing to pay.</p>' +
     '<div class="go"><button type="button" class="btn pri lg" data-act="start">Start your brief</button><button type="button" class="btn lg" data-act="know">I know the car</button><button type="button" class="ghost" data-act="sample">Try the sample →</button></div>' +
     '<ul class="intro-proof"><li>Two minutes to a brief. Three real models that fit it.</li><li>Dealers write to a private address you control.</li><li>Every offer priced the same way, for both sides of the desk.</li></ul></div>' +
     '<div>' + (m ? CD.car(m, "hero") : "") + '</div></section>' +
@@ -485,7 +485,7 @@ function bind() {
     switch (act) {
       case "start": S.mode = "guide"; go("brief"); break;
       case "know": S.mode = "know"; go("matches"); setTimeout(function () { var s = document.getElementById("msearch"); if (s) s.focus(); }, 50); break;
-      case "sample": S = seed(); media = {}; CD.toast("Sample buyer loaded: Jordan Ellis, 2026 Kia Telluride, three rooftops asked.", "ok"); render(); break;
+      case "sample": S = seed(); media = {}; CD.toast("Sample buyer loaded: Jordan Ellis, 2026 Kia Telluride, two rooftops asked.", "ok"); render(); break;
       case "goto": go(v); break;
       case "pay": b.pay = v; render(true); break;
       case "tier": b.tier = v; render(true); break;

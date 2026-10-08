@@ -109,7 +109,7 @@ function openLead() { var l = S.open ? leadById(S.open) : null; if (!l) { var al
 function loadSampleDeal() {
   var now = Date.now();
   CD.deal.set({ id: CD.deal.newId(), created: now - 9 * 60e3, askedAt: now - 9 * 60e3, status: "asked", way: "price", pick: "kia-telluride", alias: "jordan.e@cleardrive.app",
-    rooftops: ["kia-fairfax", "chantilly-kia", "kia-alexandria"], offers: [], thread: [{ who: "sys", text: "Request sent to three Ourisman rooftops.", at: now - 9 * 60e3 }],
+    rooftops: ["kia-fairfax", "kia-catonsville"], offers: [], thread: [{ who: "sys", text: "Request sent to two Ourisman rooftops.", at: now - 9 * 60e3 }],
     brief: { pay: "finance", limit: 650, down: 3000, term: 72, lterm: 36, miles: 12000, das: 3000, body: "suv", size: "large", makes: ["Kia", "Toyota", "Honda"], feats: ["awd", "blind", "third"], zip: "22030", state: "VA", tier: "good", lender: "tcu",
       trade: { has: true, year: 2018, make: "Honda", model: "Accord", miles: 82000, cond: "good", payoff: 9000, photos: ["front", "rear", "interior", "odo"] }, prot: { gap: "yes", vsc: "ask", maint: "no", tire: "no" }, name: "Jordan Ellis" } });
   S.open = CD.deal.get().id; save();
